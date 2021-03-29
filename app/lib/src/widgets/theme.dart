@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 ThemeData basicTheme() {
   InputDecorationTheme _basicInputTheme(InputDecorationTheme base) {
+    final errorColor = Color(0xffa30015);
     return base.copyWith(
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(color: Colors.black, width: 2.0),
@@ -13,6 +14,15 @@ ThemeData basicTheme() {
       filled: true,
       fillColor: Colors.grey[100],
       contentPadding: EdgeInsets.all(10),
+      errorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor, width: 2.0)
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(color: errorColor, width: 3.0)
+      ),
+      errorStyle: TextStyle(
+        color: errorColor
+      )
     );
   }
 

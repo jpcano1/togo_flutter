@@ -1,10 +1,13 @@
 import '../widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../blocs/provider.dart';
+import '../blocs/bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -29,28 +32,42 @@ class LoginScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-              child: TextField(
-                keyboardType: TextInputType.emailAddress,
-                cursorColor: Colors.black,
-                style: TextStyle(color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: "example@mail.com",
-                  hintStyle: TextStyle(color: Colors.black38)
-                ),
-              ),
+              child: StreamBuilder(
+                stream: bloc.email,
+                builder: (streamContext, snapshot) {
+                  return TextField(
+                    onChanged: bloc.changeEmail,
+                    keyboardType: TextInputType.emailAddress,
+                    cursorColor: Colors.black,
+                    style: TextStyle(color: Colors.black),
+                    decoration: InputDecoration(
+                      hintText: "example@mail.com",
+                      hintStyle: TextStyle(color: Colors.black38),
+                      errorText: snapshot.error
+                    ),
+                  );
+                },
+              )
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
-              child: TextField(
-                cursorColor: Colors.black,
-                style: TextStyle(color: Colors.black),
-                obscureText: true,
-                decoration: InputDecoration(
-                  hintText: "password",
-                  hintStyle: TextStyle(color: Colors.black38)
-                ),
-              ),
+              child: StreamBuilder(
+                stream: bloc.password,
+                builder: (streamContext, snapshot) {
+                  return TextField(
+                    onChanged: bloc.changePassword,
+                    cursorColor: Colors.black,
+                    style: TextStyle(color: Colors.black),
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      hintText: "password",
+                      hintStyle: TextStyle(color: Colors.black38),
+                      errorText: snapshot.error
+                    ),
+                  );
+                },
+              )
             ),
             Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),

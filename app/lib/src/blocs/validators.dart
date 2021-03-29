@@ -8,9 +8,9 @@ class Validators {
       if (regex.hasMatch(email)) {
         sink.add(email);
       } else if (email.isEmpty) {
-        sink.addError("El email no puede estar vacío");
+        sink.addError("Email cannot be empty");
       } else {
-        sink.addError("El email no tiene un formato válido");
+        sink.addError("Email not valid");
       }
     }
   );
@@ -20,9 +20,9 @@ class Validators {
       Pattern pattern = r"^[a-zA-Z]\w{3,14}$";
       RegExp regex = RegExp(pattern);
       if (password.isEmpty) {
-        sink.addError("El Password no puede estar vacío");
+        sink.addError("Password cannot be empty");
       } else if (!regex.hasMatch(password)) {
-        sink.addError("El Password debe tener al menos 4 caracteres");
+        sink.addError("Password not strong enough");
       } else {
         sink.add(password);
       }
