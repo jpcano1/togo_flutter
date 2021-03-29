@@ -33,16 +33,14 @@ class LoginScreen extends StatelessWidget {
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
               child: StreamBuilder(
-                stream: bloc.email,
+                stream: bloc.loginEmail,
                 builder: (streamContext, snapshot) {
                   return TextField(
-                    onChanged: bloc.changeEmail,
                     keyboardType: TextInputType.emailAddress,
                     cursorColor: Colors.black,
                     style: TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: "example@mail.com",
-                      hintStyle: TextStyle(color: Colors.black38),
                       errorText: snapshot.error
                     ),
                   );
@@ -53,16 +51,14 @@ class LoginScreen extends StatelessWidget {
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
               child: StreamBuilder(
-                stream: bloc.password,
+                stream: bloc.loginPassword,
                 builder: (streamContext, snapshot) {
                   return TextField(
-                    onChanged: bloc.changePassword,
                     cursorColor: Colors.black,
                     style: TextStyle(color: Colors.black),
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "password",
-                      hintStyle: TextStyle(color: Colors.black38),
                       errorText: snapshot.error
                     ),
                   );

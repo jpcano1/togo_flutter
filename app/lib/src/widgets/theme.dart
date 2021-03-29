@@ -22,7 +22,8 @@ ThemeData basicTheme() {
       ),
       errorStyle: TextStyle(
         color: errorColor
-      )
+      ),
+      hintStyle: TextStyle(color: Colors.black38)
     );
   }
 
