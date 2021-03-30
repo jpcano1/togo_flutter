@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
 
 class LoginScreen extends StatelessWidget {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of(context);
@@ -69,11 +73,27 @@ class LoginScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: AppButton(
-                color: Theme.of(context).colorScheme.primary,
-                text: "Log In",
-                onPressed: () => true,
-                minWidth: size.width,
+              child: StreamBuilder(
+                stream: bloc.loginSubmit,
+                builder: (streamContext, snapshot) {
+                  return AppButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Log In",
+                    onPressed: snapshot.hasData? () {
+                      _firebaseAuth.signInWithEmailAndPassword(
+                        email: snapshot.data["email"], 
+                        password: snapshot.data["password"]
+                      );
+
+                      User user = _firebaseAuth.currentUser;
+
+                      if (!user.emailVerified) {
+                        
+                      }
+                    }: null,
+                    minWidth: size.width,
+                  );
+                },
               ),
             )
           ],

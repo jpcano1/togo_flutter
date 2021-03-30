@@ -40,7 +40,7 @@ class Bloc with Validators {
     final validPassword = _registerPasswordController.value;
     final validName = _registerNameController.value;
 
-    return <String, String>{
+    return <String, String> {
       "email": validEmail,
       "password": validPassword,
       "name": validName
@@ -51,7 +51,10 @@ class Bloc with Validators {
     final validEmail = _loginEmailController.value;
     final validPassword = _loginPasswordController.value;
 
-    print("Validado");
+    return <String, String> {
+      "email": validEmail,
+      "password": validPassword
+    };
   }
 
   dispose() {

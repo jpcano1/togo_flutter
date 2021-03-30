@@ -1,3 +1,5 @@
+import 'package:app/src/screens/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import './screens/register.dart';
@@ -29,7 +31,7 @@ class App extends StatelessWidget {
             },
           ),
           "/login": (_) => LoginScreen(),
-          "/register": (_) => RegisterScreen()
+          "/register": (_) => RegisterScreen(),
         },
       )
     );
