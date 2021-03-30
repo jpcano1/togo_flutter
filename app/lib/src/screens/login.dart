@@ -2,7 +2,6 @@ import '../widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
-import '../blocs/bloc.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -36,6 +35,7 @@ class LoginScreen extends StatelessWidget {
                 stream: bloc.loginEmail,
                 builder: (streamContext, snapshot) {
                   return TextField(
+                    onChanged: bloc.changeLoginEmail,
                     keyboardType: TextInputType.emailAddress,
                     cursorColor: Colors.black,
                     style: TextStyle(color: Colors.black),
@@ -54,6 +54,7 @@ class LoginScreen extends StatelessWidget {
                 stream: bloc.loginPassword,
                 builder: (streamContext, snapshot) {
                   return TextField(
+                    onChanged: bloc.changeLoginPassword,
                     cursorColor: Colors.black,
                     style: TextStyle(color: Colors.black),
                     obscureText: true,

@@ -1,3 +1,6 @@
+import 'package:app/src/blocs/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +9,8 @@ import '../blocs/provider.dart';
 class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
@@ -69,16 +74,59 @@ class RegisterScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0),
-              child: AppButton(
-                color: Theme.of(context).colorScheme.primary,
-                text: "Next",
-                onPressed: () => true,
-                minWidth: size.width,
-              ),
+              child: StreamBuilder(
+                stream: bloc.registerSubmit,
+                builder: (streamContext, snapshot) {
+                  return AppButton(
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Next",
+                    onPressed: snapshot.hasData? () async {
+                      var validData = bloc.register();
+                      try {
+                        UserCredential credentials = await _firebaseAuth.createUserWithEmailAndPassword(
+                          email: validData["email"], 
+                          password: validData["password"]
+                        );
+                      } on FirebaseAuthException catch(e) {
+                        if (e.code == "weak-password") {
+                          dialog(streamContext, "The password provided is too weak.");
+                        } else if (e.code == 'email-already-in-use') {
+                          dialog(streamContext, "The account already exists for that email.");
+                        }
+                      }
+                    }: null,
+                    minWidth: size.width,
+                  );
+                },
+              )
             )
           ],
         ),
       ),
+    );
+  }
+
+  dialog(context, error) {
+    showDialog(
+      context: context, 
+      builder: (dialogContext) {
+        return AlertDialog(
+          content: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(error),
+                Padding(
+                  padding: EdgeInsets.all(5.0),
+                  child: TextButton(
+                    onPressed: () => Navigator.pop(dialogContext),
+                    child: Text("Ok"),
+                  )
+                ),
+              ],
+            ),
+          ),
+        );
+      }
     );
   }
 }

@@ -11,18 +11,31 @@ class Bloc with Validators {
 
   Stream<String> get email => _registerEmailController.stream.transform<String>(validateEmail);
   Stream<String> get password => _registerPasswordController.stream.transform<String>(validatePassword);
-  Stream<bool> get submitValid => Rx.combineLatest2(email, password, (a, b) => true);
+  Stream<bool> get registerSubmit => Rx.combineLatest2(email, password, (a, b) => true);
 
-  Stream<String> get loginEmail => _loginEmailController.stream;
-  Stream<String> get loginPassword => _loginPasswordController.stream;
+  Stream<String> get loginEmail => _loginEmailController.stream.transform<String>(validateLoginField);
+  Stream<String> get loginPassword => _loginPasswordController.stream.transform<String>(validateLoginField);
   Stream<bool> get loginSubmit => Rx.combineLatest2(loginEmail, loginPassword, (a, b) => true);
 
   Function(String) get changeEmail => _registerEmailController.sink.add;
   Function(String) get changePassword => _registerPasswordController.sink.add;
 
-  submit() {
+  Function(String) get changeLoginEmail => _loginEmailController.sink.add;
+  Function(String) get changeLoginPassword => _loginPasswordController.sink.add;
+
+  register() {
     final validEmail = _registerEmailController.value;
     final validPassword = _registerPasswordController.value;
+
+    return <String, String>{
+      "email": validEmail,
+      "password": validPassword
+    };
+  }
+
+  login() {
+    final validEmail = _loginEmailController.value;
+    final validPassword = _loginPasswordController.value;
 
     print("Validado");
   }
@@ -30,5 +43,8 @@ class Bloc with Validators {
   dispose() {
     _registerEmailController.close();
     _registerPasswordController.close();
+
+    _loginEmailController.close();
+    _loginPasswordController.close();
   }
 }

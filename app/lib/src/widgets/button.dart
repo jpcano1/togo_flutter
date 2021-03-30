@@ -18,6 +18,7 @@ class AppButton extends StatelessWidget {
       color: this.color,
       onPressed: this.onPressed,
       minWidth: minWidth,
+      disabledColor: Theme.of(context).disabledColor,
     );
   }
 }

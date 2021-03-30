@@ -17,14 +17,24 @@ class Validators {
 
   final validatePassword = StreamTransformer<String, String>.fromHandlers(
     handleData: (String password, EventSink sink) {
-      Pattern pattern = r"^[a-zA-Z]\w{3,14}$";
+      Pattern pattern = r"^[a-zA-Z]\w{5,14}$";
       RegExp regex = RegExp(pattern);
       if (password.isEmpty) {
         sink.addError("Password cannot be empty");
       } else if (!regex.hasMatch(password)) {
-        sink.addError("Password not strong enough");
+        sink.addError("Password not valid. Must be between 6 and 14 characters and have letters and numbers");
       } else {
         sink.add(password);
+      }
+    }
+  );
+
+  final validateLoginField = StreamTransformer<String, String>.fromHandlers(
+    handleData: (String fieldData, EventSink sink) {
+      if (fieldData.isEmpty) {
+        sink.addError("Field cannot be empty");
+      } else {
+        sink.add(fieldData);
       }
     }
   );
