@@ -15,6 +15,7 @@ class User {
     return <String, String> {
       "name": this.name,
       "email": this.email,
+      "phoneNumber": this.phoneNumber
     };
   }
 }

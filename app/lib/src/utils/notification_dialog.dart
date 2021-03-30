@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-dialog(context, message) {
+dialog(context, String message, {onPressed}) {
   showDialog(
     context: context, 
     builder: (dialogContext) {
@@ -17,7 +17,8 @@ dialog(context, message) {
               Padding(
                 padding: EdgeInsets.all(5.0),
                 child: TextButton(
-                  onPressed: () => Navigator.pop(dialogContext),
+                  onPressed: onPressed != null? onPressed: 
+                    () => Navigator.pop(dialogContext),
                   child: Text("Ok"),
                 )
               ),

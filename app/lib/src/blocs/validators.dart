@@ -22,9 +22,20 @@ class Validators {
       if (password.isEmpty) {
         sink.addError("Password cannot be empty");
       } else if (!regex.hasMatch(password)) {
-        sink.addError("Password not valid. Must be between 6 and 14 characters and have letters and numbers");
+        sink.addError("Password not valid.");
       } else {
         sink.add(password);
+      }
+    }
+  );
+
+  final validatePhoneNumber = StreamTransformer<String, String>.fromHandlers(
+    handleData: (String fieldData, EventSink sink) {
+      print(fieldData.length);
+      if (fieldData.length <= 5) {
+        sink.addError("Phone number cannot be empty");
+      } else {
+        sink.add(fieldData);
       }
     }
   );

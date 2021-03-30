@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/button.dart';
@@ -10,9 +11,21 @@ import '../blocs/bloc.dart';
 import '../utils/notification_dialog.dart';
 import '../blocs/provider.dart';
 
-class RegisterScreen extends StatelessWidget {
+class RegisterScreen extends StatefulWidget {
+  @override
+  _RegisterScreenState createState() => _RegisterScreenState();
+}
+
+class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference users = FirebaseFirestore.instance.collection("User");
+  String zone;
+
+  @override
+  void initState() {
+    zone = "+57";
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +33,7 @@ class RegisterScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0.0,
@@ -28,7 +42,6 @@ class RegisterScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        alignment: Alignment.centerLeft,
         color: Theme.of(context).colorScheme.background,
         child: Column(
           children: [
@@ -78,6 +91,47 @@ class RegisterScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
+              child: Row(
+                children: [
+                  CountryCodePicker(
+                    initialSelection: "CO",
+                    showCountryOnly: false,
+                    showOnlyCountryWhenClosed: false,
+                    textStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    dialogTextStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    searchStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    dialogSize: Size(size.width * 0.8, size.height * 0.7),
+                    onChanged: (CountryCode value) => setState(() => zone = value.dialCode),
+                  ),
+                  Expanded(
+                    child: StreamBuilder(
+                      stream: bloc.registerPhone,
+                      builder: (streamContext, snapshot) {
+                        return TextField(
+                          onChanged: bloc.changeRegisterPhone,
+                          cursorColor: Colors.black,
+                          keyboardType: TextInputType.phone,
+                          style: TextStyle(color: Colors.black),
+                          decoration: InputDecoration(
+                            hintText: "+57 (123) 123 1234",
+                            errorText: snapshot.error
+                          ),
+                        );
+                      },
+                    )
+                  )
+                ],
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(vertical: 10.0),
+              padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
               child: StreamBuilder(
                 stream: bloc.registerPassword,
                 builder: (streamContext, snapshot) {
@@ -123,17 +177,21 @@ class RegisterScreen extends StatelessWidget {
           email: validData["email"], 
           password: validData["password"]
         );
+        await _firebaseAuth.currentUser.updateProfile(displayName: validData["name"]);
       } on FirebaseAuthException catch(e) {
         if (e.code == "weak-password") {
           return dialog(context, "The password provided is too weak.");
         } else if (e.code == 'email-already-in-use') {
           return dialog(context, "The account already exists for that email.");
         }
+      } catch(e) {
+        print(e.toString());
       }
 
-      await _firebaseAuth.currentUser.updateProfile(displayName: validData["name"]);
-
-      var currentUser = UserModel.User(validData["name"], validData["email"]);
+      var currentUser = UserModel.User(
+        validData["name"], validData["email"], 
+        phoneNumber: this.zone + validData["phone"]
+      );
 
       users.add(currentUser.toMap())
       .then((result) async {
@@ -149,8 +207,10 @@ class RegisterScreen extends StatelessWidget {
           )
         );
       })
-      .catchError((error) {
-        dialog(context, error);
+      .catchError((FirebaseException error) {
+        if (error.code == "permission-denied") {
+          return dialog(context, "You do not have permission to perform this.");
+        }
       });
     }
     return _register;
