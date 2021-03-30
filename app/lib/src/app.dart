@@ -1,4 +1,5 @@
 import 'package:app/src/screens/home.dart';
+import 'package:app/src/screens/profile.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -33,7 +34,7 @@ class App extends StatelessWidget {
           ),
           "/login": (_) => LoginScreen(),
           "/register": (_) => RegisterScreen(),
-          "/": (_) => HomeScreen(currentUser: UserModel.User("Name", ""))
+          "/": (_) => ProfileScreen(currentUser: UserModel.User("Name", "email@email.com", phoneNumber: "+123123123123123"))
         },
       )
     );
