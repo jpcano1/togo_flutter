@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
 import '../utils/notification_dialog.dart';
+import '../models/user.dart' as UserModel;
+import 'home.dart';
 
 class LoginScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -80,11 +82,16 @@ class LoginScreen extends StatelessWidget {
                   return AppButton(
                     color: Theme.of(context).colorScheme.primary,
                     text: "Log In",
-                    onPressed: snapshot.hasData? () {
-                      _firebaseAuth.signInWithEmailAndPassword(
-                        email: snapshot.data["email"], 
-                        password: snapshot.data["password"]
-                      );
+                    onPressed: snapshot.hasData? () async {
+                      var validData = bloc.login();
+                      try {
+                        await _firebaseAuth.signInWithEmailAndPassword(
+                          email: validData["email"], 
+                          password: validData["password"]
+                        );
+                      } on FirebaseAuthException catch(e) {
+                        return dialog(streamContext, "Wrong email or password");
+                      }
 
                       User user = _firebaseAuth.currentUser;
 
@@ -92,7 +99,15 @@ class LoginScreen extends StatelessWidget {
                         dialog(streamContext, "You are not verified, please go check your email");
                       }
 
-                      
+                      var currentUser = UserModel.User(user.displayName, user.email);
+                      Navigator.pushReplacement(
+                        streamContext, 
+                        MaterialPageRoute(
+                          builder: (materialPageRouteContext) => HomeScreen(
+                            currentUser: currentUser
+                          )
+                        )
+                      );
                     }: null,
                     minWidth: size.width,
                   );
