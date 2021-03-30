@@ -29,7 +29,7 @@ class Validators {
     }
   );
 
-  final validateLoginField = StreamTransformer<String, String>.fromHandlers(
+  final validateEmptyField = StreamTransformer<String, String>.fromHandlers(
     handleData: (String fieldData, EventSink sink) {
       if (fieldData.isEmpty) {
         sink.addError("Field cannot be empty");

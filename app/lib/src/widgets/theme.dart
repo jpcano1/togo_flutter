@@ -71,7 +71,7 @@ ThemeData basicTheme() {
     );
   }
 
-  ThemeData light = ThemeData.dark();
+  ThemeData light = ThemeData.light();
 
   return light.copyWith(
     textTheme: _basicTextTheme(light.textTheme),
