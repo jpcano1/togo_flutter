@@ -8,6 +8,7 @@ import 'screens/welcome.dart';
 import './widgets/theme.dart';
 import './screens/login.dart';
 import './blocs/provider.dart' as provider;
+import './models/user.dart' as UserModel;
 
 class App extends StatelessWidget {
   @override
@@ -18,7 +19,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         theme: basicTheme(),
         routes: {
-          "/": (_) => FutureBuilder(
+          "/home": (_) => FutureBuilder(
             future: _initialization,
             builder: (futureContext, snapshot) {
               if (snapshot.hasError) {
@@ -32,6 +33,7 @@ class App extends StatelessWidget {
           ),
           "/login": (_) => LoginScreen(),
           "/register": (_) => RegisterScreen(),
+          "/": (_) => HomeScreen(currentUser: UserModel.User("Name", ""))
         },
       )
     );
