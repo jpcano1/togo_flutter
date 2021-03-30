@@ -11,40 +11,126 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Scaffold(
-      body: Container(
-        color: Theme.of(context).colorScheme.primaryVariant,
-        child: Column(
-          children: [
-            Text(
-              "Welcome, ${this.currentUser.name}",
-              style: Theme.of(context).textTheme.headline4.copyWith(
-                color: Colors.black,
-                fontWeight: FontWeight.bold
-              ),
+    return Container(
+      alignment: Alignment.center,
+      color: Theme.of(context).colorScheme.primaryVariant,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            "Welcome, ${this.currentUser.name}",
+            style: Theme.of(context).textTheme.headline4.copyWith(
+              color: Colors.black,
+              fontWeight: FontWeight.bold
             ),
-            Container(
-              margin: EdgeInsets.only(top: 20.0),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: size.width * 0.055),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/icons/pet-locator.png",
+                  width: size.width * 0.3,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(size.width * 0.05),
+                ),
+                AppButton(
+                  color: Theme.of(context).colorScheme.secondary, 
+                  text: "Find my Pet", 
+                  onPressed: () => true,
+                  minWidth: 150,
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: size.width * 0.055),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/icons/dog-house.png",
+                  width: size.width * 0.3,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(size.width * 0.05),
+                ),
+                AppButton(
+                  color: Theme.of(context).colorScheme.secondary, 
+                  text: "Services", 
+                  onPressed: () => true,
+                  minWidth: 150,
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: size.width * 0.055),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/icons/chat-box.png",
+                  width: size.width * 0.3,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(size.width * 0.05),
+                ),
+                AppButton(
+                  color: Theme.of(context).colorScheme.secondary, 
+                  text: "Chat", 
+                  onPressed: () => true,
+                  minWidth: 150,
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: size.width * 0.055),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/icons/user.png",
+                  width: size.width * 0.3,
+                ),
+                Padding(
+                  padding: EdgeInsets.all(size.width * 0.05),
+                ),
+                AppButton(
+                  color: Theme.of(context).colorScheme.secondary, 
+                  text: "Profile", 
+                  onPressed: () => true,
+                  minWidth: 150,
+                )
+              ],
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(top: size.width * 0.055),
+            child: TextButton(
+              onPressed: () => true, 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    "assets/icons/pet-locator.png",
-                    width: size.width * 0.3,
-                  ),
                   Padding(
-                    padding: EdgeInsets.all(size.width * 0.05),
+                    padding: EdgeInsets.only(right: 3.0),
+                    child: Text(
+                      "Log Out",
+                      style: TextStyle(color: Colors.black),
+                    ),
                   ),
-                  AppButton(
-                    color: Theme.of(context).colorScheme.secondary, 
-                    text: "Find my Pet", 
-                    onPressed: () => true
+                  Icon(
+                    Icons.logout, 
+                    color: Colors.black,
                   )
                 ],
               ),
-            )
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }
