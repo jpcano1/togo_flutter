@@ -4,6 +4,7 @@ import '../widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
+import '../utils/notification_dialog.dart';
 
 class LoginScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -88,8 +89,10 @@ class LoginScreen extends StatelessWidget {
                       User user = _firebaseAuth.currentUser;
 
                       if (!user.emailVerified) {
-                        
+                        dialog(streamContext, "You are not verified, please go check your email");
                       }
+
+                      
                     }: null,
                     minWidth: size.width,
                   );

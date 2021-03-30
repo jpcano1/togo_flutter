@@ -1,8 +1,8 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import '../models/user.dart' as UserModel;
 
 class HomeScreen extends StatelessWidget {
-  final User currentUser;
+  final UserModel.User currentUser;
 
   HomeScreen({this.currentUser});
 
@@ -14,7 +14,7 @@ class HomeScreen extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "Welcome, ${this.currentUser.displayName}",
+              "Welcome, ${this.currentUser.name}",
               style: Theme.of(context).textTheme.headline4.copyWith(
                 color: Colors.black,
                 fontWeight: FontWeight.bold

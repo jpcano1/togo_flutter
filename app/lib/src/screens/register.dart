@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../widgets/button.dart';
+import '../models/user.dart' as UserModel;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'home.dart';
@@ -132,10 +133,9 @@ class RegisterScreen extends StatelessWidget {
 
       await _firebaseAuth.currentUser.updateProfile(displayName: validData["name"]);
 
-      users.add({
-          "name": validData["name"],
-          "email": validData["email"]
-      })
+      var currentUser = UserModel.User(validData["name"], validData["email"]);
+
+      users.add(currentUser.toMap())
       .then((result) async {
         await _firebaseAuth.currentUser.sendEmailVerification();
         dialog(context, "User added, verify your email inbox");
@@ -144,7 +144,7 @@ class RegisterScreen extends StatelessWidget {
           context, 
           MaterialPageRoute(
             builder: (materialPageRouteContext) => HomeScreen(
-              currentUser: _firebaseAuth.currentUser
+              currentUser: currentUser
             )
           )
         );
