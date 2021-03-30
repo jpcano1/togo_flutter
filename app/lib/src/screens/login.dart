@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,13 @@ class LoginScreen extends StatelessWidget {
                       User user = _firebaseAuth.currentUser;
 
                       if (!user.emailVerified) {
-                        dialog(streamContext, "You are not verified, please go check your email");
+                        Fluttertoast.showToast(
+                          msg: "You are not verified, please go check your email",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          textColor: Colors.white,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                        );
                       }
 
                       var currentUser = UserModel.User(user.displayName, user.email);

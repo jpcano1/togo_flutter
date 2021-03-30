@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
 import 'package:flutter/material.dart';
@@ -196,7 +198,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       users.add(currentUser.toMap())
       .then((result) async {
         await _firebaseAuth.currentUser.sendEmailVerification();
-        dialog(context, "User added, verify your email inbox");
+
+        Fluttertoast.showToast(
+          msg: "Verify your email inbox",
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
 
         Navigator.pushReplacement(
           context, 
