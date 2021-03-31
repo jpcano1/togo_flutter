@@ -21,7 +21,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         theme: basicTheme(),
         routes: {
-          "/home": (_) => FutureBuilder(
+          "/": (_) => FutureBuilder(
             future: _initialization,
             builder: (futureContext, snapshot) {
               if (snapshot.hasError) {
@@ -35,7 +35,7 @@ class App extends StatelessWidget {
           ),
           "/login": (_) => LoginScreen(),
           "/register": (_) => RegisterScreen(),
-          "/": (_) => ServicesScreen()
+          "/services": (_) => ServicesScreen(),
         },
       )
     );

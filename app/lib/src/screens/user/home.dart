@@ -64,7 +64,10 @@ class HomeScreen extends StatelessWidget {
                 AppButton(
                   color: Theme.of(context).colorScheme.secondary, 
                   text: "Services", 
-                  onPressed: () => true,
+                  onPressed: () => Navigator.pushNamed(
+                    context, 
+                    "/services"
+                  ),
                   minWidth: 150,
                 )
               ],

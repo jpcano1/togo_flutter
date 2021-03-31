@@ -97,7 +97,7 @@ class ProfileScreen extends StatelessWidget {
             Expanded(
               child: Container(
                 width: size.width * 0.8,
-                child: ListView.builder(
+                child: this.currentUser.pets.length > 0? ListView.builder(
                   itemCount: this.currentUser.pets.length,
                   itemBuilder: (BuildContext listContext, int index) {
                     Pet pet = this.currentUser.pets[index];
@@ -131,7 +131,7 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     );
                   },
-                ),
+                ): null,
               )
             ),
             Container(
