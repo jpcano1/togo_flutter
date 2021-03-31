@@ -1,7 +1,7 @@
 import 'package:app/src/models/pet.dart';
-import 'package:app/src/screens/home.dart';
-import 'package:app/src/screens/profile.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app/src/screens/services/services.dart';
+import './screens/user/home.dart';
+import './screens/user/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import './screens/register.dart';
@@ -35,11 +35,7 @@ class App extends StatelessWidget {
           ),
           "/login": (_) => LoginScreen(),
           "/register": (_) => RegisterScreen(),
-          "/": (_) => ProfileScreen(currentUser: UserModel.User(
-            "Name", "email@email.com", 
-            phoneNumber: "+123123123123123",
-            pets: [Pet("Valto", 6), Pet("Michi", 7), Pet("Simona", 3), Pet("Simona", 3), Pet("Simona", 3), Pet("Simona", 3), Pet("Simona", 3), Pet("Simona", 3), Pet("Simona", 3), Pet("Simona", 3)]
-          ))
+          "/": (_) => ServicesScreen()
         },
       )
     );

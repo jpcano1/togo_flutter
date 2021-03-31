@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
 import '../utils/notification_dialog.dart';
 import '../models/user.dart' as UserModel;
-import 'home.dart';
+import 'user/home.dart';
 
 class LoginScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -110,9 +110,7 @@ class LoginScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         streamContext, 
                         MaterialPageRoute(
-                          builder: (materialPageRouteContext) => HomeScreen(
-                            currentUser: currentUser
-                          )
+                          builder: (materialPageRouteContext) => HomeScreen(currentUser)
                         )
                       );
                     }: null,

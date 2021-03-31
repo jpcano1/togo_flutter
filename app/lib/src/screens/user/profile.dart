@@ -1,13 +1,13 @@
-import 'package:app/src/models/pet.dart';
+import '../../models/pet.dart';
 import 'package:flutter/material.dart';
-import '../models/user.dart' as UserModel;
+import '../../models/user.dart' as UserModel;
 
 class ProfileScreen extends StatelessWidget {
   final UserModel.User currentUser;
   final String defaultPetImage = "assets/icons/scottish-fold-cat.png";
   final String defaultUserImage = "assets/icons/user.png";
 
-  ProfileScreen({this.currentUser});
+  ProfileScreen(this.currentUser);
 
   @override
   Widget build(BuildContext context) {

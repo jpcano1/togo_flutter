@@ -1,11 +1,12 @@
-import 'package:app/src/widgets/button.dart';
+import '../../widgets/button.dart';
 import 'package:flutter/material.dart';
-import '../models/user.dart' as UserModel;
+import '../../models/user.dart' as UserModel;
+import 'profile.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserModel.User currentUser;
 
-  HomeScreen({this.currentUser});
+  HomeScreen(this.currentUser);
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +18,14 @@ class HomeScreen extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(
-            "Welcome, ${this.currentUser.name}",
-            style: Theme.of(context).textTheme.headline4.copyWith(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
+          Container(
+            padding: EdgeInsets.only(top: 20.0),
+            child: Text(
+              "Welcome, ${this.currentUser.name}",
+              style: Theme.of(context).textTheme.headline5.copyWith(
+                color: Colors.black,
+                fontWeight: FontWeight.bold
+              ),
             ),
           ),
           Container(
@@ -102,7 +106,12 @@ class HomeScreen extends StatelessWidget {
                 AppButton(
                   color: Theme.of(context).colorScheme.secondary, 
                   text: "Profile", 
-                  onPressed: () => true,
+                  onPressed: () => Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (materialPageRouteContext) => ProfileScreen(this.currentUser)
+                    )
+                  ),
                   minWidth: 150,
                 )
               ],
