@@ -1,9 +1,17 @@
+import 'package:app/src/models/pet.dart';
+
 class User {
   String name;
   String email;
   String phoneNumber;
+  String imagePath;
+  List<Pet> pets = <Pet>[];
 
-  User(this.name, this.email, {this.phoneNumber});
+  User(this.name, this.email, {
+    this.phoneNumber, 
+    this.pets, 
+    this.imagePath=""
+  });
 
   User.fromJson(Map<String, String> parsedJson) {
     this.name = parsedJson["name"];

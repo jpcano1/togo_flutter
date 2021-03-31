@@ -81,6 +81,7 @@ ThemeData basicTheme() {
       secondary: Color(0xff99b2dd),
       secondaryVariant: Color(0xffb4e5a0),
       background: Colors.white,
+      surface: Color(0xff89a1b0)
     ),
     disabledColor: Color(0xff76a5c6),
     inputDecorationTheme: _basicInputTheme(light.inputDecorationTheme),
