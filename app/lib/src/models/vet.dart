@@ -10,18 +10,30 @@ class StoreVet extends UserModel.User {
            String email, this.officeHours, 
            this.contactPhone, 
            this.locations, {String phoneNumber}): 
-    super(name, email, phoneNumber: phoneNumber);
+    super(name, email, phoneNumber: phoneNumber) {
+      this.name = name;
+      this.email = email;
+      this.phoneNumber = phoneNumber;
+    }
   
   @override
   StoreVet.fromJson(Map<String, String> parsedJson): 
-    super.fromJson(parsedJson);
+    super.fromJson(parsedJson) {
+      // User Attributes
+      this.name = parsedJson["name"];
+      this.email = parsedJson["email"];
+      this.phoneNumber = parsedJson["phoneNumber"];
+
+      // Vet Attributes
+    }
   
   @override
   toMap() {
-    Map<String, dynamic> map = super.toMap();
-    map["officeHours"] = this.officeHours;
-    map["contactPhone"] = this.contactPhone;
-    map["locations"] = this.locations;
-    return map;
+    return {
+      ...super.toMap(),
+      "officeHoursce": this.officeHours,
+      "contactPhone": this.contactPhone,
+      "locations": this.locations
+    };
   }
 }
