@@ -11,6 +11,7 @@ import '../../../models/store_vet.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../utils/location.dart';
+import '../../../utils/haversine.dart';
 
 class StoreVetDetail extends StatefulWidget {
   final StoreVet storeVet;
@@ -27,40 +28,50 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
   bool visible;
   BitmapDescriptor mapMarker;
   Position userLocation;
+  double shortestDistance;
 
   _StoreVetDetailState(this.storeVet);
 
   @override
   initState() {
+    super.initState();
     visible = false;
     initCustomMarker("assets/icons/pet-locator-2.png")
       .then((byteData) => mapMarker = BitmapDescriptor.fromBytes(byteData))
       .catchError(print);
-    deteriminePosition()
-      .then((position) => userLocation = position)
-      .catchError((error) {
-        Fluttertoast.showToast(
-          msg: error,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.BOTTOM,
-          textColor: Colors.white,
-          backgroundColor: Theme.of(context).colorScheme.primary
-        );
-        Navigator.pop(context);
-      });
-    super.initState();
   }
 
-  bestDistance() {
+  String bestDistance(Position userLocation) {
+    var shortestDistance = double.infinity;
+
     var currentUserCoordinates = {
-      "lat": this.userLocation.latitude,
-      "lng": this.userLocation.longitude
+      "lat": userLocation.latitude,
+      "lng": userLocation.longitude
     };
+
+    for (Map<String, double> location in this.storeVet.locations) {
+      var startLat = currentUserCoordinates["lat"];
+      var startLong = currentUserCoordinates["lng"];
+
+      var endLat = location["lat"];
+      var endLong = location["lng"];
+
+      var distance = Haversine.distance(startLat, startLong, endLat, endLong);
+
+      if (distance < shortestDistance) {
+        shortestDistance = distance;
+      }
+    }
+    return shortestDistance.toStringAsFixed(2);
   }
 
   Future<Uint8List> initCustomMarker(String path) async {
-    ByteData byteData = await DefaultAssetBundle.of(context).load(path);
-    return byteData.buffer.asUint8List();
+    try {
+      ByteData byteData = await DefaultAssetBundle.of(context).load(path);
+      return byteData.buffer.asUint8List();
+    } catch(error) {
+      throw new Exception(error);
+    }
   }
 
   void onMapCreated(GoogleMapController controller) {
@@ -69,7 +80,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
       for (Map<String, double> location in this.storeVet.locations) {
         markers.add(
           Marker(
-            markerId: MarkerId("value-$counter"),
+            markerId: MarkerId("value-${counter++}"),
             position: LatLng(location["lat"], location["lng"]),
             infoWindow: InfoWindow(
               title: "Come Here!"
@@ -77,7 +88,6 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
             icon: mapMarker
           )
         );
-        counter++;
       }
     });
   }
@@ -106,12 +116,53 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
             children: [
               Container(
                 margin: EdgeInsets.only(bottom: size.height * 0.05),
-                child: Text(
-                  this.storeVet.name,
-                  style: Theme.of(context).textTheme.headline5.copyWith(
-                    color: Colors.black
-                  ),
-                ),
+                child: Column(
+                  children: [
+                    Text(
+                      this.storeVet.name,
+                      style: Theme.of(context).textTheme.headline5.copyWith(
+                        color: Colors.black
+                      ),
+                    ),
+                    FutureBuilder(
+                      future: determinePosition(),
+                      builder: (futureContext, AsyncSnapshot<Position> snapshot) {
+                        if (snapshot.hasError) {
+                          Fluttertoast.showToast(
+                            msg: snapshot.error,
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            textColor: Colors.white,
+                            backgroundColor: Theme.of(context).colorScheme.primary
+                          );
+                          Navigator.pop(context);
+                          return Text(
+                            snapshot.error,
+                            style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.black
+                            ),
+                          );
+                        }
+                        if (snapshot.hasData && 
+                          snapshot.connectionState == ConnectionState.done) {
+                          return Text(
+                            "${bestDistance(snapshot.data)} km far from you",
+                            style: Theme.of(context).textTheme.subtitle1.copyWith(
+                              color: Colors.black
+                            ),
+                          );
+                        }
+
+                        return Text(
+                          "Loading",
+                          style: Theme.of(context).textTheme.subtitle1.copyWith(
+                            color: Colors.black
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                )
               ),
               CircleAvatar(
                 backgroundImage: storeVetImage,

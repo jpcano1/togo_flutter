@@ -2,9 +2,9 @@ import 'package:vector_math/vector_math.dart' as Vec;
 import 'dart:math' as Math;
 
 class Haversine {
-  final int _earthRadius = 6371;
+  static final int _earthRadius = 6371;
 
-    double distance(
+    static double distance(
       double startLat, double startLong,
       double endLat, double endLong) {
         double dLat  = Vec.degrees2Radians * (endLat - startLat);
@@ -19,7 +19,7 @@ class Haversine {
         return _earthRadius * c;
     }
 
-    double _haversin(double val) {
+    static double _haversin(double val) {
         return Math.pow(Math.sin(val / 2), 2);
     }
 }
