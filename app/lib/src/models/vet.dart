@@ -2,7 +2,7 @@ import 'user.dart' as UserModel;
 
 class StoreVet extends UserModel.User {
 
-  List<String> officeHours;
+  Map<String, List<String>> officeHours;
   String contactPhone;
   List<Map<String, double>> locations;
 

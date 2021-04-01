@@ -1,5 +1,6 @@
 import 'package:app/src/models/pet.dart';
 import 'package:app/src/screens/services/services.dart';
+import 'package:app/src/screens/services/store_vet_list.dart';
 import './screens/user/home.dart';
 import './screens/user/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +37,7 @@ class App extends StatelessWidget {
           "/login": (_) => LoginScreen(),
           "/register": (_) => RegisterScreen(),
           "/services": (_) => ServicesScreen(),
+          "/services/vets": (_) => VetListScreen()
         },
       )
     );

@@ -4,8 +4,6 @@ import '../../models/user.dart' as UserModel;
 
 class ProfileScreen extends StatelessWidget {
   final UserModel.User currentUser;
-  final String defaultPetImage = "assets/icons/scottish-fold-cat.png";
-  final String defaultUserImage = "assets/icons/user.png";
 
   ProfileScreen(this.currentUser);
 
@@ -13,6 +11,9 @@ class ProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final spaceBetween = size.width * 0.03;
+
+    final String defaultPetImage = "assets/icons/scottish-fold-cat.png";
+    final String defaultUserImage = "assets/icons/user.png";
 
     AssetImage userImage = AssetImage(
       this.currentUser.imagePath.isEmpty?
@@ -106,7 +107,7 @@ class ProfileScreen extends StatelessWidget {
                     if (pet.imagePath.isNotEmpty) {
                       image = AssetImage(pet.imagePath);
                     } else {
-                      image = AssetImage(this.defaultPetImage);
+                      image = AssetImage(defaultPetImage);
                     }
                     return Card(
                       color: Theme.of(context).colorScheme.surface,

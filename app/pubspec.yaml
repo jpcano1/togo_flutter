@@ -32,6 +32,10 @@ dependencies:
   firebase_core: ^1.0.2
   firebase_auth: ^1.0.1
   cloud_firestore: ^1.0.3
+  firebase_storage: "^8.0.1"
+
+  # Google Dependencies
+  google_maps_flutter: ^2.0.1
 
   # Other Dependencies
   google_fonts: ^2.0.0
