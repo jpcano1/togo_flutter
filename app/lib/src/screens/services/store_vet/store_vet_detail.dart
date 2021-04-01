@@ -1,11 +1,16 @@
+import 'dart:typed_data';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter/material.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../models/store_vet.dart';
 import '../../../widgets/button.dart';
-import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../../widgets/app_bar.dart';
+import '../../../utils/location.dart';
 
 class StoreVetDetail extends StatefulWidget {
   final StoreVet storeVet;
@@ -21,23 +26,46 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
   final Set<Marker> markers = {};
   bool visible;
   BitmapDescriptor mapMarker;
+  Position userLocation;
 
   _StoreVetDetailState(this.storeVet);
 
   @override
   initState() {
     visible = false;
+    initCustomMarker("assets/icons/pet-locator-2.png")
+      .then((byteData) => mapMarker = BitmapDescriptor.fromBytes(byteData))
+      .catchError(print);
+    deteriminePosition()
+      .then((position) => userLocation = position)
+      .catchError((error) {
+        Fluttertoast.showToast(
+          msg: error,
+          toastLength: Toast.LENGTH_LONG,
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary
+        );
+        Navigator.pop(context);
+      });
     super.initState();
   }
 
-  initCustomMarker() async {
-    mapMarker = await BitmapDescriptor.fromAssetImage(ImageConfiguration(), "assets/icons/petshop-locator.png");
+  bestDistance() {
+    var currentUserCoordinates = {
+      "lat": this.userLocation.latitude,
+      "lng": this.userLocation.longitude
+    };
+  }
+
+  Future<Uint8List> initCustomMarker(String path) async {
+    ByteData byteData = await DefaultAssetBundle.of(context).load(path);
+    return byteData.buffer.asUint8List();
   }
 
   void onMapCreated(GoogleMapController controller) {
     setState(() {
       int counter = 1;
-
       for (Map<String, double> location in this.storeVet.locations) {
         markers.add(
           Marker(
@@ -45,7 +73,8 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
             position: LatLng(location["lat"], location["lng"]),
             infoWindow: InfoWindow(
               title: "Come Here!"
-            )
+            ),
+            icon: mapMarker
           )
         );
         counter++;

@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 
 import '../widgets/button.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../blocs/provider.dart';
 import '../utils/notification_dialog.dart';
 import '../models/user.dart' as UserModel;
@@ -92,10 +91,9 @@ class LoginScreen extends StatelessWidget {
                           email: validData["email"], 
                           password: validData["password"]
                         );
-                      } on FirebaseAuthException catch(e) {
+                      } on FirebaseAuthException catch(_) {
                         return dialog(streamContext, "Wrong email or password");
                       }
-
 
                       User user = _firebaseAuth.currentUser;
                       
