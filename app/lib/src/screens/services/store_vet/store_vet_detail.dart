@@ -1,29 +1,32 @@
-import 'package:app/src/models/vet.dart';
-import 'package:app/src/widgets/button.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+
+import '../../../models/store_vet.dart';
+import '../../../widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import '../../widgets/app_bar.dart';
+import '../../../widgets/app_bar.dart';
 
-class VetDetail extends StatefulWidget {
+class StoreVetDetail extends StatefulWidget {
   final StoreVet storeVet;
 
-  VetDetail(this.storeVet, {Key key}): super(key: key);
+  StoreVetDetail(this.storeVet, {Key key}): super(key: key);
 
   @override
-  _VetDetailState createState() => _VetDetailState(this.storeVet);
+  _StoreVetDetailState createState() => _StoreVetDetailState(this.storeVet);
 }
 
-class _VetDetailState extends State<VetDetail> {
+class _StoreVetDetailState extends State<StoreVetDetail> {
   final StoreVet storeVet;
   final Set<Marker> markers = {};
   bool visible;
   BitmapDescriptor mapMarker;
 
-  _VetDetailState(this.storeVet);
+  _StoreVetDetailState(this.storeVet);
 
   @override
   initState() {
-    visible = true;
+    visible = false;
     super.initState();
   }
 
@@ -40,6 +43,9 @@ class _VetDetailState extends State<VetDetail> {
           Marker(
             markerId: MarkerId("value-$counter"),
             position: LatLng(location["lat"], location["lng"]),
+            infoWindow: InfoWindow(
+              title: "Come Here!"
+            )
           )
         );
         counter++;
@@ -88,19 +94,14 @@ class _VetDetailState extends State<VetDetail> {
                 width: size.width,
                 child: Column(
                   children: [
-                    TextButton(
-                      child: Text(
-                        "Office Hours",
-                        style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: Theme.of(context).colorScheme.primary
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
+                    AppButton(
+                      color: Theme.of(context).colorScheme.primary, 
+                      text: "Office Hours", 
                       onPressed: () {
                         setState(() {
                           visible = !visible;
                         });
-                      },
+                      }
                     ),
                     Visibility(
                       visible: visible,
@@ -201,6 +202,15 @@ class _VetDetailState extends State<VetDetail> {
                 ),
               ),
               Container(
+                margin: EdgeInsets.only(bottom: 20.0),
+                child: Text(
+                  "Locations",
+                  style: Theme.of(context).textTheme.headline6.copyWith(
+                    color: Theme.of(context).colorScheme.primary
+                  ),
+                ),
+              ),
+              Container(
                 child: GoogleMap(
                   onMapCreated: onMapCreated,
                   markers: markers,
@@ -211,13 +221,11 @@ class _VetDetailState extends State<VetDetail> {
                     ),
                     zoom: 14,
                   ),
-                  onTap: (_) {
-                    print("Hola");
+                  gestureRecognizers: {
+                    Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())
                   },
-                  scrollGesturesEnabled: false,
-                  liteModeEnabled: true,
                 ),
-                height: size.height * 0.3,
+                height: size.height * 0.4,
                 width: size.width,
               )
             ],

@@ -1,22 +1,22 @@
-import 'package:app/src/screens/services/store_vet_detail.dart';
+import 'store_vet_detail.dart';
 import 'package:flutter/material.dart';
-import '../../models/vet.dart' as VetModel;
-import '../../widgets/app_bar.dart';
+import '../../../models/store_vet.dart' as VetModel;
+import '../../../widgets/app_bar.dart';
 
-class VetListScreen extends StatefulWidget {
+class StoreVetListScreen extends StatefulWidget {
   final bool stores;
   
-  VetListScreen({this.stores=false});
+  StoreVetListScreen({this.stores=false});
 
   @override
-  _VetListScreenState createState() => _VetListScreenState(this.stores);
+  _StoreVetListScreenState createState() => _StoreVetListScreenState(this.stores);
 }
 
-class _VetListScreenState extends State<VetListScreen> {
+class _StoreVetListScreenState extends State<StoreVetListScreen> {
   List<VetModel.StoreVet> vetList;
   final bool stores;
 
-  _VetListScreenState(this.stores);
+  _StoreVetListScreenState(this.stores);
 
   @override
   void initState() {
@@ -136,7 +136,7 @@ class _VetListScreenState extends State<VetListScreen> {
                       onTap: () => Navigator.push(
                         listContext, 
                         MaterialPageRoute(
-                          builder: (materialPageRouteContext) => VetDetail(storeVet)
+                          builder: (materialPageRouteContext) => StoreVetDetail(storeVet)
                         )
                       ),
                       title: Text(

@@ -5,13 +5,15 @@ class User {
   String email;
   String phoneNumber;
   String imagePath;
-  List<Pet> pets = <Pet>[];
+  List<Pet> pets;
 
   User(this.name, this.email, {
     this.phoneNumber, 
-    this.pets, 
-    this.imagePath=""
-  });
+    this.imagePath="",
+    List<Pet> pets
+  }) {
+    this.pets = pets ?? [];
+  }
 
   User.fromJson(Map<String, String> parsedJson) {
     this.name = parsedJson["name"];
