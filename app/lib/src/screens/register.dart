@@ -195,8 +195,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         phoneNumber: this.zone + validData["phone"]
       );
 
-      users.add(currentUser.toMap())
-      .then((result) async {
+      users.add({
+        ...currentUser.toMap(),
+        "petOwner": true,
+        "store": false,
+        "walker": false,
+        "vet": false,
+        "pets": []
+      })
+      .then((DocumentReference result) async {
         await _firebaseAuth.currentUser.sendEmailVerification();
 
         Fluttertoast.showToast(

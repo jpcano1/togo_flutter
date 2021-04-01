@@ -15,10 +15,14 @@ class User {
     this.pets = pets ?? [];
   }
 
-  User.fromJson(Map<String, String> parsedJson) {
+  User.fromJson(Map<String, dynamic> parsedJson) {
     this.name = parsedJson["name"];
     this.email = parsedJson["email"];
     this.phoneNumber = parsedJson["phoneNumber"];
+    this.pets = List.generate(
+      parsedJson["pets"].length, 
+      (index) => Pet.fromJson(parsedJson["pets"][index])
+    );
   }
 
   toMap() {

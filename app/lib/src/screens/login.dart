@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -11,6 +12,7 @@ import 'user/home.dart';
 
 class LoginScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final CollectionReference users = FirebaseFirestore.instance.collection("User");
 
   @override
   Widget build(BuildContext context) {
@@ -94,8 +96,9 @@ class LoginScreen extends StatelessWidget {
                         return dialog(streamContext, "Wrong email or password");
                       }
 
-                      User user = _firebaseAuth.currentUser;
 
+                      User user = _firebaseAuth.currentUser;
+                      
                       if (!user.emailVerified) {
                         Fluttertoast.showToast(
                           msg: "You are not verified, please go check your email",
