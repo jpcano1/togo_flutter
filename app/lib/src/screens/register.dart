@@ -22,6 +22,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final CollectionReference users = FirebaseFirestore.instance.collection("User");
   String zone;
+  bool nightMode = isNightMode();
 
   @override
   void initState() {
@@ -31,7 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool nightMode = isNightMode();
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
