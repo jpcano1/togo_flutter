@@ -3,15 +3,14 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/material.dart';
 
 import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'user/home.dart';
 import '../blocs/bloc.dart';
 import '../utils/notification_dialog.dart';
 import '../blocs/provider.dart';
+import './user/profile_picture_upload.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -191,19 +190,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
 
       var currentUser = UserModel.User(
+        _firebaseAuth.currentUser.uid,
         validData["name"], validData["email"], 
         phoneNumber: this.zone + validData["phone"]
       );
 
-      users.add({
-        ...currentUser.toMap(),
-        "petOwner": true,
-        "store": false,
-        "walker": false,
-        "vet": false,
-        "pets": []
-      })
-      .then((DocumentReference result) async {
+      users.doc(currentUser.id).set(currentUser.toMap())
+      .then((_) async {
         await _firebaseAuth.currentUser.sendEmailVerification();
 
         Fluttertoast.showToast(
@@ -213,10 +206,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           backgroundColor: Theme.of(context).colorScheme.primary,
         );
 
-        Navigator.pushReplacement(
+        Navigator.push(
           context, 
           MaterialPageRoute(
-            builder: (materialPageRouteContext) => HomeScreen(currentUser)
+            builder: (_) => ProfilePictureUploadScreen(currentUser)
           )
         );
       })

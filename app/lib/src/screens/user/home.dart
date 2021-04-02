@@ -1,3 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../widgets/button.dart';
 import 'package:flutter/material.dart';
 import '../../models/user.dart' as UserModel;
@@ -5,6 +8,7 @@ import 'profile.dart';
 
 class HomeScreen extends StatelessWidget {
   final UserModel.User currentUser;
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   HomeScreen(this.currentUser);
 
@@ -123,7 +127,17 @@ class HomeScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: size.width * 0.055),
             child: TextButton(
-              onPressed: () => true, 
+              onPressed: () {
+                _firebaseAuth.signOut();
+                Fluttertoast.showToast(
+                  msg: "You've been logged out",
+                  toastLength: Toast.LENGTH_LONG,
+                  gravity: ToastGravity.BOTTOM,
+                  textColor: Colors.white,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                );
+                Navigator.of(context).popUntil(ModalRoute.withName("/"));
+              }, 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

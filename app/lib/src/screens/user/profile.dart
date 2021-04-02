@@ -1,8 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 import '../../models/pet.dart';
 import 'package:flutter/material.dart';
 import '../../models/user.dart' as UserModel;
 
 class ProfileScreen extends StatelessWidget {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final UserModel.User currentUser;
 
   ProfileScreen(this.currentUser);
@@ -14,12 +18,13 @@ class ProfileScreen extends StatelessWidget {
 
     final String defaultPetImage = "assets/icons/scottish-fold-cat.png";
     final String defaultUserImage = "assets/icons/user.png";
+    var userImage;
 
-    AssetImage userImage = AssetImage(
-      this.currentUser.imagePath.isEmpty?
-        defaultUserImage:
-        this.currentUser.imagePath
-    );
+    if (this.currentUser.imagePath.isEmpty) {
+      userImage = AssetImage(defaultUserImage);
+    } else {
+      userImage = NetworkImage(this.currentUser.imagePath);
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.primaryVariant,
@@ -149,7 +154,17 @@ class ProfileScreen extends StatelessWidget {
             Container(
               margin: EdgeInsets.only(top: size.width * 0.055),
               child: TextButton(
-                onPressed: () => true, 
+                onPressed: () {
+                  _firebaseAuth.signOut();
+                  Fluttertoast.showToast(
+                    msg: "You've been logged out",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.BOTTOM,
+                    textColor: Colors.white,
+                    backgroundColor: Theme.of(context).colorScheme.primary,
+                  );
+                  Navigator.of(context).popUntil(ModalRoute.withName("/"));
+                }, 
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
