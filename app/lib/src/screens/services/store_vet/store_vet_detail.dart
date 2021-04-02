@@ -5,12 +5,14 @@ import 'package:flutter/gestures.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/services.dart' show rootBundle;
 
 import '../../../models/store_vet.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../utils/location.dart';
 import '../../../utils/haversine.dart';
+import '../../../utils/night_mode.dart';
 
 class StoreVetDetail extends StatefulWidget {
   final StoreVet storeVet;
@@ -25,21 +27,31 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
   final StoreVet storeVet;
   final Set<Marker> markers = {};
   bool visible;
+  bool nightMode;
   BitmapDescriptor mapMarker;
   Position userLocation;
   double shortestDistance;
   Future<Position> position;
+  String _mapStyle;
 
   _StoreVetDetailState(this.storeVet);
 
   @override
   initState() {
     super.initState();
+
+    nightMode = isNightMode();
     visible = false;
     initCustomMarker("assets/icons/pet-locator-2.png")
       .then((byteData) => mapMarker = BitmapDescriptor.fromBytes(byteData))
       .catchError(print);
     this.position = determinePosition();
+
+    if (nightMode) {
+      rootBundle.loadString('assets/map_styles/night_mode.txt').then((string) {
+        _mapStyle = string;
+      });
+    }
   }
 
   String bestDistance(Position userLocation) {
@@ -76,6 +88,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
   }
 
   void onMapCreated(GoogleMapController controller) {
+    controller.setMapStyle(this._mapStyle);
     setState(() {
       int counter = 1;
       for (Map<String, double> location in this.storeVet.locations) {
@@ -108,7 +121,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: appBar(
         backgroundColor: Theme.of(context).colorScheme.background, 
-        iconColor: Colors.black
+        iconColor: nightMode? Colors.white: Colors.black
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -122,34 +135,25 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                     Text(
                       this.storeVet.name,
                       style: Theme.of(context).textTheme.headline5.copyWith(
-                        color: Colors.black
+                        color: nightMode? Colors.white: Colors.black
                       ),
                     ),
                     FutureBuilder(
                       future: this.position,
                       builder: (futureContext, AsyncSnapshot<Position> snapshot) {
+                        var message;
                         if (snapshot.hasError) {
-                          return Text(
-                            snapshot.error,
-                            style: Theme.of(context).textTheme.subtitle1.copyWith(
-                              color: Colors.black
-                            ),
-                          );
-                        }
-                        if (snapshot.hasData && 
+                          message = snapshot.error;
+                        } else if (snapshot.hasData && 
                           snapshot.connectionState == ConnectionState.done) {
-                          return Text(
-                            "${bestDistance(snapshot.data)} km far from you",
-                            style: Theme.of(context).textTheme.subtitle1.copyWith(
-                              color: Colors.black
-                            ),
-                          );
+                          message = "${bestDistance(snapshot.data)} km far from you";
+                        } else {
+                          message = "Loading";
                         }
-
                         return Text(
-                          "Loading",
+                          message,
                           style: Theme.of(context).textTheme.subtitle1.copyWith(
-                            color: Colors.black
+                            color: nightMode? Colors.white: Colors.black
                           ),
                         );
                       },

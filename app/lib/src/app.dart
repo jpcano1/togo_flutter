@@ -42,6 +42,7 @@ class App extends StatelessWidget {
           "/register": (_) => RegisterScreen(),
           "/services": (_) => ServicesScreen(),
           "/services/vets": (_) => StoreVetListScreen(),
+          // "/": (_) => StoreVetListScreen(),
         },
       )
     );

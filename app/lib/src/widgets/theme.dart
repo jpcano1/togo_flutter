@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../utils/night_mode.dart';
 
 ThemeData basicTheme() {
+  bool nightMode = isNightMode();
+
   InputDecorationTheme _basicInputTheme(InputDecorationTheme base) {
     final errorColor = Color(0xffa30015);
+    final borderColor = nightMode? Colors.white: Colors.black;
     return base.copyWith(
       enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black, width: 2.0),
+        borderSide: BorderSide(color: borderColor, width: 2.0),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide(color: Colors.black, width: 3.0)
+        borderSide: BorderSide(color: borderColor, width: 3.0)
       ),
       filled: true,
-      fillColor: Colors.grey[100],
+      fillColor: nightMode? Colors.grey[900]: Colors.grey[100],
       contentPadding: EdgeInsets.all(10),
       errorBorder: OutlineInputBorder(
         borderSide: BorderSide(color: errorColor, width: 2.0)
@@ -23,12 +27,12 @@ ThemeData basicTheme() {
       errorStyle: TextStyle(
         color: errorColor
       ),
-      hintStyle: TextStyle(color: Colors.black38)
+      hintStyle: TextStyle(color: nightMode? Colors.white38: Colors.black38)
     );
   }
 
   TextTheme _basicTextTheme(TextTheme base) {
-    final textColorPrimary = Colors.white;
+    final textColorPrimary = nightMode? Colors.black: Colors.white;
 
     return base.copyWith(
       headline1: GoogleFonts.workSansTextTheme(base).headline1.copyWith(
@@ -71,19 +75,19 @@ ThemeData basicTheme() {
     );
   }
 
-  ThemeData light = ThemeData.light();
+  ThemeData basicTheme = nightMode? ThemeData.dark(): ThemeData.light();
 
-  return light.copyWith(
-    textTheme: _basicTextTheme(light.textTheme),
-    colorScheme: light.colorScheme.copyWith(
+  return basicTheme.copyWith(
+    textTheme: _basicTextTheme(basicTheme.textTheme),
+    colorScheme: basicTheme.colorScheme.copyWith(
       primary: Color(0xff3a6a8c),
       primaryVariant: Color(0xff6c8a9d),
       secondary: Color(0xff99b2dd),
       secondaryVariant: Color(0xffb4e5a0),
-      background: Colors.white,
-      surface: Color(0xff89a1b0)
+      background: nightMode? Colors.black: Colors.white,
+      surface: Color(0xff89a1b0),
     ),
     disabledColor: Color(0xff76a5c6),
-    inputDecorationTheme: _basicInputTheme(light.inputDecorationTheme),
+    inputDecorationTheme: _basicInputTheme(basicTheme.inputDecorationTheme),
   );
 }
