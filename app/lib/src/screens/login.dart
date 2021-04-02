@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/app_bar.dart';
 import '../widgets/button.dart';
 import '../blocs/provider.dart';
 import '../utils/notification_dialog.dart';
@@ -19,12 +20,9 @@ class LoginScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.background,
-        elevation: 0.0,
-        iconTheme: IconThemeData(
-          color: Colors.black
-        ),
+      appBar: appBar(
+        backgroundColor: Theme.of(context).colorScheme.background, 
+        iconColor: Colors.black
       ),
       body: Container(
         alignment: Alignment.centerLeft,
@@ -107,7 +105,10 @@ class LoginScreen extends StatelessWidget {
                         );
                       }
 
-                      var currentUser = UserModel.User(user.displayName, user.email);
+                      var document = await users.doc(_firebaseAuth.currentUser.uid).get();
+
+                      var currentUser = UserModel.User.fromJson(document.data());
+
                       Navigator.pushReplacement(
                         streamContext, 
                         MaterialPageRoute(

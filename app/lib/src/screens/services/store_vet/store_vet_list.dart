@@ -22,6 +22,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
   void initState() {
     vetList = [
       VetModel.StoreVet(
+        "",
         "Exotic Pet",
         "Email@vet.com",
         {
@@ -40,6 +41,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ]
       ),
       VetModel.StoreVet(
+        "",
         "Veterinaria 2",
         "Email@vet.com",
         {
@@ -54,6 +56,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ]
       ),
       VetModel.StoreVet(
+        "",
         "Veterinaria 3",
         "Email@vet.com",
         {
@@ -68,6 +71,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ]
       ),
       VetModel.StoreVet(
+        "",
         "Veterinaria 4",
         "Email@vet.com",
         {

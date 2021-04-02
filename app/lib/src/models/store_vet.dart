@@ -6,11 +6,12 @@ class StoreVet extends UserModel.User {
   String contactPhone;
   List<Map<String, double>> locations;
 
-  StoreVet(String name, 
+  StoreVet(String id, String name, 
            String email, this.officeHours, 
            this.contactPhone, 
            this.locations, {String phoneNumber}): 
-    super(name, email, phoneNumber: phoneNumber) {
+    super(id, name, email, phoneNumber: phoneNumber) {
+      this.id = id;
       this.name = name;
       this.email = email;
       this.phoneNumber = phoneNumber;
