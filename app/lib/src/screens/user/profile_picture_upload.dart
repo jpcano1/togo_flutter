@@ -4,7 +4,7 @@ import 'package:app/src/screens/user/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../widgets/app_bar.dart';
-import '../../utils/photo_upload.dart';
+import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
 import '../../models/user.dart' as UserModel;
 

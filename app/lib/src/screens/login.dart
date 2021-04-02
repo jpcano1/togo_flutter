@@ -22,6 +22,7 @@ class LoginScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: appBar(
         backgroundColor: Theme.of(context).colorScheme.background, 
         iconColor: nightMode? Colors.white: Colors.black
@@ -96,7 +97,7 @@ class LoginScreen extends StatelessWidget {
                           password: validData["password"]
                         );
                       } on FirebaseAuthException catch(_) {
-                        return dialog(streamContext, "Wrong email or password");
+                        return dialog(streamContext, message: "Wrong email or password");
                       }
 
                       User user = _firebaseAuth.currentUser;

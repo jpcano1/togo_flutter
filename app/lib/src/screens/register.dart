@@ -192,9 +192,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
         await _firebaseAuth.currentUser.updateProfile(displayName: validData["name"]);
       } on FirebaseAuthException catch(e) {
         if (e.code == "weak-password") {
-          return dialog(context, "The password provided is too weak.");
+          return dialog(context, message: "The password provided is too weak.");
         } else if (e.code == 'email-already-in-use') {
-          return dialog(context, "The account already exists for that email.");
+          return dialog(context, message: "The account already exists for that email.");
         }
       } catch(e) {
         print(e.toString());
@@ -226,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       })
       .catchError((FirebaseException error) {
         if (error.code == "permission-denied") {
-          return dialog(context, "You do not have permission to perform this.");
+          return dialog(context, message: "You do not have permission to perform this.");
         }
       });
     }
