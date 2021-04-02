@@ -7,13 +7,13 @@ class AppButton extends StatelessWidget {
   final double minWidth;
   final Widget child;
 
-  AppButton({@required this.color, @required this.text, @required this.onPressed, this.minWidth, this.child});
+  AppButton({@required this.color, this.text, @required this.onPressed, this.minWidth, this.child});
 
   @override
   Widget build(BuildContext context) {
     return MaterialButton(
       child: this.child ?? Text(
-        this.text,
+        this.text?? "",
         style: Theme.of(context).textTheme.button,
       ),
       color: this.color,

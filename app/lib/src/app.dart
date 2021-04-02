@@ -1,3 +1,5 @@
+import 'package:app/src/screens/user/home.dart';
+
 import './models/user.dart' as UserModel;
 import './models/pet.dart' as PetModel;
 
@@ -7,6 +9,7 @@ import './screens/services/store_vet/store_vet_list.dart';
 import './screens/welcome.dart';
 import './screens/login.dart';
 import './screens/register.dart';
+import './screens/user/qr_scanner.dart';
 
 // Widgets
 import './widgets/theme.dart';
@@ -42,7 +45,7 @@ class App extends StatelessWidget {
           "/register": (_) => RegisterScreen(),
           "/services": (_) => ServicesScreen(),
           "/services/vets": (_) => StoreVetListScreen(),
-          // "/": (_) => StoreVetListScreen(),
+          "/qr_scanner": (_) => QRScannerScreen(),
         },
       )
     );

@@ -10,7 +10,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import '../../../models/store_vet.dart';
 import '../../../widgets/button.dart';
 import '../../../widgets/app_bar.dart';
-import '../../../utils/location.dart';
+import '../../../utils/permissions.dart';
 import '../../../utils/haversine.dart';
 import '../../../utils/night_mode.dart';
 
