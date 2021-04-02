@@ -5,7 +5,6 @@ import 'package:flutter/gestures.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../models/store_vet.dart';
 import '../../../widgets/button.dart';
@@ -128,14 +127,6 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                       future: determinePosition(),
                       builder: (futureContext, AsyncSnapshot<Position> snapshot) {
                         if (snapshot.hasError) {
-                          Fluttertoast.showToast(
-                            msg: snapshot.error,
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            textColor: Colors.white,
-                            backgroundColor: Theme.of(context).colorScheme.primary
-                          );
-                          Navigator.pop(context);
                           return Text(
                             snapshot.error,
                             style: Theme.of(context).textTheme.subtitle1.copyWith(
