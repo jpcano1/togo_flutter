@@ -28,6 +28,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
   BitmapDescriptor mapMarker;
   Position userLocation;
   double shortestDistance;
+  Future<Position> position;
 
   _StoreVetDetailState(this.storeVet);
 
@@ -38,6 +39,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
     initCustomMarker("assets/icons/pet-locator-2.png")
       .then((byteData) => mapMarker = BitmapDescriptor.fromBytes(byteData))
       .catchError(print);
+    this.position = determinePosition();
   }
 
   String bestDistance(Position userLocation) {
@@ -124,7 +126,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                       ),
                     ),
                     FutureBuilder(
-                      future: determinePosition(),
+                      future: this.position,
                       builder: (futureContext, AsyncSnapshot<Position> snapshot) {
                         if (snapshot.hasError) {
                           return Text(
