@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:app/src/utils/notification_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -16,7 +15,7 @@ class QRScannerScreen extends StatefulWidget {
 
 class _QRScannerScreenState extends State<QRScannerScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
-  Barcode result;
+  String qrMessage;
   QRViewController controller;
 
   @override
@@ -44,12 +43,29 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         child: Column(
           children: [
             Expanded(
-              flex: 5,
+              flex: 4,
               child: QRView(
                 key: qrKey,
                 onQRViewCreated: scanQRCode,
+                overlay: QrScannerOverlayShape(
+                  borderColor: Theme.of(context).colorScheme.primaryVariant,
+                  borderRadius: 10,
+                  borderLength: 30,
+                  borderWidth: 10,
+                  cutOutSize: size.width * 0.7
+                ),
               ),
             ),
+            Expanded(
+              flex: 2,
+              child: Padding(
+                  child: Text(
+                  this.qrMessage?? "Scan the QR Code",
+                  style: Theme.of(context).textTheme.headline5,
+                ),
+                padding: EdgeInsets.only(top: size.height * 0.03),
+              )
+            )
           ],
         ),
       ),
@@ -64,15 +80,9 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         this.controller = controller;
       });
 
-      controller.scannedDataStream.listen((scanData) { 
+      controller.scannedDataStream.listen((scanData) {
         setState(() {
-          dialog(
-            context,
-            message: "Data: ${scanData.code}",
-            onPressed: () {
-              Navigator.popUntil(context, ModalRoute.withName("/home"));
-            }
-          );
+          this.qrMessage = scanData.code;
         });
       });
     } on Exception catch(e) {
