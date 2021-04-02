@@ -1,5 +1,8 @@
-import 'package:app/src/screens/home.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:app/src/models/pet.dart';
+import 'package:app/src/screens/services/services.dart';
+import './screens/services/store_vet/store_vet_list.dart';
+import './screens/user/home.dart';
+import './screens/user/profile.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 import './screens/register.dart';
@@ -8,6 +11,7 @@ import 'screens/welcome.dart';
 import './widgets/theme.dart';
 import './screens/login.dart';
 import './blocs/provider.dart' as provider;
+import './models/user.dart' as UserModel;
 
 class App extends StatelessWidget {
   @override
@@ -18,7 +22,7 @@ class App extends StatelessWidget {
       child: MaterialApp(
         theme: basicTheme(),
         routes: {
-          "/": (_) => FutureBuilder(
+          "/home": (_) => FutureBuilder(
             future: _initialization,
             builder: (futureContext, snapshot) {
               if (snapshot.hasError) {
@@ -32,6 +36,9 @@ class App extends StatelessWidget {
           ),
           "/login": (_) => LoginScreen(),
           "/register": (_) => RegisterScreen(),
+          "/services": (_) => ServicesScreen(),
+          // "/services/vets": (_) => StoreVetListScreen(),
+          "/": (_) => StoreVetListScreen()
         },
       )
     );

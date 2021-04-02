@@ -8,7 +8,7 @@ import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'home.dart';
+import 'user/home.dart';
 import '../blocs/bloc.dart';
 import '../utils/notification_dialog.dart';
 import '../blocs/provider.dart';
@@ -195,8 +195,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
         phoneNumber: this.zone + validData["phone"]
       );
 
-      users.add(currentUser.toMap())
-      .then((result) async {
+      users.add({
+        ...currentUser.toMap(),
+        "petOwner": true,
+        "store": false,
+        "walker": false,
+        "vet": false,
+        "pets": []
+      })
+      .then((DocumentReference result) async {
         await _firebaseAuth.currentUser.sendEmailVerification();
 
         Fluttertoast.showToast(
@@ -209,9 +216,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Navigator.pushReplacement(
           context, 
           MaterialPageRoute(
-            builder: (materialPageRouteContext) => HomeScreen(
-              currentUser: currentUser
-            )
+            builder: (materialPageRouteContext) => HomeScreen(currentUser)
           )
         );
       })
