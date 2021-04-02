@@ -1,10 +1,12 @@
-import 'package:app/src/widgets/button.dart';
+import '../../widgets/button.dart';
 import 'package:flutter/material.dart';
+import '../../utils/night_mode.dart';
 
 class ServicesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    bool nightMode = isNightMode();
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -12,7 +14,7 @@ class ServicesScreen extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0.0,
         iconTheme: IconThemeData(
-          color: Colors.black
+          color: nightMode? Colors.white: Colors.black
         ),
       ),
       body: Container(
@@ -25,7 +27,7 @@ class ServicesScreen extends StatelessWidget {
               child: Text(
                 "Services",
                 style: Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.black,
+                  color: nightMode? Colors.white: Colors.black,
                 ),
                 textAlign: TextAlign.start,
               ),

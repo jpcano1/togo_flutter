@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'night_mode.dart';
 
 dialog(context, String message, {onPressed}) {
+  bool nightMode = isNightMode();
   showDialog(
     context: context, 
     builder: (dialogContext) {
@@ -11,7 +13,7 @@ dialog(context, String message, {onPressed}) {
               Text(
                 message,
                 style: Theme.of(context).textTheme.bodyText1.copyWith(
-                  color: Colors.black
+                  color: nightMode? Colors.white: Colors.black
                 ),
               ),
               Padding(

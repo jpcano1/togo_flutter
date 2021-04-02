@@ -8,7 +8,8 @@ import '../widgets/button.dart';
 import '../blocs/provider.dart';
 import '../utils/notification_dialog.dart';
 import '../models/user.dart' as UserModel;
-import 'user/home.dart';
+import './user/home.dart';
+import '../utils/night_mode.dart';
 
 class LoginScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -16,13 +17,14 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool nightMode = isNightMode();
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: appBar(
         backgroundColor: Theme.of(context).colorScheme.background, 
-        iconColor: Colors.black
+        iconColor: nightMode? Colors.white: Colors.black
       ),
       body: Container(
         alignment: Alignment.centerLeft,
@@ -32,7 +34,7 @@ class LoginScreen extends StatelessWidget {
             Text(
               "Login",
               style: Theme.of(context).textTheme.headline4.copyWith(
-                color: Colors.black,
+                color: nightMode? Colors.white: Colors.black,
               ),
             ),
             Container(
@@ -44,8 +46,10 @@ class LoginScreen extends StatelessWidget {
                   return TextField(
                     onChanged: bloc.changeLoginEmail,
                     keyboardType: TextInputType.emailAddress,
-                    cursorColor: Colors.black,
-                    style: TextStyle(color: Colors.black),
+                    cursorColor: nightMode? Colors.white: Colors.black,
+                    style: TextStyle(
+                      color: nightMode? Colors.white: Colors.black,
+                    ),
                     decoration: InputDecoration(
                       hintText: "example@mail.com",
                       errorText: snapshot.error
@@ -62,8 +66,10 @@ class LoginScreen extends StatelessWidget {
                 builder: (streamContext, snapshot) {
                   return TextField(
                     onChanged: bloc.changeLoginPassword,
-                    cursorColor: Colors.black,
-                    style: TextStyle(color: Colors.black),
+                    cursorColor: nightMode? Colors.white: Colors.black,
+                    style: TextStyle(
+                      color: nightMode? Colors.white: Colors.black,
+                    ),
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "password",

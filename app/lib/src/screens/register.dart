@@ -9,6 +9,7 @@ import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
 import '../blocs/bloc.dart';
 import '../utils/notification_dialog.dart';
+import '../utils/night_mode.dart';
 import '../blocs/provider.dart';
 import './user/profile_picture_upload.dart';
 
@@ -30,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool nightMode = isNightMode();
     final bloc = Provider.of(context);
     final size = MediaQuery.of(context).size;
 
@@ -39,7 +41,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0.0,
         iconTheme: IconThemeData(
-          color: Colors.black
+          color: nightMode? Colors.white: Colors.black
         ),
       ),
       body: Container(
@@ -49,7 +51,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             Text(
               "Register",
               style: Theme.of(context).textTheme.headline4.copyWith(
-                color: Colors.black,
+                color: nightMode? Colors.white: Colors.black,
               ),
             ),
             Container(
@@ -60,8 +62,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 builder: (streamContext, snapshot) {
                   return TextField(
                     onChanged: bloc.changeRegisterName,
-                    cursorColor: Colors.black,
-                    style: TextStyle(color: Colors.black),
+                    cursorColor: nightMode? Colors.white: Colors.black,
+                    style: TextStyle(
+                      color: nightMode? Colors.white: Colors.black
+                    ),
                     decoration: InputDecoration(
                       hintText: "John Doe",
                       errorText: snapshot.error
@@ -79,8 +83,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return TextField(
                     onChanged: bloc.changeRegisterEmail,
                     keyboardType: TextInputType.emailAddress,
-                    cursorColor: Colors.black,
-                    style: TextStyle(color: Colors.black),
+                    cursorColor: nightMode? Colors.white: Colors.black,
+                    style: TextStyle(
+                      color: nightMode? Colors.white: Colors.black
+                    ),
                     decoration: InputDecoration(
                       hintText: "example@mail.com",
                       errorText: snapshot.error
@@ -99,14 +105,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     showCountryOnly: false,
                     showOnlyCountryWhenClosed: false,
                     textStyle: TextStyle(
-                      color: Colors.black,
+                      color: nightMode? Colors.white: Colors.black,
                     ),
                     dialogTextStyle: TextStyle(
-                      color: Colors.black,
+                      color: nightMode? Colors.white: Colors.black,
                     ),
                     searchStyle: TextStyle(
-                      color: Colors.black,
+                      color: nightMode? Colors.white: Colors.black,
                     ),
+                    dialogBackgroundColor: Theme.of(context).backgroundColor,
                     dialogSize: Size(size.width * 0.8, size.height * 0.7),
                     onChanged: (CountryCode value) => setState(() => zone = value.dialCode),
                   ),
@@ -116,9 +123,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       builder: (streamContext, snapshot) {
                         return TextField(
                           onChanged: bloc.changeRegisterPhone,
-                          cursorColor: Colors.black,
                           keyboardType: TextInputType.phone,
-                          style: TextStyle(color: Colors.black),
+                          cursorColor: nightMode? Colors.white: Colors.black,
+                          style: TextStyle(
+                            color: nightMode? Colors.white: Colors.black
+                          ),
                           decoration: InputDecoration(
                             hintText: "+57 (123) 123 1234",
                             errorText: snapshot.error
@@ -138,8 +147,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 builder: (streamContext, snapshot) {
                   return TextField(
                     onChanged: bloc.changeRegisterPassword,
-                    cursorColor: Colors.black,
-                    style: TextStyle(color: Colors.black),
+                    cursorColor: nightMode? Colors.white: Colors.black,
+                    style: TextStyle(
+                      color: nightMode? Colors.white: Colors.black
+                    ),
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "password",

@@ -2,6 +2,7 @@ import 'store_vet_detail.dart';
 import 'package:flutter/material.dart';
 import '../../../models/store_vet.dart' as VetModel;
 import '../../../widgets/app_bar.dart';
+import '../../../utils/night_mode.dart';
 
 class StoreVetListScreen extends StatefulWidget {
   final bool stores;
@@ -91,6 +92,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool nightMode = isNightMode();
     final size = MediaQuery.of(context).size;
     final defaultVetImagePath = "assets/icons/snakes.png";
 
@@ -98,7 +100,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: appBar(
         backgroundColor: Theme.of(context).colorScheme.background, 
-        iconColor: Colors.black
+        iconColor: nightMode? Colors.white: Colors.black
       ),
       body: Container(
         child: Column(
@@ -110,7 +112,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
               child: Text(
                 this.stores? "Stores": "Vets",
                 style: Theme.of(context).textTheme.headline4.copyWith(
-                  color: Colors.black,
+                  color: nightMode? Colors.white: Colors.black
                 ),
                 textAlign: TextAlign.start,
               ),
@@ -128,9 +130,8 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
                     image = AssetImage(defaultVetImagePath);
                   }
                   return Card(
-                    color: Colors.white70,
+                    color: nightMode? Colors.white60: Colors.black38,
                     borderOnForeground: false,
-                    elevation: 2.0,
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundImage: image,
@@ -146,7 +147,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
                       title: Text(
                         storeVet.name,
                         style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: Colors.black
+                          color: nightMode? Colors.white: Colors.black
                         ),
                       )
                     ),
