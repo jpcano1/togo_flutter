@@ -1,3 +1,5 @@
+import 'package:flutter/rendering.dart';
+
 import 'store_vet_detail.dart';
 import 'package:flutter/material.dart';
 import '../../../models/store_vet.dart' as VetModel;
@@ -16,6 +18,10 @@ class StoreVetListScreen extends StatefulWidget {
 class _StoreVetListScreenState extends State<StoreVetListScreen> {
   List<VetModel.StoreVet> vetList;
   final bool stores;
+  String _selected = "name";
+  bool _visible = false;
+
+  List<String> criteria = ["name", "rating"];
 
   _StoreVetListScreenState(this.stores);
 
@@ -23,7 +29,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
   void initState() {
     vetList = [
       VetModel.StoreVet(
-        "",
+        "1",
         "Exotic Pet",
         "Email@vet.com",
         {
@@ -34,7 +40,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
           "Friday": ["1:00", "2:00"],
           "Weekend": ["1:00", "2:00"],
         },
-        "123123123",
+        "123123123", 2.1,
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -42,14 +48,14 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ]
       ),
       VetModel.StoreVet(
-        "",
-        "Veterinaria 2",
+        "2",
+        "New Med Vet",
         "Email@vet.com",
         {
           "Lunes": ["1:00", "2:00"],
           "Martes": ["1:00", "2:00"],
         },
-        "123123123",
+        "123123123", 1.2,
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -57,14 +63,14 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ]
       ),
       VetModel.StoreVet(
-        "",
-        "Veterinaria 3",
+        "3",
+        "The Golden Century",
         "Email@vet.com",
         {
           "Lunes": ["1:00", "2:00"],
           "Martes": ["1:00", "2:00"],
         },
-        "123123123",
+        "123123123", 4.6,
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -72,14 +78,14 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ]
       ),
       VetModel.StoreVet(
-        "",
-        "Veterinaria 4",
+        "4",
+        "Country Vet",
         "Email@vet.com",
         {
           "Lunes": ["1:00", "2:00"],
           "Martes": ["1:00", "2:00"],
         },
-        "123123123",
+        "123123123", 3.5,
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -109,13 +115,66 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
               width: size.width,
               margin: EdgeInsets.only(top: 10.0),
               padding: EdgeInsets.only(left: 10.0),
-              child: Text(
-                this.stores? "Stores": "Vets",
-                style: Theme.of(context).textTheme.headline4.copyWith(
-                  color: nightMode? Colors.white: Colors.black
+              child: Row(
+                children: [
+                  Container(
+                    width: size.width * 0.4,
+                    child: Text(
+                      this.stores? "Stores": "Vets",
+                      style: Theme.of(context).textTheme.headline4.copyWith(
+                        color: nightMode? Colors.white: Colors.black
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                  Container(
+                    alignment: Alignment.centerRight,
+                    margin: EdgeInsets.only(left: size.width * 0.15),
+                    width: size.width * 0.4,
+                    child: IconButton(
+                      icon: Icon(
+                        Icons.sort,
+                        color: nightMode? Colors.white: Colors.black,
+                      ), 
+                      onPressed: () {
+                        setState(() {
+                          this._visible = !this._visible;
+                        });
+                      }
+                    ),
+                  )
+                ],
+              )
+            ),
+            Visibility(
+              visible: this._visible,
+              child: Container(
+                height: size.height * 0.15,
+                child: ListView(
+                  children: List.generate(
+                    this.criteria.length, 
+                    (index) => ListTile(
+                      title: Text(
+                        this.criteria[index],
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          color: nightMode? Colors.white: Colors.black
+                        ),
+                      ),
+                      leading: Radio(
+                        activeColor: nightMode? Colors.white: Colors.black,
+                        value: this.criteria[index],
+                        groupValue: this._selected,
+                        onChanged: (String value) {
+                          setState(() {
+                            this._selected = value;
+                          });
+                          this.sortStoreVet(value);
+                        },
+                      ),
+                    )
+                  ),
                 ),
-                textAlign: TextAlign.start,
-              ),
+              )
             ),
             Expanded(
               child: ListView.builder(
@@ -141,7 +200,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
                       onTap: () => Navigator.push(
                         listContext, 
                         MaterialPageRoute(
-                          builder: (materialPageRouteContext) => StoreVetDetail(storeVet)
+                          builder: (_) => StoreVetDetail(storeVet)
                         )
                       ),
                       title: Text(
@@ -149,7 +208,13 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
                         style: Theme.of(context).textTheme.headline6.copyWith(
                           color: nightMode? Colors.white: Colors.black
                         ),
-                      )
+                      ),
+                      subtitle: Text(
+                        "Rating: ${storeVet.averageRating}",
+                        style: Theme.of(context).textTheme.bodyText1.copyWith(
+                          color: nightMode? Colors.white: Colors.black
+                        ),
+                      ),
                     ),
                   );
                 },
@@ -159,5 +224,21 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
         ),
       ),
     );
+  }
+
+  void sortStoreVet(String criteria) {
+    if (criteria == "name") {
+      setState(() {
+        this.vetList.sort((a, b) => 
+          b.name.toLowerCase().compareTo(a.name.toLowerCase())
+        );
+      });
+    } else {
+      setState(() {
+        this.vetList.sort((a, b) => 
+          b.averageRating.compareTo(a.averageRating)
+        );
+      });
+    }
   }
 }
