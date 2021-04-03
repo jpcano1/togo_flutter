@@ -1,4 +1,4 @@
-import '../bloc_base.dart';
+import 'blocs/bloc_base.dart';
 import 'package:flutter/material.dart';
 
 class Provider<T extends BlocBase> extends InheritedWidget {
@@ -9,7 +9,7 @@ class Provider<T extends BlocBase> extends InheritedWidget {
     Key key,
     @required this.bloc,
     @required this.child
-  });
+  }): super(key: key, child: child);
 
   bool updateShouldNotify(_) => true;
 

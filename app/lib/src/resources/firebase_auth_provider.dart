@@ -38,7 +38,7 @@ class FirebaseAuthProvider {
     );
   }
 
-  Future<void> updateUser({Map<String, String> data}) async {
+  Future<void> updateUserData({Map<String, String> data}) async {
     return await authenticator.currentUser.updateProfile(
       displayName: data["displayName"]?? "",
       photoURL: data["photoUrl"]?? ""

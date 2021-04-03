@@ -14,8 +14,9 @@ import './screens/user/qr_scanner.dart';
 // Widgets
 import './widgets/theme.dart';
 
-// BLoC Provider
-import './blocs/provider.dart' as provider;
+// BLoCs
+import './bloc/bloc_provider.dart' as provider;
+import './bloc/blocs/login_bloc.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,29 +26,30 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
-    return provider.Provider(
-      child: MaterialApp(
-        theme: basicTheme(),
-        routes: {
-          "/": (_) => FutureBuilder(
-            future: _initialization,
-            builder: (futureContext, snapshot) {
-              if (snapshot.hasError) {
-                return Text(snapshot.error);
-              } 
-              if (snapshot.connectionState == ConnectionState.done) {
-                return WelcomeScreen();
-              }
-              return Text("Loading");
-            },
-          ),
-          "/login": (_) => LoginScreen(),
-          "/register": (_) => RegisterScreen(),
-          "/services": (_) => ServicesScreen(),
-          "/services/vets": (_) => StoreVetListScreen(),
-          "/qr_scanner": (_) => QRScannerScreen(),
-        },
-      )
+    return MaterialApp(
+      theme: basicTheme(),
+      routes: {
+        "/": (_) => FutureBuilder(
+          future: _initialization,
+          builder: (futureContext, snapshot) {
+            if (snapshot.hasError) {
+              return Text(snapshot.error);
+            } 
+            if (snapshot.connectionState == ConnectionState.done) {
+              return WelcomeScreen();
+            }
+            return Text("Loading");
+          },
+        ),
+        "/login": (_) => provider.Provider<LoginBloc>(
+          bloc: LoginBloc(),
+          child: LoginScreen()
+        ),
+        "/register": (_) => RegisterScreen(),
+        "/services": (_) => ServicesScreen(),
+        "/services/vets": (_) => StoreVetListScreen(),
+        "/qr_scanner": (_) => QRScannerScreen(),
+      },
     );
   }
 }

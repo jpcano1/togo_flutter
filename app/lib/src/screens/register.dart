@@ -7,10 +7,10 @@ import 'package:flutter/material.dart';
 
 import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
-import '../blocs/bloc.dart';
+import '../bloc/bloc.dart';
 import '../utils/notification_dialog.dart';
 import '../utils/night_mode.dart';
-import '../blocs/provider.dart';
+import '../bloc/provider.dart';
 import './user/profile_picture_upload.dart';
 
 class RegisterScreen extends StatefulWidget {

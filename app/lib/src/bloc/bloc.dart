@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
-import 'validators.dart';
+import 'blocs/validators.dart';
 
 class Bloc with Validators {
   final _registerEmailController = BehaviorSubject<String>();
