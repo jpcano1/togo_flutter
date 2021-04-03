@@ -1,17 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_code_picker/country_code_picker.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
-import '../blocs/bloc.dart';
 import '../utils/notification_dialog.dart';
 import '../utils/night_mode.dart';
-import '../blocs/provider.dart';
+import '../bloc/bloc_provider.dart';
+import '../bloc/blocs/register_bloc.dart';
 import './user/profile_picture_upload.dart';
+
+import '../bloc/blocs/update_profile_picture_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -19,8 +19,6 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-  final CollectionReference users = FirebaseFirestore.instance.collection("User");
   String zone;
   bool nightMode = isNightMode();
 
@@ -32,7 +30,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final bloc = Provider.of(context);
+    final bloc = Provider.of<RegisterBloc>(context);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -169,7 +167,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   return AppButton(
                     color: Theme.of(streamContext).colorScheme.primary,
                     text: "Next",
-                    onPressed: snapshot.hasData? register(streamContext, bloc): null,
+                    onPressed: snapshot.hasData? register(streamContext, bloc, this.zone): null,
                     minWidth: size.width,
                   );
                 },
@@ -181,54 +179,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  register(BuildContext context, Bloc bloc) {
+  register(BuildContext context, RegisterBloc bloc, String zone) {
     _register() async {
-      var validData = bloc.register();
+      UserModel.User blocData;
       try {
-        await _firebaseAuth.createUserWithEmailAndPassword(
-          email: validData["email"], 
-          password: validData["password"]
-        );
-        await _firebaseAuth.currentUser.updateProfile(displayName: validData["name"]);
-      } on FirebaseAuthException catch(e) {
-        if (e.code == "weak-password") {
-          return dialog(context, message: "The password provided is too weak.");
-        } else if (e.code == 'email-already-in-use') {
-          return dialog(context, message: "The account already exists for that email.");
-        }
+        blocData = await bloc.register(zone);
       } catch(e) {
-        print(e.toString());
+        return dialog(context, message: e);
       }
 
-      var currentUser = UserModel.User(
-        _firebaseAuth.currentUser.uid,
-        validData["name"], validData["email"], 
-        phoneNumber: this.zone + validData["phone"]
+      Fluttertoast.showToast(
+        msg: "Verify your email inbox",
+        gravity: ToastGravity.BOTTOM,
+        textColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.primary,
       );
 
-      users.doc(currentUser.id).set(currentUser.toMap())
-      .then((_) async {
-        await _firebaseAuth.currentUser.sendEmailVerification();
-
-        Fluttertoast.showToast(
-          msg: "Verify your email inbox",
-          gravity: ToastGravity.BOTTOM,
-          textColor: Colors.white,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        );
-
-        Navigator.push(
-          context, 
-          MaterialPageRoute(
-            builder: (_) => ProfilePictureUploadScreen(currentUser)
+      Navigator.push(
+        context, 
+        MaterialPageRoute(
+          builder: (_) => Provider(
+            bloc: UpdateProfilePictureBloc(), 
+            child: ProfilePictureUploadScreen(blocData)
           )
-        );
-      })
-      .catchError((FirebaseException error) {
-        if (error.code == "permission-denied") {
-          return dialog(context, message: "You do not have permission to perform this.");
-        }
-      });
+        )
+      );
     }
     return _register;
   }
