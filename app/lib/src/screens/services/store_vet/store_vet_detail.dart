@@ -167,22 +167,21 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                 maxRadius: size.width * 0.2,
               ),
               Container(
-                margin: EdgeInsets.only(top: size.height * 0.05),
+                margin: EdgeInsets.all(size.width * 0.05),
                 width: size.width,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AppButton(
-                      color: Theme.of(context).colorScheme.primary, 
-                      text: "Office Hours", 
-                      onPressed: () {
-                        setState(() {
-                          visible = !visible;
-                        });
-                      }
+                    Container(
+                      child: Text(
+                        "Office Hours:",
+                        style: Theme.of(context).textTheme.subtitle1.copyWith(
+                          color: Theme.of(context).colorScheme.primary
+                        ),
+                      ),
                     ),
-                    Visibility(
-                      visible: visible,
-                      child: Column(
+                    Container(
+                      child: Row(
                         children: [
                           Container(
                             child: ListView(
@@ -193,20 +192,25 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                                   List<String> schedules = this.storeVet.officeHours[key];
                                   return Text(
                                     "$key: ${schedules[0]} - ${schedules[1]}",
-                                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                                    style: Theme.of(context).textTheme.subtitle1.copyWith(
                                       color: Theme.of(context).colorScheme.primary
                                     ),
-                                    textAlign: TextAlign.center,
+                                    textAlign: TextAlign.start,
                                   );
                                 }
                               ),
                             ),
-                            height: this.storeVet.officeHours.length * 18.0,
+                            width: size.width * 0.7,
+                            height: this.storeVet.officeHours.length * 20.0,
                           ),
                           Container(
-                            margin: EdgeInsets.only(bottom: 20.0),
+                            width: size.width * 0.2,
+                            alignment: Alignment.centerRight,
                             child: IconButton(
-                              icon: Image.asset("assets/icons/chat-box.png"),
+                              icon: Image.asset(
+                                "assets/icons/chat-box.png",
+                                width: size.width * 0.09,
+                              ),
                               onPressed: () => true,
                             ),
                           )

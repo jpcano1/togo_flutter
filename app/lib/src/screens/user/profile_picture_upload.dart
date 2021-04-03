@@ -140,7 +140,8 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
 
   Future<String> upload() async {
     try {
-      var filename = this.picture.path.split("/").last;
+      var filename = this.currentUser.id + this.picture.path
+      .split("/").last.split(".").last;
       var snapshot = await _storage
       .ref()
       .child("user_pictures/pet_owner/$filename")

@@ -189,8 +189,8 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
                     image = AssetImage(defaultVetImagePath);
                   }
                   return Card(
-                    color: nightMode? Colors.white60: Colors.black38,
-                    borderOnForeground: false,
+                    color: nightMode? Colors.black: Colors.white,
+                    shadowColor: nightMode? Colors.white: Colors.black,
                     child: ListTile(
                       leading: CircleAvatar(
                         backgroundImage: image,
