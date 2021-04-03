@@ -11,7 +11,6 @@ import '../bloc/bloc_provider.dart';
 import '../bloc/blocs/register_bloc.dart';
 import './user/profile_picture_upload.dart';
 
-import '../bloc/bloc_provider.dart';
 import '../bloc/blocs/update_profile_picture_bloc.dart';
 
 class RegisterScreen extends StatefulWidget {
