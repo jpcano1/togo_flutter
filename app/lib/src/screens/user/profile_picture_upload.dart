@@ -6,6 +6,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../widgets/app_bar.dart';
 import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
+import '../../bloc/bloc_provider.dart';
+import '../../bloc/blocs/update_profile_picture_bloc.dart';
 import '../../models/user.dart' as UserModel;
 
 import 'package:flutter/material.dart';
@@ -18,25 +20,25 @@ class ProfilePictureUploadScreen extends StatefulWidget {
   ProfilePictureUploadScreen(this.currentUser);
 
   @override
-  _ProfilePictureUploadScreenState createState() => _ProfilePictureUploadScreenState(this.currentUser);
+  _ProfilePictureUploadScreenState createState() => _ProfilePictureUploadScreenState();
 }
 
 class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen> {
   final firebase_storage.FirebaseStorage _storage = firebase_storage.FirebaseStorage.instance;
   final firestore.CollectionReference users = firestore.FirebaseFirestore.instance.collection("User");
 
-  final UserModel.User currentUser;
-
-  _ProfilePictureUploadScreenState(this.currentUser);
-
   File picture;
+  String filename;
   String nextButtonText = "Next";
   bool allowed = false;
 
   @override
   Widget build(BuildContext context) {
+    final UserModel.User currentUser = widget.currentUser;
+
     final size = MediaQuery.of(context).size;
     final String imageUrl = "assets/icons/profile.png";
+    final bloc = Provider.of<UpdateProfilePictureBloc>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -76,6 +78,9 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                           .then((File result) {
                             setState(() {
                               this.picture = result;
+                              this.filename = currentUser.id + "." + this.picture.path
+                              .split("/").last.split(".").last;
+                              bloc.profileImageChange([this.filename, this.picture]);
                               allowed = true;
                               nextButtonText = "Next";
                             });
@@ -98,36 +103,41 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                     ),
                   ),
                   Container(
-                    child: AppButton(
-                      color: Theme.of(context).colorScheme.primary,
-                      text: nextButtonText,
-                      onPressed: allowed? () async {
-                        var downloadPath = await upload();
-                        users.doc(this.currentUser.id)
-                        .update({
-                          "imagePath": downloadPath
-                        })
-                        .then((_) {
-                          Fluttertoast.showToast(
-                            msg: "User created successfully!",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            textColor: Colors.white,
-                            backgroundColor: Theme.of(context).colorScheme.primary,
-                          );
-                          this.currentUser.imagePath = downloadPath;
-                          Navigator.pushReplacement(
-                            context, 
-                            MaterialPageRoute(
-                              builder: (_) => HomeScreen(this.currentUser)
-                            )
-                          );
-                        })
-                        .catchError((firestore.FirebaseException error) {
-                          print(error.code);
-                        });
-                      }: null,
-                    ),
+                    child: StreamBuilder(
+                      stream: bloc.profileImageOut,
+                      builder: (streamContext, snapshot) {
+                        return AppButton(
+                          color: Theme.of(context).colorScheme.primary,
+                          text: nextButtonText,
+                          onPressed: allowed? () async {
+                            var streamList = snapshot.data;
+
+                            String downloadPath;
+
+                            try {
+                              downloadPath = await bloc.upload(streamList[0], streamList[1]);
+                            } catch (error) {
+                              print(error);
+                            }
+
+                            Fluttertoast.showToast(
+                              msg: "User created successfully!",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.BOTTOM,
+                              textColor: Colors.white,
+                              backgroundColor: Theme.of(context).colorScheme.primary,
+                            );
+                            currentUser.imagePath = downloadPath;
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(
+                                builder: (_) => HomeScreen(currentUser)
+                              )
+                            );
+                          }: null,
+                        );
+                      },
+                    )
                   )
                 ],
               ),
@@ -136,19 +146,5 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
         ),
       ),
     );
-  }
-
-  Future<String> upload() async {
-    try {
-      var filename = this.currentUser.id + this.picture.path
-      .split("/").last.split(".").last;
-      var snapshot = await _storage
-      .ref()
-      .child("user_pictures/pet_owner/$filename")
-      .putFile(this.picture);
-      return await snapshot.ref.getDownloadURL();
-    } on Exception catch(e) {
-      throw new Exception(e);
-    }
   }
 }
