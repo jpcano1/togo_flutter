@@ -30,6 +30,9 @@ class Repository {
 
   Future<void> verifyEmail() =>
     _authProvider.verifyEmail();
+  
+  FirebaseAuth.User getCurrentUser() => 
+    _authProvider.getCurrentUser();
 
   // Storage Functions
   Future<String> uploadProfilePicture({String filename, File file}) =>

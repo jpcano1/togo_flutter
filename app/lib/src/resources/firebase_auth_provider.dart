@@ -48,4 +48,8 @@ class FirebaseAuthProvider {
   Future<void> verifyEmail() async {
     return await authenticator.currentUser.sendEmailVerification();
   }
+
+  FirebaseAuth.User getCurrentUser() {
+    return authenticator.currentUser;
+  }
 }

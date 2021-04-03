@@ -11,6 +11,9 @@ import '../bloc/bloc_provider.dart';
 import '../bloc/blocs/register_bloc.dart';
 import './user/profile_picture_upload.dart';
 
+import '../bloc/bloc_provider.dart';
+import '../bloc/blocs/update_profile_picture_bloc.dart';
+
 class RegisterScreen extends StatefulWidget {
   @override
   _RegisterScreenState createState() => _RegisterScreenState();
@@ -196,7 +199,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Navigator.push(
         context, 
         MaterialPageRoute(
-          builder: (_) => ProfilePictureUploadScreen(blocData)
+          builder: (_) => Provider(
+            bloc: UpdateProfilePictureBloc(), 
+            child: ProfilePictureUploadScreen(blocData)
+          )
         )
       );
     }
