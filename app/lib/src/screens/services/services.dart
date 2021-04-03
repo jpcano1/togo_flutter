@@ -64,7 +64,13 @@ class ServicesScreen extends StatelessWidget {
                   AppButton(
                     color: Theme.of(context).colorScheme.primary, 
                     text: "Stores", 
-                    onPressed: () => true,
+                    onPressed: () => Navigator.pushNamed(
+                      context, 
+                      "/services/vets", 
+                      arguments: {
+                        "stores": true
+                      }
+                    ),
                     minWidth: size.width * 0.35,
                   )
                 ],

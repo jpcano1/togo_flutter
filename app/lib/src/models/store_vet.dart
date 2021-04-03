@@ -5,10 +5,11 @@ class StoreVet extends UserModel.User {
   Map<String, List<String>> officeHours;
   String contactPhone;
   List<Map<String, double>> locations;
+  double averageRating;
 
   StoreVet(String id, String name, 
            String email, this.officeHours, 
-           this.contactPhone, 
+           this.contactPhone, this.averageRating,
            this.locations, {String phoneNumber}): 
     super(id, name, email, phoneNumber: phoneNumber) {
       this.id = id;
@@ -24,7 +25,6 @@ class StoreVet extends UserModel.User {
       this.name = parsedJson["name"];
       this.email = parsedJson["email"];
       this.phoneNumber = parsedJson["phoneNumber"];
-
       // Vet Attributes
     }
   
@@ -32,7 +32,7 @@ class StoreVet extends UserModel.User {
   toMap() {
     return {
       ...super.toMap(),
-      "officeHoursce": this.officeHours,
+      "officeHours": this.officeHours,
       "contactPhone": this.contactPhone,
       "locations": this.locations
     };
