@@ -17,6 +17,7 @@ import './widgets/theme.dart';
 // BLoCs
 import './bloc/bloc_provider.dart' as provider;
 import './bloc/blocs/login_bloc.dart';
+import './bloc/blocs/register_bloc.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +46,10 @@ class App extends StatelessWidget {
           bloc: LoginBloc(),
           child: LoginScreen()
         ),
-        "/register": (_) => RegisterScreen(),
+        "/register": (_) => provider.Provider<RegisterBloc>(
+          bloc: RegisterBloc(),
+          child: RegisterScreen(),
+        ),
         "/services": (_) => ServicesScreen(),
         "/services/vets": (_) => StoreVetListScreen(),
         "/qr_scanner": (_) => QRScannerScreen(),
