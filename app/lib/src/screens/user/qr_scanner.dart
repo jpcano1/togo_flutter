@@ -190,7 +190,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         });
         scanner.cancel();
       });
-    } on Exception catch(e) {
+    } catch(e) {
       Fluttertoast.showToast(
         msg: e.toString(),
         toastLength: Toast.LENGTH_LONG,

@@ -21,6 +21,12 @@ class UpdateProfilePictureBloc implements BlocBase {
         filename: filename,
         file: file
       );
+      await _repository.updateUser(
+        uid: _repository.getCurrentUser().uid,
+        data: {
+          "imagePath": photoUrl
+        }
+      );
     } on FirebaseStorage.FirebaseException catch(e) {
       return Future.error("There was an error uploading the image");
     }
