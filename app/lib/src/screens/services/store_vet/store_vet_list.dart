@@ -40,7 +40,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
           "Friday": ["1:00", "2:00"],
           "Weekend": ["1:00", "2:00"],
         },
-        "123123123", 2.1,
+        "123123123",
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -55,7 +55,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
           "Lunes": ["1:00", "2:00"],
           "Martes": ["1:00", "2:00"],
         },
-        "123123123", 1.2,
+        "123123123",
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -70,7 +70,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
           "Lunes": ["1:00", "2:00"],
           "Martes": ["1:00", "2:00"],
         },
-        "123123123", 4.6,
+        "123123123",
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},
@@ -85,7 +85,7 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
           "Lunes": ["1:00", "2:00"],
           "Martes": ["1:00", "2:00"],
         },
-        "123123123", 3.5,
+        "123123123",
         [
           {"lat": 4.6365921453154995, "lng": -74.09680067805952},
           {"lat": 4.634153971749186, "lng": -74.09474074161847},

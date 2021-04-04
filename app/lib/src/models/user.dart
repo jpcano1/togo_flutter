@@ -17,13 +17,13 @@ class User {
     this.pets = pets ?? [];
   }
 
-  User.fromJson(Map<String, dynamic> parsedJson) {
-    this.name = parsedJson["name"];
-    this.email = parsedJson["email"];
-    this.phoneNumber = parsedJson["phoneNumber"];
-    this.imagePath = parsedJson["imagePath"];
-    this.pets = List.generate(parsedJson["pets"].length,
-        (index) => Pet.fromJson(parsedJson["pets"][index]));
+  User.fromMap(Map<String, dynamic> map) {
+    this.name = map["name"];
+    this.email = map["email"];
+    this.phoneNumber = map["phoneNumber"];
+    this.imagePath = map["imagePath"];
+    this.pets = List.generate(map["pets"].length,
+        (index) => Pet.fromMap(map["pets"][index]));
   }
 
   toMap() {

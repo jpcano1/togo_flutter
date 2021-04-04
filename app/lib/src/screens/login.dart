@@ -102,7 +102,7 @@ class LoginScreen extends StatelessWidget {
 
                         var document = blocData["document"];
 
-                        var currentUser = UserModel.User.fromJson(document.data());
+                        var currentUser = UserModel.User.fromMap(document.data());
 
                         Navigator.pushReplacement(
                           streamContext, 
