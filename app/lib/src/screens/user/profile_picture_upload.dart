@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:app/src/screens/user/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../utils/notification_dialog.dart';
+import '../../widgets/spinner.dart';
 import '../../widgets/app_bar.dart';
 import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
@@ -110,16 +112,18 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                           color: Theme.of(context).colorScheme.primary,
                           text: nextButtonText,
                           onPressed: allowed? () async {
+                            dialog(context, content: LoadingSpinner());
                             var streamList = snapshot.data;
 
                             String downloadPath;
 
                             try {
                               downloadPath = await bloc.upload(streamList[0], streamList[1]);
+                              Navigator.pop(streamContext);
                             } catch (error) {
+                              Navigator.pop(streamContext);
                               print(error);
                             }
-
                             Fluttertoast.showToast(
                               msg: "User created successfully!",
                               toastLength: Toast.LENGTH_LONG,

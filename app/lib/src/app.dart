@@ -10,6 +10,7 @@ import './screens/welcome.dart';
 import './screens/login.dart';
 import './screens/register.dart';
 import './screens/user/qr_scanner.dart';
+import './widgets/spinner.dart';
 
 // Widgets
 import './widgets/theme.dart';
