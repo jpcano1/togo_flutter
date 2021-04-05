@@ -49,4 +49,14 @@ class Validators {
       }
     }
   );
+
+  final validateNumberField = StreamTransformer<dynamic, String>.fromHandlers(
+    handleData: (fieldData, EventSink sink) {
+      if (fieldData <= 0) {
+        sink.addError("Field must be greater than zero");
+      } else {
+        sink.add(fieldData);
+      }
+    }
+  );
 }

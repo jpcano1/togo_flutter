@@ -13,8 +13,6 @@ import '../../bloc/blocs/update_profile_picture_bloc.dart';
 import '../../models/user.dart' as UserModel;
 
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
 class ProfilePictureUploadScreen extends StatefulWidget {
   final UserModel.User currentUser;
@@ -26,9 +24,6 @@ class ProfilePictureUploadScreen extends StatefulWidget {
 }
 
 class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen> {
-  final firebase_storage.FirebaseStorage _storage = firebase_storage.FirebaseStorage.instance;
-  final firestore.CollectionReference users = firestore.FirebaseFirestore.instance.collection("User");
-
   File picture;
   String filename;
   String nextButtonText = "Next";

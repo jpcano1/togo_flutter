@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
 
 import '../models/user.dart' as UserModel;
+import '../models/pet.dart' as PetModel;
+
 import 'firebase_auth_provider.dart' as AuthProvider;
 import 'firebase_storage_provider.dart' as StorageProvider;
 import 'firestore_provider.dart' as FirestoreProvider;
@@ -39,6 +41,7 @@ class Repository {
     _storageProvider.uploadProfilePicture(filename: filename, file: file);
 
   // Firestore Functions
+  // User Operations
   Future<void> createUser({UserModel.User currentUser}) => 
     _firestoreProvider.createUser(currentUser: currentUser);
   
@@ -50,4 +53,8 @@ class Repository {
   
   Future<void> deleteUser({String uid}) =>
     _firestoreProvider.deleteUser(uid: uid);
+
+  // Pet Operations
+  Future<void> createPet({UserModel.User currentUser, PetModel.Pet newPet}) => 
+    _firestoreProvider.createPet(currentUser: currentUser, newPet: newPet);
 }

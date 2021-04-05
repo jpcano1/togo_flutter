@@ -1,3 +1,4 @@
+import 'package:app/src/screens/pet/pet_register.dart';
 import 'package:app/src/screens/user/home.dart';
 
 import './models/user.dart' as UserModel;
@@ -31,7 +32,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: basicTheme(),
       routes: {
-        "/": (_) => FutureBuilder(
+        "/home": (_) => FutureBuilder(
           future: _initialization,
           builder: (futureContext, snapshot) {
             if (snapshot.hasError) {
@@ -54,6 +55,7 @@ class App extends StatelessWidget {
         "/services": (_) => ServicesScreen(),
         "/services/vets": (_) => StoreVetListScreen(),
         "/qr_scanner": (_) => QRScannerScreen(),
+        "/": (_) => PetRegisterScreen()
       },
     );
   }
