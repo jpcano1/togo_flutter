@@ -1,3 +1,4 @@
+import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
 import 'package:app/src/screens/pet/pet_register.dart';
 import 'package:app/src/screens/user/home.dart';
 
@@ -32,7 +33,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: basicTheme(),
       routes: {
-        "/home": (_) => FutureBuilder(
+        "/": (_) => FutureBuilder(
           future: _initialization,
           builder: (futureContext, snapshot) {
             if (snapshot.hasError) {
@@ -55,7 +56,10 @@ class App extends StatelessWidget {
         "/services": (_) => ServicesScreen(),
         "/services/vets": (_) => StoreVetListScreen(),
         "/qr_scanner": (_) => QRScannerScreen(),
-        "/": (_) => PetRegisterScreen()
+        "/pet/register": (_) => provider.Provider<CreatePetBloc>(
+          bloc: CreatePetBloc(),
+          child: PetRegisterScreen(),
+        )
       },
     );
   }

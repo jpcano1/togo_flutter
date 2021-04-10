@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
+import 'package:flutter/foundation.dart';
 
 import '../models/user.dart' as UserModel;
 import '../models/pet.dart' as PetModel;
@@ -21,13 +22,19 @@ class Repository {
   }
 
   // Auth Functions
-  Future<FirebaseAuth.UserCredential> login({String email, String password}) =>
+  Future<FirebaseAuth.UserCredential> login({
+    @required String email, 
+    @required String password
+  }) =>
     _authProvider.login(email: email, password: password);
 
-  Future<FirebaseAuth.UserCredential> register({String email, String password}) =>
+  Future<FirebaseAuth.UserCredential> register({
+    @required String email, 
+    @required String password
+  }) =>
     _authProvider.register(email: email, password: password);
   
-  Future<void> updateUserData({Map<String, String> data}) =>
+  Future<void> updateUserData({@required Map<String, String> data}) =>
     _authProvider.updateUserData(data: data);
 
   Future<void> verifyEmail() =>
@@ -37,24 +44,35 @@ class Repository {
     _authProvider.getCurrentUser();
 
   // Storage Functions
-  Future<String> uploadProfilePicture({String filename, File file}) =>
+  Future<String> uploadProfilePicture({
+    @required String filename, 
+    @required File file
+  }) =>
     _storageProvider.uploadProfilePicture(filename: filename, file: file);
 
   // Firestore Functions
   // User Operations
-  Future<void> createUser({UserModel.User currentUser}) => 
+  Future<void> createUser({@required UserModel.User currentUser}) => 
     _firestoreProvider.createUser(currentUser: currentUser);
   
-  Future<Firestore.DocumentSnapshot> readUser({String uid}) =>
+  Future<Firestore.DocumentSnapshot> readUser({@required String uid}) =>
     _firestoreProvider.readUser(uid: uid);
   
-  Future<void> updateUser({String uid, Map<String, dynamic> data}) =>
+  Future<void> updateUser({
+    @required String uid, 
+    @required Map<String, dynamic> data
+  }) =>
     _firestoreProvider.updateUser(uid: uid, data: data);
   
-  Future<void> deleteUser({String uid}) =>
+  Future<void> deleteUser({
+    @required String uid
+  }) =>
     _firestoreProvider.deleteUser(uid: uid);
 
   // Pet Operations
-  Future<void> createPet({UserModel.User currentUser, PetModel.Pet newPet}) => 
+  Future<void> createPet({
+    @required FirebaseAuth.User currentUser, 
+    @required PetModel.Pet newPet
+  }) => 
     _firestoreProvider.createPet(currentUser: currentUser, newPet: newPet);
 }

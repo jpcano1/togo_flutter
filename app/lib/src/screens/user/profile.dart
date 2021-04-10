@@ -148,7 +148,7 @@ class ProfileScreen extends StatelessWidget {
               margin: EdgeInsets.only(top: size.width * 0.055),
               child: IconButton(
                 icon: Icon(Icons.add, color: Colors.white), 
-                onPressed: () => true,
+                onPressed: () => Navigator.pushNamed(context, "/pet/register"),
               ),
             ),
             Container(
