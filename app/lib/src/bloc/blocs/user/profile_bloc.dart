@@ -11,7 +11,7 @@ class ProfileBloc implements BlocBase {
 
   Repository _repository = Repository();
   StreamController<UserModel.User> _userProfileController = StreamController<UserModel.User>();
-  StreamController<List<PetModel.Pet>> _petListController = StreamController();
+  StreamController<List<PetModel.Pet>> _petListController = StreamController<List<PetModel.Pet>>();
 
   Function(List<PetModel.Pet>) get petListAdd => _petListController.sink.add;
   Function(UserModel.User) get userAdd => _userProfileController.sink.add;
@@ -39,7 +39,7 @@ class ProfileBloc implements BlocBase {
       for (var pet in pets) {
         petList.add(PetModel.Pet.fromMap(pet.data()));
       }
-      this.petListAdd(petList);
+      petListAdd(petList);
       return;
     } on FirebaseException catch(e) {
       return Future.error(e.message);
@@ -47,8 +47,6 @@ class ProfileBloc implements BlocBase {
       return Future.error(e.toString());
     }
   }
-
-
 
   dispose() {
     _userProfileController.close();

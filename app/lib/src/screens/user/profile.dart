@@ -33,7 +33,12 @@ class ProfileScreen extends StatelessWidget {
             return StreamBuilder(
               stream: bloc.userOut,
               builder: (streamContext, streamSnaphot) {
-                return builBody(streamContext, streamSnaphot.data, bloc);
+                if (streamSnaphot.hasData) {
+                  return builBody(streamContext, streamSnaphot.data, bloc);
+                }
+                return Center(
+                  child: LoadingSpinner(),
+                );
               }
             );
           }
@@ -136,14 +141,31 @@ class ProfileScreen extends StatelessWidget {
                     return StreamBuilder(
                       stream: bloc.petListOut,
                       builder: (BuildContext streamContext, AsyncSnapshot streamSnapshot) {
-                        return builPetList(streamContext, streamSnapshot.data);
+                        if (streamSnapshot.hasData) {
+                          return builPetList(streamContext, streamSnapshot.data);
+                        }
+                        if (streamSnapshot.hasError) {
+                          return Center(
+                            child: Text(streamSnapshot.error),
+                          );
+                        }
+                        return Center(
+                          child: LoadingSpinner()
+                        );
                       },
                     );
                   }
                   if (snapshot.hasError) {
-                    return Text(snapshot.error);
+                    return Center(
+                      child: Text(
+                        snapshot.error,
+                        style: TextStyle(color: Colors.black)
+                      ),
+                    );
                   }
-                  return Text("Loading");
+                  return Center(
+                    child: LoadingSpinner()
+                  );
                 },
               )
             )

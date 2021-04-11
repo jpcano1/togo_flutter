@@ -20,9 +20,9 @@ class Pet {
     this.name = map["name"];
     this.type = map["type"];
     this.breed = map["breed"];
-    this.height = double.tryParse(map["height"]);
-    this.weight = double.tryParse(map["weight"]);
-    this.age = int.tryParse(map["age"]);
+    this.height = map["height"];
+    this.weight = map["weight"];
+    this.age = map["age"];
     this.birthday = map["birthday"];
     this.imagePath = map["imagePath"];
   }
