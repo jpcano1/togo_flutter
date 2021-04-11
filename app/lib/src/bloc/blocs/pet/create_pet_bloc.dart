@@ -13,16 +13,16 @@ class CreatePetBloc with Validators implements BlocBase {
   
   BehaviorSubject<String> _nameController = BehaviorSubject<String>();
   BehaviorSubject<String> _breedController = BehaviorSubject<String>();
-  BehaviorSubject _heightController = BehaviorSubject();
-  BehaviorSubject _weightController = BehaviorSubject();
-  BehaviorSubject _ageController = BehaviorSubject();
+  BehaviorSubject<String> _heightController = BehaviorSubject<String>();
+  BehaviorSubject<String> _weightController = BehaviorSubject<String>();
+  BehaviorSubject<String> _ageController = BehaviorSubject<String>();
   BehaviorSubject<String> _birthdayController = BehaviorSubject<String>();
 
   Stream<String> get nameOut => _nameController.stream.transform(validateEmptyField);
   Stream<String> get breedOut => _breedController.stream.transform(validateEmptyField);
-  Stream get heightOut => _heightController.stream.transform(validateNumberField);
-  Stream get weightOut => _weightController.stream.transform(validateNumberField);
-  Stream get ageOut => _ageController.stream.transform(validateNumberField);
+  Stream<String> get heightOut => _heightController.stream.transform(validateNumberField);
+  Stream<String> get weightOut => _weightController.stream.transform(validateNumberField);
+  Stream<String> get ageOut => _ageController.stream.transform(validateNumberField);
   Stream<String> get birthdayOut => _birthdayController;
   Stream<bool> get petSubmit =>
     Rx.combineLatest6(
@@ -43,32 +43,19 @@ class CreatePetBloc with Validators implements BlocBase {
     try {
       var pet = PetModel.Pet(
         _nameController.value, "", 
-        _breedController.value, _heightController.value,
-        _weightController.value, _ageController.value,
+        _breedController.value, 
+        double.tryParse(_heightController.value),
+        double.tryParse(_weightController.value), 
+        double.tryParse(_ageController.value).floor(),
         _birthdayController.value
       );
 
-      var petId = _repository.createPet(
+      var petId = await _repository.createPet(
         currentUser: currentUser,
         newPet: pet
       );
 
-      List<Map<String, dynamic>> userPets = (
-        await _repository.readUser(uid: currentUser.uid)
-      ).data()["pets"];
-
-      userPets.add({
-        "id": petId,
-        "imagePath": pet.imagePath,
-        "name": pet.name
-      });
-
-      await _repository.updateUser(
-        uid: currentUser.uid, 
-        data: {
-          "pets": userPets
-        }
-      );
+      return petId;
     } on FirebaseException catch(e) {
       return Future.error(e.message);
     } catch(e) {

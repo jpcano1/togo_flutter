@@ -54,4 +54,27 @@ class FirestoreProvider {
     });
     return petDocument.id;
   }
+
+  Future<List<Firestore.QueryDocumentSnapshot>> listPets(
+    {FirebaseAuth.User currentUser}
+  ) async {
+    Firestore.QuerySnapshot petListDocument = await database.collection(petCollection)
+    .where("ownerId", isEqualTo: currentUser.uid)
+    .get();
+    return petListDocument.docs;
+  }
+
+  Future<void> updatePet({
+    String petId, Map<String, dynamic> data
+  }) async {
+    return await database.collection(petCollection).doc(petId).update(data);
+  }
+
+  Future<Firestore.DocumentSnapshot> readPet({String petId}) async {
+    return await database.collection(petCollection).doc(petId).get();
+  }
+
+  Future<void> deletePet({String petId}) async {
+    return await database.collection(petCollection).doc(petId).delete();
+  }
 }

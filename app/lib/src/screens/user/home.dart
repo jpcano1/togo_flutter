@@ -1,3 +1,5 @@
+import 'package:app/src/bloc/bloc_provider.dart';
+import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -118,7 +120,10 @@ class HomeScreen extends StatelessWidget {
                       onPressed: () => Navigator.push(
                         context, 
                         MaterialPageRoute(
-                          builder: (materialPageRouteContext) => ProfileScreen(this.currentUser)
+                          builder: (materialPageRouteContext) => Provider(
+                            bloc: ProfileBloc(), 
+                            child: ProfileScreen()
+                          )
                         )
                       ),
                       minWidth: 150,

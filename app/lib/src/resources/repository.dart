@@ -75,4 +75,21 @@ class Repository {
     @required PetModel.Pet newPet
   }) => 
     _firestoreProvider.createPet(currentUser: currentUser, newPet: newPet);
+
+  Future<void> updatePet({
+    @required String petId, 
+    @required Map<String, dynamic> data
+  }) => 
+    _firestoreProvider.updatePet(petId: petId, data: data);
+  
+  Future<Firestore.DocumentSnapshot> readPet({@required String petId}) =>
+    _firestoreProvider.readPet(petId: petId);
+  
+  Future<void> deletePet({@required String petId}) =>
+    _firestoreProvider.deletePet(petId: petId);
+  
+  Future<List<Firestore.QueryDocumentSnapshot>> listPets(
+    {@required FirebaseAuth.User currentUser}
+  ) => 
+    _firestoreProvider.listPets(currentUser: currentUser);
 }
