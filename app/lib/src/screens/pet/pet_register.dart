@@ -1,5 +1,9 @@
+import 'dart:io';
+
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
+import 'package:app/src/utils/permissions.dart';
+import 'package:app/src/widgets/button.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -18,12 +22,14 @@ class PetRegisterScreen extends StatefulWidget {
 
 class _PetRegisterScreenState extends State<PetRegisterScreen> {
   String date;
+  File picture;
 
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<CreatePetBloc>(context);
     bool nightMode = isNightMode();
     final size = MediaQuery.of(context).size;
+    String imageUrl = "assets/icons/image.png";
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -48,14 +54,27 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: size.height * 0.04),
+                margin: EdgeInsets.only(top: size.height * 0.03),
+                width: size.width * 0.5,
                 alignment: Alignment.center,
-                child: IconButton(
-                  icon: Image.asset(
-                    "assets/icons/image.png",
-                  ),
-                  onPressed: () => print("Hola"),
-                  iconSize: size.width * 0.4,
+                child: this.picture == null? Image.asset(
+                  imageUrl
+                ): Image.file(
+                  this.picture
+                )
+              ),
+              Container(
+                margin: EdgeInsets.only(top: size.height * 0.03),
+                child: ElevatedButton(
+                  child: Text("Upload Picture"),
+                  onPressed: () async {
+                    uploadImage()
+                    .then((File result) {
+                      setState(() {
+                        this.picture = result;
+                      });
+                    });
+                  },
                 ),
               ),
               Container(
@@ -222,40 +241,49 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
               Container(
                 margin: EdgeInsets.only(top: size.height * 0.05),
                 width: size.width * 0.23,
-                child: TextButton(
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.save,
-                        color: Colors.black,
+                child: StreamBuilder(
+                  stream: bloc.petSubmit,
+                  builder: (streamContext, snapshot) {
+                    return TextButton(
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.save,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            "Save",
+                            style: TextStyle(
+                              color: Colors.black
+                            ),
+                          )
+                        ],
                       ),
-                      Text(
-                        "Save",
-                        style: TextStyle(
-                          color: Colors.black
-                        ),
-                      )
-                    ],
-                  ),
-                  onPressed: () async {
-                    if (this.date == null) {
-                      dialog(context, message: "You have to pick a date!");
-                      return;
-                    } else {
-                      try {
-                        dialog(context, content: LoadingSpinner());
-                        await bloc.createPet();
-                        Navigator.pop(context);
-                        showToast("Pet created", context);
-                        Navigator.pop(context);
-                      } catch(e) {
-                        print(e);
-                        Navigator.pop(context);
-                        showToast(e, context);
-                      }
-                    }
+                      onPressed: snapshot.hasData? () async {
+                        if (this.date == null) {
+                          dialog(context, message: "You have to pick a date!");
+                          return;
+                        } else {
+                          try {
+                            dialog(context, content: LoadingSpinner());
+                            String petId = await bloc.createPet();
+
+                            if (this.picture != null) {
+                              bloc.pictureChange([this.picture, petId]);
+                            }
+                            Navigator.pop(context);
+                            showToast("Pet created", context);
+                            Navigator.pop(context);
+                          } catch(e) {
+                            print(e);
+                            Navigator.pop(context);
+                            showToast(e, context);
+                          }
+                        }
+                      }: null,
+                    );
                   },
-                ),
+                )
               )
             ],
           ),

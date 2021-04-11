@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
@@ -17,7 +18,9 @@ class CreatePetBloc with Validators implements BlocBase {
   BehaviorSubject<String> _weightController = BehaviorSubject<String>();
   BehaviorSubject<String> _ageController = BehaviorSubject<String>();
   BehaviorSubject<String> _birthdayController = BehaviorSubject<String>();
+  StreamController<List<dynamic>> _pictureController = StreamController<List<dynamic>>();
 
+  Stream<List<dynamic>> get pictureOut => _pictureController.stream;
   Stream<String> get nameOut => _nameController.stream.transform(validateEmptyField);
   Stream<String> get breedOut => _breedController.stream.transform(validateEmptyField);
   Stream<String> get heightOut => _heightController.stream.transform(validateNumberField);
@@ -26,8 +29,8 @@ class CreatePetBloc with Validators implements BlocBase {
   Stream<String> get birthdayOut => _birthdayController;
   Stream<bool> get petSubmit =>
     Rx.combineLatest6(
-      nameOut, breedOut, heightOut, 
-      weightOut, ageOut, birthdayOut, 
+      nameOut, breedOut, heightOut,
+      weightOut, ageOut, birthdayOut,
       (a, b, c, d, e, f) => true
     );
 
@@ -37,8 +40,16 @@ class CreatePetBloc with Validators implements BlocBase {
   Function(String) get weightChange => _weightController.sink.add;
   Function(String) get ageChange => _ageController.sink.add;
   Function(String) get birthdayChange => _birthdayController.sink.add;
+  Function(List<dynamic>) get pictureChange => _pictureController.sink.add;
 
-  createPet() async {
+  CreatePetBloc() {
+    pictureOut
+    .listen((List<dynamic> result) async {
+      await uploadPicture(result[0], result[1]);
+    });
+  }
+
+  Future<String> createPet() async {
     var currentUser = _repository.getCurrentUser();
     try {
       var pet = PetModel.Pet(
@@ -50,7 +61,7 @@ class CreatePetBloc with Validators implements BlocBase {
         _birthdayController.value
       );
 
-      var petId = await _repository.createPet(
+      String petId = await _repository.createPet(
         currentUser: currentUser,
         newPet: pet
       );
@@ -60,6 +71,27 @@ class CreatePetBloc with Validators implements BlocBase {
       return Future.error(e.message);
     } catch(e) {
       return Future.error(e.toString());
+    }
+  }
+
+  Future<void> uploadPicture(File file, String petId) async {
+    try {
+      var format = file.path.split("/").last.split(".").last;
+      String filename = petId + "." + format;
+      var photoUrl = await _repository.uploadProfilePicture(
+        filename: filename, 
+        file: file, 
+        directory: "pet_pictures"
+      );
+
+      await _repository.updatePet(
+        petId: petId, 
+        data: {
+          "imagePath": photoUrl
+        }
+      );
+    } on FirebaseException catch(e) {
+      return Future.error(e.message);
     }
   }
 
@@ -77,5 +109,6 @@ class CreatePetBloc with Validators implements BlocBase {
     _ageController.close();
     await _birthdayController.drain();
     _birthdayController.close();
+    _pictureController.close();
   }
 }

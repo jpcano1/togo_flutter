@@ -117,7 +117,6 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                               Navigator.pop(streamContext);
                             } catch (error) {
                               Navigator.pop(streamContext);
-                              print(error);
                             }
                             Fluttertoast.showToast(
                               msg: "User created successfully!",

@@ -46,9 +46,14 @@ class Repository {
   // Storage Functions
   Future<String> uploadProfilePicture({
     @required String filename, 
-    @required File file
+    @required File file,
+    @required directory
   }) =>
-    _storageProvider.uploadProfilePicture(filename: filename, file: file);
+    _storageProvider.uploadProfilePicture(
+      filename: filename, 
+      file: file,
+      directory: directory
+    );
 
   // Firestore Functions
   // User Operations
@@ -70,7 +75,7 @@ class Repository {
     _firestoreProvider.deleteUser(uid: uid);
 
   // Pet Operations
-  Future<void> createPet({
+  Future<String> createPet({
     @required FirebaseAuth.User currentUser, 
     @required PetModel.Pet newPet
   }) => 

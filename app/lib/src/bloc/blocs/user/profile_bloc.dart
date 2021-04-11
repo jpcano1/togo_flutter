@@ -23,7 +23,7 @@ class ProfileBloc implements BlocBase {
     try {
       var uid = _repository.getCurrentUser().uid;
       var user = await _repository.readUser(uid: uid);
-      userAdd(UserModel.User.fromMap(user.data()));      
+      userAdd(UserModel.User.fromMap(user.data()));
       return;
     } on FirebaseException catch(e) {
       return Future.error(e.message);

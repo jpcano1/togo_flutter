@@ -11,8 +11,6 @@ import '../../models/user.dart' as UserModel;
 class ProfileScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
-  ProfileScreen();
-
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<ProfileBloc>(context);
@@ -224,10 +222,10 @@ class ProfileScreen extends StatelessWidget {
       itemCount: pets.length,
       itemBuilder: (BuildContext listContext, int index) {
         Pet pet = pets[index];
-        AssetImage image;
+        var image;
 
         if (pet.imagePath.isNotEmpty) {
-          image = AssetImage(pet.imagePath);
+          image = NetworkImage(pet.imagePath);
         } else {
           image = AssetImage(defaultPetImage);
         }
