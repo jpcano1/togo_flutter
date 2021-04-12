@@ -1,5 +1,6 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
+import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -186,10 +187,15 @@ class ProfileScreen extends StatelessWidget {
           Container(
             margin: EdgeInsets.only(top: size.width * 0.055),
             child: TextButton(
-              onPressed: () {
-                _firebaseAuth.signOut();
+              onPressed: () async {
+                await _firebaseAuth.signOut();
                 showToast("You've been logged out", context);
-                Navigator.of(context).popUntil(ModalRoute.withName("/"));
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => WelcomeScreen()
+                  ), 
+                  ModalRoute.withName("/")
+                );
               }, 
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

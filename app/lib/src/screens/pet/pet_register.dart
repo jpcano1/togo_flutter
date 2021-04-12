@@ -94,7 +94,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: StreamBuilder(
                         stream: bloc.nameOut,
@@ -115,7 +115,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                       )
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: StreamBuilder(
                         stream: bloc.breedOut,
@@ -135,7 +135,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                       )
                     ),
                     Container(
-                      margin: EdgeInsets.symmetric(vertical: 10.0),
+                      margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Row(
                         children: [
@@ -269,13 +269,13 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                             String petId = await bloc.createPet();
 
                             if (this.picture != null) {
-                              bloc.pictureChange([this.picture, petId]);
+                              await bloc.pictureChange([this.picture, petId]);
                             }
-                            Navigator.pop(context);
-                            showToast("Pet created", context);
+                            Navigator.pop(streamContext);
+                            showToast("Pet created", streamContext);
                             Navigator.pop(context);
                           } catch(e) {
-                            Navigator.pop(context);
+                            Navigator.pop(streamContext);
                             showToast(e, context);
                           }
                         }
