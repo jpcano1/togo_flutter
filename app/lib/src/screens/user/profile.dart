@@ -1,6 +1,7 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
 import 'package:app/src/widgets/spinner.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -176,7 +177,10 @@ class ProfileScreen extends StatelessWidget {
             margin: EdgeInsets.only(top: size.width * 0.055),
             child: IconButton(
               icon: Icon(Icons.add, color: Colors.white), 
-              onPressed: () => Navigator.pushNamed(context, "/pet/register"),
+              onPressed: () async {
+                await Navigator.pushNamed(context, "/pet/register");
+                await bloc.listPets();
+              },
             ),
           ),
           Container(
@@ -184,13 +188,7 @@ class ProfileScreen extends StatelessWidget {
             child: TextButton(
               onPressed: () {
                 _firebaseAuth.signOut();
-                Fluttertoast.showToast(
-                  msg: "You've been logged out",
-                  toastLength: Toast.LENGTH_LONG,
-                  gravity: ToastGravity.BOTTOM,
-                  textColor: Colors.white,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                );
+                showToast("You've been logged out", context);
                 Navigator.of(context).popUntil(ModalRoute.withName("/"));
               }, 
               child: Row(

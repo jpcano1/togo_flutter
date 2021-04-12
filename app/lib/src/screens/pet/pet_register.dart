@@ -8,7 +8,7 @@ import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../models/pet.dart';
+import '../../models/pet.dart' as PetModel;
 import '../../widgets/app_bar.dart';
 import '../../utils/night_mode.dart';
 import '../../utils/notification_dialog.dart';
@@ -275,7 +275,6 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                             showToast("Pet created", context);
                             Navigator.pop(context);
                           } catch(e) {
-                            print(e);
                             Navigator.pop(context);
                             showToast(e, context);
                           }

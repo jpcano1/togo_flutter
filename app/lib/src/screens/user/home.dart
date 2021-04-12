@@ -9,10 +9,7 @@ import '../../models/user.dart' as UserModel;
 import 'profile.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UserModel.User currentUser;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
-
-  HomeScreen(this.currentUser);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +26,7 @@ class HomeScreen extends StatelessWidget {
               Container(
                 padding: EdgeInsets.only(top: size.height * 0.08),
                 child: Text(
-                  "Welcome, ${this.currentUser.name}",
+                  "Welcome, ${this._firebaseAuth.currentUser.displayName}",
                   style: Theme.of(context).textTheme.headline5.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.bold

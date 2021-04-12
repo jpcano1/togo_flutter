@@ -129,7 +129,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             Navigator.pushReplacement(
                               context, 
                               MaterialPageRoute(
-                                builder: (_) => HomeScreen(currentUser)
+                                builder: (_) => HomeScreen()
                               )
                             );
                           }: null,

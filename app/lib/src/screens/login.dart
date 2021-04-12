@@ -110,7 +110,7 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           streamContext, 
                           MaterialPageRoute(
-                            builder: (materialPageRouteContext) => HomeScreen(currentUser)
+                            builder: (materialPageRouteContext) => HomeScreen()
                           )
                         );
                       } catch(error) {
