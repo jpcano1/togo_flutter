@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:app/src/screens/services/store_vet/store_vet_detail.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 import '../../widgets/app_bar.dart';
@@ -191,13 +191,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
         scanner.cancel();
       });
     } catch(e) {
-      Fluttertoast.showToast(
-        msg: e.toString(),
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        textColor: Colors.white,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      );
+      showToast(e.toString(), context);
     }
   }
 
@@ -212,7 +206,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   void dispose() {
-    controller?.dispose();
     super.dispose();
+    controller?.dispose();
   }
 }
