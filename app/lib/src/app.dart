@@ -1,4 +1,7 @@
+import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
+import 'package:app/src/screens/pet/pet_register.dart';
 import 'package:app/src/screens/user/home.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import './models/user.dart' as UserModel;
 import './models/pet.dart' as PetModel;
@@ -37,11 +40,16 @@ class App extends StatelessWidget {
               return Text(snapshot.error);
             } 
             if (snapshot.connectionState == ConnectionState.done) {
+              final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+              if (firebaseAuth.currentUser != null) {
+                return HomeScreen();
+              }
               return WelcomeScreen();
             }
             return Text("Loading");
           },
         ),
+        "/home": (_) => HomeScreen(),
         "/login": (_) => provider.Provider<LoginBloc>(
           bloc: LoginBloc(),
           child: LoginScreen()
@@ -53,6 +61,10 @@ class App extends StatelessWidget {
         "/services": (_) => ServicesScreen(),
         "/services/vets": (_) => StoreVetListScreen(),
         "/qr_scanner": (_) => QRScannerScreen(),
+        "/pet/register": (_) => provider.Provider<CreatePetBloc>(
+          bloc: CreatePetBloc(),
+          child: PetRegisterScreen(),
+        )
       },
     );
   }

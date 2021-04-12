@@ -21,10 +21,14 @@ class FirebaseStorageProvider {
   }
 
   // User actions
-  Future<String> uploadProfilePicture({String filename, File file}) async {
+  Future<String> uploadProfilePicture({
+    String filename, 
+    File file,
+    String directory
+  }) async {
     var snapshot = await storage
     .ref()
-    .child("user_pictures/pet_owner/$filename")
+    .child("$directory/$filename")
     .putFile(file);
     return await snapshot.ref.getDownloadURL();
   }

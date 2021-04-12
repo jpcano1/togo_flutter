@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:app/src/screens/user/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../utils/notification_dialog.dart';
+import '../../widgets/spinner.dart';
 import '../../widgets/app_bar.dart';
 import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
@@ -11,8 +13,6 @@ import '../../bloc/blocs/update_profile_picture_bloc.dart';
 import '../../models/user.dart' as UserModel;
 
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
 class ProfilePictureUploadScreen extends StatefulWidget {
   final UserModel.User currentUser;
@@ -24,9 +24,6 @@ class ProfilePictureUploadScreen extends StatefulWidget {
 }
 
 class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen> {
-  final firebase_storage.FirebaseStorage _storage = firebase_storage.FirebaseStorage.instance;
-  final firestore.CollectionReference users = firestore.FirebaseFirestore.instance.collection("User");
-
   File picture;
   String filename;
   String nextButtonText = "Next";
@@ -110,16 +107,17 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                           color: Theme.of(context).colorScheme.primary,
                           text: nextButtonText,
                           onPressed: allowed? () async {
+                            dialog(context, content: LoadingSpinner());
                             var streamList = snapshot.data;
 
                             String downloadPath;
 
                             try {
                               downloadPath = await bloc.upload(streamList[0], streamList[1]);
+                              Navigator.pop(streamContext);
                             } catch (error) {
-                              print(error);
+                              Navigator.pop(streamContext);
                             }
-
                             Fluttertoast.showToast(
                               msg: "User created successfully!",
                               toastLength: Toast.LENGTH_LONG,
@@ -131,7 +129,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             Navigator.pushReplacement(
                               context, 
                               MaterialPageRoute(
-                                builder: (_) => HomeScreen(currentUser)
+                                builder: (_) => HomeScreen()
                               )
                             );
                           }: null,

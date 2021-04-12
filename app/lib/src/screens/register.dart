@@ -3,6 +3,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/spinner.dart';
 import '../widgets/button.dart';
 import '../models/user.dart' as UserModel;
 import '../utils/notification_dialog.dart';
@@ -181,13 +182,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   register(BuildContext context, RegisterBloc bloc, String zone) {
     _register() async {
+      dialog(context, content: LoadingSpinner());
       UserModel.User blocData;
       try {
         blocData = await bloc.register(zone);
       } catch(e) {
-        return dialog(context, message: e);
+        Navigator.pop(context);
+        Fluttertoast.showToast(
+          msg: e,
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+        return;
       }
 
+      Navigator.pop(context);
       Fluttertoast.showToast(
         msg: "Verify your email inbox",
         gravity: ToastGravity.BOTTOM,
@@ -195,7 +205,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         backgroundColor: Theme.of(context).colorScheme.primary,
       );
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context, 
         MaterialPageRoute(
           builder: (_) => Provider(
