@@ -138,6 +138,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                       margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
                       padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Flexible(
                             child: StreamBuilder(
