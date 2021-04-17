@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
 import 'package:app/src/utils/permissions.dart';
-import 'package:app/src/widgets/button.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../models/pet.dart' as PetModel;
 import '../../widgets/app_bar.dart';
 import '../../utils/night_mode.dart';
 import '../../utils/notification_dialog.dart';
@@ -227,7 +224,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                             lastDate: DateTime.now()
                           ).then((DateTime date) {
                             if (date != null) {
-                                setState(() {
+                              setState(() {
                                 this.date = "${date.day}/${date.month}/${date.year}";
                               });
                               bloc.birthdayChange("${date.day}/${date.month}/${date.year}");
