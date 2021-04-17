@@ -1,5 +1,6 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
+import 'package:app/src/screens/pet/pet_detail.dart';
 import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
@@ -252,7 +253,12 @@ class ProfileScreen extends StatelessWidget {
             leading: CircleAvatar(
               backgroundImage: image,
             ),
-            onTap: () => true,
+            onTap: () => Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (_) => PetDetailScreen(pet)
+              )
+            ),
           ),
         );
       },
