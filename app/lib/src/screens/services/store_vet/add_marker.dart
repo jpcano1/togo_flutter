@@ -64,20 +64,26 @@ class _AddMarkerScreenState extends State<AddMarkerScreen> {
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () {
+          var markerId = MarkerId("${this.markers.length}");
           setState(() {
             this.markers.add(
               Marker(
-                markerId: MarkerId("${this.markers.length}"),
+                markerId: markerId,
                 draggable: true,
                 position: LatLng(
                   this.userLocation.latitude,
                   this.userLocation.longitude
-                )
+                ),
+                onTap: () => deleteMarker(markerId)
               )
             );
           });
         },
       ),
     );
+  }
+
+  deleteMarker(MarkerId id) {
+    this.markers.removeWhere((item) => item.markerId == id);
   }
 }
