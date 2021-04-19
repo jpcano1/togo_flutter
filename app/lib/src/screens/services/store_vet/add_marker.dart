@@ -61,6 +61,23 @@ class _AddMarkerScreenState extends State<AddMarkerScreen> {
           },
         )
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () {
+          setState(() {
+            this.markers.add(
+              Marker(
+                markerId: MarkerId("${this.markers.length}"),
+                draggable: true,
+                position: LatLng(
+                  this.userLocation.latitude,
+                  this.userLocation.longitude
+                )
+              )
+            );
+          });
+        },
+      ),
     );
   }
 }
