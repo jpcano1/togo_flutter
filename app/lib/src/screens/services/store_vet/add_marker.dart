@@ -6,12 +6,17 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class AddMarkerScreen extends StatefulWidget {
+  final List<Map<String, double>> locations; 
+
+  AddMarkerScreen({this.locations});
+
   @override
   _AddMarkerScreenState createState() => _AddMarkerScreenState();
 }
 
 class _AddMarkerScreenState extends State<AddMarkerScreen> {
-  final Set<Marker> markers = {};
+  Set<Marker> markers = {};
+  Map<String, Map<String, double>> locations;
   Position userLocation;
   Future<Position> position;
 
@@ -19,10 +24,29 @@ class _AddMarkerScreenState extends State<AddMarkerScreen> {
   void initState() {
     super.initState();
     position = determinePosition();
-  }
 
-  void onMapCreated(GoogleMapController controller) {
+    this.locations = <String, Map<String, double>>{};
 
+    if (widget.locations != null && widget.locations.isNotEmpty) {
+      widget.locations.forEach((element) {
+        var markerId = MarkerId("${this.markers.length}");
+        this.locations[markerId.value] = element;
+        this.markers.add(
+          Marker(
+            markerId: markerId,
+            draggable: true,
+            position: LatLng(
+              element["lat"],
+              element["lng"]
+            ),
+            onDragEnd: (LatLng newPosition) {
+              updatePosition(markerId, newPosition);
+            },
+            onTap: () => deleteMarker(markerId)
+          )
+        );
+      });
+    }
   }
 
   @override
@@ -37,17 +61,36 @@ class _AddMarkerScreenState extends State<AddMarkerScreen> {
           future: this.position,
           builder: (_, AsyncSnapshot<Position> snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              setState(() {
-                this.userLocation = snapshot.data;
-              });
               return GoogleMap(
                 initialCameraPosition: CameraPosition(
                   target: LatLng(
-                    this.userLocation.latitude,
-                    this.userLocation.longitude
+                    snapshot.data.latitude,
+                    snapshot.data.longitude
                   ),
-                  zoom: 14
+                  zoom: 14,
                 ),
+                onTap: (LatLng newPosition) {
+                  var markerId = MarkerId("${this.markers.length}");
+                  setState(() {
+                    this.locations[markerId.value] = {
+                      "lat": newPosition.latitude,
+                      "lng": newPosition.longitude
+                    };
+                    this.markers.add(
+                      Marker(
+                        markerId: markerId,
+                        draggable: true,
+                        position: newPosition,
+                        onDragEnd: (LatLng newPosition) {
+                          updatePosition(markerId, newPosition);
+                        },
+                        onTap: () => deleteMarker(markerId)
+                      )
+                    );
+                  });
+                  return;
+                },
+                markers: this.markers,
               );
             }
             if (snapshot.hasError) {
@@ -62,28 +105,26 @@ class _AddMarkerScreenState extends State<AddMarkerScreen> {
         )
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: () {
-          var markerId = MarkerId("${this.markers.length}");
-          setState(() {
-            this.markers.add(
-              Marker(
-                markerId: markerId,
-                draggable: true,
-                position: LatLng(
-                  this.userLocation.latitude,
-                  this.userLocation.longitude
-                ),
-                onTap: () => deleteMarker(markerId)
-              )
-            );
-          });
-        },
+        child: Icon(Icons.save),
+        onPressed: () => print(this.locations.values.toList())
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 
   deleteMarker(MarkerId id) {
-    this.markers.removeWhere((item) => item.markerId == id);
+    setState(() {
+      this.markers.removeWhere((item) => item.markerId == id);
+      this.locations.remove(id.value);
+    });
+  }
+
+  updatePosition(MarkerId id, LatLng newPosition) {
+    setState(() {
+      this.locations[id.value] = {
+        "lat": newPosition.latitude,
+        "lng": newPosition.longitude
+      };
+    });
   }
 }

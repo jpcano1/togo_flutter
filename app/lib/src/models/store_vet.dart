@@ -6,18 +6,16 @@ class StoreVet extends UserModel.User {
   Map<String, List<String>> officeHours;
   String contactPhone;
   List<Map<String, double>> locations;
-  List<Rating> ratings;
 
   StoreVet(String id, String name, 
            String email, this.officeHours, 
            this.contactPhone,this.locations,
-           {String phoneNumber, List<Rating> ratings}): 
+           {String phoneNumber}): 
     super(id, name, email, phoneNumber: phoneNumber) {
     this.id = id;
     this.name = name;
     this.email = email;
     this.phoneNumber = phoneNumber;
-    this.ratings = ratings?? <Rating>[];
   }
   
   @override
@@ -31,8 +29,6 @@ class StoreVet extends UserModel.User {
     this. officeHours = map["officeHours"];
     this.contactPhone = map["contactPhone"];
     this.locations = map["locations"];
-    this.ratings = List.generate(map["ratings"].length, 
-        (index) => Rating.fromMap(map["ratings"][index]));
   }
   
   @override
@@ -42,20 +38,10 @@ class StoreVet extends UserModel.User {
       "officeHours": this.officeHours,
       "contactPhone": this.contactPhone,
       "locations": this.locations,
-      "ratings": this.ratings
     };
   }
 
   double get averageRating {
-    if (this.ratings.isEmpty) {
-      return 0;
-    }
-
-    double sum = 0;
-    for (Rating rating in this.ratings) {
-      sum += rating.score;
-    }
-
-    return sum / this.ratings.length;
+    return 0;
   }
 }

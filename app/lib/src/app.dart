@@ -1,5 +1,6 @@
 import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
 import 'package:app/src/screens/pet/pet_register.dart';
+import 'package:app/src/screens/services/store_vet/add_marker.dart';
 import 'package:app/src/screens/user/home.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -33,7 +34,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: basicTheme(),
       routes: {
-        "/": (_) => FutureBuilder(
+        "/welcome": (_) => FutureBuilder(
           future: _initialization,
           builder: (futureContext, snapshot) {
             if (snapshot.hasError) {
@@ -64,7 +65,9 @@ class App extends StatelessWidget {
         "/pet/register": (_) => provider.Provider<CreatePetBloc>(
           bloc: CreatePetBloc(),
           child: PetRegisterScreen(),
-        )
+        ),
+        "/": (_) => AddMarkerScreen(),
+        // "/marker_add": (_) => AddMarkerScreen()
       },
     );
   }
