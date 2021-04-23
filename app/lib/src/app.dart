@@ -68,7 +68,6 @@ class App extends StatelessWidget {
           child: PetRegisterScreen(),
         ),
         "/": (_) => StoreVetCreationScreen(),
-        "/marker_add": (_) => AddMarkerScreen()
       },
     );
   }

@@ -1,4 +1,5 @@
 import 'package:app/src/screens/services/store_vet/add_marker.dart';
+import 'package:app/src/screens/services/store_vet/add_office_hours.dart';
 import 'package:app/src/widgets/app_bar.dart';
 import 'package:app/src/widgets/button.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ class StoreVetCreationScreen extends StatefulWidget {
 
 class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
   List<Map<String, double>> locations = [];
-  Map<String, List<String>> officeHours = {};
+  Map<String, List<String>> officeHours;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,9 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
                     )
                   );
                   setState(() {
-                    this.locations = result;
+                    if (result != null) {
+                      this.locations = result;
+                    }
                   });
                 },
                 child: Row(
@@ -74,7 +77,21 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
               width: size.width * 0.8,
               child: AppButton(
                 color: Theme.of(context).colorScheme.secondary, 
-                onPressed: () => true,
+                onPressed: () async {
+                  var result = await Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (_) => AddOfficeHoursScreen(
+                        officeHours: this.officeHours,
+                      )
+                    )
+                  );
+                  setState(() {
+                    if (result != null) {
+                      this.officeHours = result;
+                    }
+                  });
+                },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
