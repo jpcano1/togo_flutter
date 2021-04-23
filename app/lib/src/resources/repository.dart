@@ -97,4 +97,8 @@ class Repository {
     {@required FirebaseAuth.User currentUser}
   ) => 
     _firestoreProvider.listPets(currentUser: currentUser);
+  
+  // StoreVet Operations
+  Future<void> createStoreVet({@required storeVet}) => 
+    _firestoreProvider.createStoreVet(storeVet);
 }

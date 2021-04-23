@@ -10,15 +10,16 @@ class StoreVet extends UserModel.User {
            String email, this.officeHours, 
            this.contactPhone,this.locations,
            {String phoneNumber}): 
-    super(id, name, email, phoneNumber: phoneNumber);
+    super(id, name, email, phoneNumber: phoneNumber) {
+    this.id = id;
+    this.name = name;
+    this.email = email;
+    this.phoneNumber = phoneNumber;
+  }
   
   @override
   StoreVet.fromMap(Map<String, dynamic> map): 
     super.fromMap(map) {
-    // User Attributes
-    this.name = map["name"];
-    this.email = map["email"];
-    this.phoneNumber = map["phoneNumber"];
     // Vet Attributes
     this. officeHours = map["officeHours"];
     this.contactPhone = map["contactPhone"];
