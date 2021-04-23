@@ -1,5 +1,4 @@
 import 'user.dart' as UserModel;
-import 'rating.dart';
 
 class StoreVet extends UserModel.User {
 
@@ -11,12 +10,7 @@ class StoreVet extends UserModel.User {
            String email, this.officeHours, 
            this.contactPhone,this.locations,
            {String phoneNumber}): 
-    super(id, name, email, phoneNumber: phoneNumber) {
-    this.id = id;
-    this.name = name;
-    this.email = email;
-    this.phoneNumber = phoneNumber;
-  }
+    super(id, name, email, phoneNumber: phoneNumber);
   
   @override
   StoreVet.fromMap(Map<String, dynamic> map): 
