@@ -106,7 +106,7 @@ class _AddMarkerScreenState extends State<AddMarkerScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
-        onPressed: () => print(this.locations.values.toList())
+        onPressed: () => Navigator.pop(context, this.locations.values.toList())
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );

@@ -43,7 +43,7 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
               child: AppButton(
                 color: Theme.of(context).colorScheme.secondary, 
                 onPressed: () async {
-                  this.locations = await Navigator.push(
+                  var result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (_) => AddMarkerScreen(
@@ -51,6 +51,9 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
                       )
                     )
                   );
+                  setState(() {
+                    this.locations = result;
+                  });
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -111,7 +114,7 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
               width: size.width * 0.8,
               child: AppButton(
                 color: Theme.of(context).colorScheme.primary, 
-                onPressed: () => true,
+                onPressed: () => print(this.locations),
                 text: "Next",
               ),
             )
