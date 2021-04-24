@@ -44,14 +44,48 @@ class WelcomeScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.secondary,
                     text: "Register",
                     onPressed: () {
-                      checkConnectivity().then((value) {
-                        if (value) {
-                          Navigator.pushNamed(context, "/register");
+                      checkConnectivity().then((connected) {
+                        if (!connected) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                "No internet connection",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              content: Text(
+                                'Keep in mind you don\'t have an internet connection at the moment, you may proceed but credentials will be saved locally.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(
+                                      color: Colors.black,
+                                    ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.pushNamed(context, "/register");
+                                  },
+                                  child: Text('Continue'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            ),
+                          );
                         } else {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(
-                                'Be aware that you don\'t have internet connection '),
-                          ));
                           Navigator.pushNamed(context, "/register");
                         }
                       });
