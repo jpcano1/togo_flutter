@@ -235,7 +235,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                     Container(
                       width: size.width * 0.7,
                       child: Text(
-                        "Contact Us: ${this.storeVet.contactPhone}",
+                        "Contact Us: ${this.storeVet.phoneNumber}",
                         style: Theme.of(context).textTheme.headline6.copyWith(
                           color: Theme.of(context).colorScheme.primary
                         ),

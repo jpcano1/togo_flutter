@@ -79,11 +79,4 @@ class FirestoreProvider {
   Future<void> deletePet({String petId}) async {
     return await database.collection(petCollection).doc(petId).delete();
   }
-
-  // StoreVet Functions
-  // Create, get, update, delete
-  Future<void> createStoreVet(StoreVetModel.StoreVet storeVet) async {
-    return await database.collection(storeVetCollection).doc(storeVet.id)
-    .set(storeVet.toMap());
-  }
 }

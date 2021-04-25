@@ -22,6 +22,7 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen> {
   String zone;
   bool nightMode = isNightMode();
+  bool serviceProvider = false;
 
   @override
   void initState() {
@@ -60,6 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 stream: bloc.registerName,
                 builder: (streamContext, snapshot) {
                   return TextField(
+                    textCapitalization: TextCapitalization.words,
                     onChanged: bloc.changeRegisterName,
                     cursorColor: nightMode? Colors.white: Colors.black,
                     style: TextStyle(
@@ -98,6 +100,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               margin: EdgeInsets.symmetric(vertical: 10.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 5.0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   CountryCodePicker(
                     initialSelection: "CO",
@@ -116,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     dialogSize: Size(size.width * 0.8, size.height * 0.7),
                     onChanged: (CountryCode value) => setState(() => zone = value.dialCode),
                   ),
-                  Expanded(
+                  Flexible(
                     child: StreamBuilder(
                       stream: bloc.registerPhone,
                       builder: (streamContext, snapshot) {
@@ -160,6 +163,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
               )
             ),
             Container(
+              padding: EdgeInsets.only(right: 5.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    "Are you a service provider?",
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: Theme.of(context).colorScheme.primary
+                    ),
+                  ),
+                  Checkbox(
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    onChanged: (bool value) {
+                      setState(() {
+                        this.serviceProvider = value;  
+                      });
+                    },
+                    value: this.serviceProvider,
+                  ),
+                ],
+              )
+            ),
+            Container(
               margin: EdgeInsets.symmetric(vertical: 8.0),
               padding: EdgeInsets.symmetric(horizontal: 20.0),
               child: StreamBuilder(
@@ -183,7 +209,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   register(BuildContext context, RegisterBloc bloc, String zone) {
     _register() async {
       dialog(context, content: LoadingSpinner());
-      UserModel.User blocData;
+      String blocData;
       try {
         blocData = await bloc.register(zone);
       } catch(e) {

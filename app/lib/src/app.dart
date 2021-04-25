@@ -35,7 +35,7 @@ class App extends StatelessWidget {
     return MaterialApp(
       theme: basicTheme(),
       routes: {
-        "/welcome": (_) => FutureBuilder(
+        "/": (_) => FutureBuilder(
           future: _initialization,
           builder: (futureContext, snapshot) {
             if (snapshot.hasError) {
@@ -62,12 +62,12 @@ class App extends StatelessWidget {
         ),
         "/services": (_) => ServicesScreen(),
         "/services/vets": (_) => StoreVetListScreen(),
+        "/services/vets/create": (_) => StoreVetCreationScreen(),
         "/qr_scanner": (_) => QRScannerScreen(),
         "/pet/register": (_) => provider.Provider<CreatePetBloc>(
           bloc: CreatePetBloc(),
           child: PetRegisterScreen(),
         ),
-        "/": (_) => StoreVetCreationScreen(),
       },
     );
   }
