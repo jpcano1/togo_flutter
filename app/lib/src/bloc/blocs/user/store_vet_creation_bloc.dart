@@ -9,11 +9,19 @@ class StoreVetCreationBloc extends BlocBase {
   final _officeHoursController = BehaviorSubject();
   final _roleController = BehaviorSubject();
 
-  Function get locationsChange => _locationsController.sink.add;
-  Function get officeHoursChange => _officeHoursController.sink.add;
-  Function get roleChange => _roleController.sink.add;
+  Function(List<Map<String, double>>) get locationsChange => _locationsController.sink.add;
+  Function(dynamic) get officeHoursChange => _officeHoursController.sink.add;
+  Function(bool) get roleChange => _roleController.sink.add;
   
-  Future<void> submit() async {
+  Future<String> submit() async {
+    if (_locationsController.value.isEmpty) {
+      return Future.error("Locations are empty");
+    }
+
+    if (_officeHoursController.value.isEmpty) {
+      return Future.error("Office hours are empty");
+    }
+
     var newData = {
       "locations": _locationsController.value,
       "officeHours": _officeHoursController.value,
@@ -33,6 +41,8 @@ class StoreVetCreationBloc extends BlocBase {
     } catch(e) {
       return Future.error(e.toString());
     }
+
+    return _repository.getCurrentUser().uid;
   }
 
   dispose() async {

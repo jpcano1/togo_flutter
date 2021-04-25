@@ -16,7 +16,9 @@ class _AddOfficeHoursScreenState extends State<AddOfficeHoursScreen> {
   initState() {
     super.initState();
     
-    if (widget.officeHours != null) {
+    if (widget.officeHours != null && 
+      widget.officeHours.containsKey("Weekdays") && 
+      widget.officeHours.containsKey("Weekends")) {
       officeHours = {
         "Weekdays": widget.officeHours["Weekdays"],
         "Weekends": widget.officeHours["Weekends"]

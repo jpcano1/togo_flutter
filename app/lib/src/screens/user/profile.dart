@@ -143,6 +143,7 @@ class ProfileScreen extends StatelessWidget {
                       stream: bloc.petListOut,
                       builder: (BuildContext streamContext, AsyncSnapshot streamSnapshot) {
                         if (streamSnapshot.hasData) {
+                          print(streamSnapshot.data);
                           return builPetList(streamContext, streamSnapshot.data);
                         }
                         if (streamSnapshot.hasError) {
@@ -223,7 +224,7 @@ class ProfileScreen extends StatelessWidget {
 
   builPetList(BuildContext context, List pets) {
     final String defaultPetImage = "assets/icons/scottish-fold-cat.png";
-    return pets.length > 0? ListView.builder(
+    return ListView.builder(
       itemCount: pets.length,
       itemBuilder: (BuildContext listContext, int index) {
         Pet pet = pets[index];
@@ -262,6 +263,6 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       },
-    ): null;
+    );
   }
 }

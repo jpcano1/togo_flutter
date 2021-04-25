@@ -1,3 +1,6 @@
+import 'package:app/src/bloc/blocs/user/store_vet_creation_bloc.dart';
+import 'package:app/src/screens/services/store_vet/store_vet_creation.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
@@ -214,27 +217,20 @@ class _RegisterScreenState extends State<RegisterScreen> {
         blocData = await bloc.register(zone);
       } catch(e) {
         Navigator.pop(context);
-        Fluttertoast.showToast(
-          msg: e,
-          gravity: ToastGravity.BOTTOM,
-          textColor: Colors.white,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        );
+        showToast(e, context);
         return;
       }
 
       Navigator.pop(context);
-      Fluttertoast.showToast(
-        msg: "Verify your email inbox",
-        gravity: ToastGravity.BOTTOM,
-        textColor: Colors.white,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      );
+      showToast("Verify your email inbox", context);
 
       Navigator.pushReplacement(
         context, 
         MaterialPageRoute(
-          builder: (_) => Provider(
+          builder: (_) => this.serviceProvider? Provider(
+            bloc: StoreVetCreationBloc(), 
+            child: StoreVetCreationScreen(vetId: blocData)
+          ): Provider(
             bloc: UpdateProfilePictureBloc(), 
             child: ProfilePictureUploadScreen(blocData)
           )

@@ -1,7 +1,14 @@
+import 'package:app/src/bloc/bloc_provider.dart';
+import 'package:app/src/bloc/blocs/update_profile_picture_bloc.dart';
+import 'package:app/src/bloc/blocs/user/store_vet_creation_bloc.dart';
 import 'package:app/src/screens/services/store_vet/add_marker.dart';
 import 'package:app/src/screens/services/store_vet/add_office_hours.dart';
+import 'package:app/src/screens/user/profile_picture_upload.dart';
+import 'package:app/src/utils/notification_dialog.dart';
 import 'package:app/src/widgets/app_bar.dart';
 import 'package:app/src/widgets/button.dart';
+import 'package:app/src/widgets/spinner.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:flutter/material.dart';
 
 class StoreVetCreationScreen extends StatefulWidget {
@@ -14,11 +21,13 @@ class StoreVetCreationScreen extends StatefulWidget {
 
 class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
   List<Map<String, double>> locations = [];
-  Map<String, List<String>> officeHours;
+  Map<String, List<String>> officeHours = {};
+  bool storeRole = false;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final bloc = Provider.of<StoreVetCreationBloc>(context);
     return Scaffold(
       appBar: appBar(
         backgroundColor: Colors.white, 
@@ -107,7 +116,6 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(bottom: size.height * 0.05),
               width: size.width * 0.8,
               child: AppButton(
                 color: Theme.of(context).colorScheme.secondary, 
@@ -129,9 +137,55 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
             Container(
               margin: EdgeInsets.only(bottom: size.height * 0.05),
               width: size.width * 0.8,
+              child: Row(
+                children: [
+                  Text(
+                    "Are you a store provider?",
+                    style: Theme.of(context).textTheme.bodyText1.copyWith(
+                      color: Theme.of(context).colorScheme.primary
+                    ),
+                  ),
+                  Checkbox(
+                    activeColor: Theme.of(context).colorScheme.primary,
+                    onChanged: (bool value) {
+                      setState(() {
+                        this.storeRole = value;  
+                      });
+                    },
+                    value: this.storeRole,
+                  ),
+                ],
+              )
+            ),
+            Container(
+              margin: EdgeInsets.only(bottom: size.height * 0.05),
+              width: size.width * 0.8,
               child: AppButton(
                 color: Theme.of(context).colorScheme.primary, 
-                onPressed: () => print(this.locations),
+                onPressed: () async {
+                  bloc.roleChange(storeRole);
+                  bloc.locationsChange(locations);
+                  bloc.officeHoursChange(officeHours);
+                  dialog(context, content: LoadingSpinner());
+                  String userId;
+                  try {
+                    userId = await bloc.submit();
+                  } catch(e) {
+                    Navigator.pop(context);
+                    showToast(e, context);
+                    return;
+                  }
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (_) => Provider(
+                        bloc: UpdateProfilePictureBloc(), 
+                        child: ProfilePictureUploadScreen(userId)
+                      )
+                    )
+                  );
+                },
                 text: "Next",
               ),
             )
