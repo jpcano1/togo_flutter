@@ -5,7 +5,6 @@ import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../models/pet.dart';
 import 'package:flutter/material.dart';

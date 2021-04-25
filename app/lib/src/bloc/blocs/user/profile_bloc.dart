@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:firebase_core/firebase_core.dart';
 
 import '../../../models/pet.dart' as PetModel;
@@ -23,6 +22,7 @@ class ProfileBloc implements BlocBase {
     try {
       var uid = _repository.getCurrentUser().uid;
       var user = await _repository.readUser(uid: uid);
+      print(user.data());
       userAdd(UserModel.User.fromMap(user.data()));
       return;
     } on FirebaseException catch(e) {
