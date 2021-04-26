@@ -98,6 +98,7 @@ class Repository {
   ) => 
     _firestoreProvider.listPets(currentUser: currentUser);
 
+  // Store Operations
   Future<List<Firestore.QueryDocumentSnapshot>> listVets() =>
     _firestoreProvider.listVets();
 

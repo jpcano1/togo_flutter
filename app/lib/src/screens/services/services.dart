@@ -1,3 +1,7 @@
+import 'package:app/src/bloc/bloc_provider.dart';
+import 'package:app/src/bloc/blocs/user/store_vet_list_bloc.dart';
+import 'package:app/src/screens/services/store_vet/store_vet_list.dart';
+
 import '../../widgets/button.dart';
 import 'package:flutter/material.dart';
 import '../../utils/night_mode.dart';
@@ -57,19 +61,29 @@ class ServicesScreen extends StatelessWidget {
                   AppButton(
                     color: Theme.of(context).colorScheme.primary, 
                     text: "Vets", 
-                    onPressed: () => Navigator.pushNamed(context, "/services/vets"),
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => Provider(
+                          bloc: StoreVetListBloc(),
+                          child: StoreVetListScreen(stores: false),
+                        )
+                      )
+                    ),
                     minWidth: size.width * 0.35,
                   ),
                   Padding(padding: EdgeInsets.all(size.width * 0.08)),
                   AppButton(
                     color: Theme.of(context).colorScheme.primary, 
                     text: "Stores", 
-                    onPressed: () => Navigator.pushNamed(
-                      context, 
-                      "/services/vets", 
-                      arguments: {
-                        "stores": true
-                      }
+                    onPressed: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => Provider(
+                          bloc: StoreVetListBloc(),
+                          child: StoreVetListScreen(stores: true),
+                        )
+                      )
                     ),
                     minWidth: size.width * 0.35,
                   )

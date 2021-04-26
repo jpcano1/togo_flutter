@@ -1,8 +1,11 @@
+import 'package:app/src/bloc/bloc_provider.dart';
+import 'package:app/src/bloc/blocs/user/store_vet_list_bloc.dart';
+import 'package:app/src/widgets/spinner.dart';
 import 'package:flutter/rendering.dart';
 
 import 'store_vet_detail.dart';
 import 'package:flutter/material.dart';
-import '../../../models/store_vet.dart' as VetModel;
+import '../../../models/store_vet.dart' as StoreVetModel;
 import '../../../widgets/app_bar.dart';
 import '../../../utils/night_mode.dart';
 
@@ -12,95 +15,28 @@ class StoreVetListScreen extends StatefulWidget {
   StoreVetListScreen({this.stores=false});
 
   @override
-  _StoreVetListScreenState createState() => _StoreVetListScreenState(this.stores);
+  _StoreVetListScreenState createState() => _StoreVetListScreenState();
 }
 
 class _StoreVetListScreenState extends State<StoreVetListScreen> {
-  List<VetModel.StoreVet> vetList;
-  final bool stores;
+  bool stores;
   String _selected = "name";
   bool _visible = false;
+  List<StoreVetModel.StoreVet> vetList;
 
   List<String> criteria = ["name", "rating"];
 
-  _StoreVetListScreenState(this.stores);
-
   @override
   void initState() {
-    vetList = [
-      VetModel.StoreVet(
-        "1",
-        "Exotic Pet",
-        "Email@vet.com",
-        {
-          "Monday": ["1:00", "2:00"],
-          "Tuesday": ["1:00", "2:00"],
-          "Wednesday": ["1:00", "2:00"],
-          "Thursday": ["1:00", "2:00"],
-          "Friday": ["1:00", "2:00"],
-          "Weekend": ["1:00", "2:00"],
-        },
-        "123123123",
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-      VetModel.StoreVet(
-        "2",
-        "New Med Vet",
-        "Email@vet.com",
-        {
-          "Lunes": ["1:00", "2:00"],
-          "Martes": ["1:00", "2:00"],
-        },
-        "123123123",
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-      VetModel.StoreVet(
-        "3",
-        "The Golden Century",
-        "Email@vet.com",
-        {
-          "Lunes": ["1:00", "2:00"],
-          "Martes": ["1:00", "2:00"],
-        },
-        "123123123",
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-      VetModel.StoreVet(
-        "4",
-        "Country Vet",
-        "Email@vet.com",
-        {
-          "Lunes": ["1:00", "2:00"],
-          "Martes": ["1:00", "2:00"],
-        },
-        "123123123",
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-    ];
     super.initState();
+    stores = widget.stores;
   }
 
   @override
   Widget build(BuildContext context) {
     bool nightMode = isNightMode();
     final size = MediaQuery.of(context).size;
-    final defaultVetImagePath = "assets/icons/snakes.png";
+    final bloc = Provider.of<StoreVetListBloc>(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -177,52 +113,84 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
               )
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: this.vetList.length,
-                itemBuilder: (BuildContext listContext, int index) {
-                  VetModel.StoreVet storeVet = vetList[index];
-                  AssetImage image;
-
-                  if (storeVet.imagePath.isNotEmpty) {
-                    image = AssetImage(storeVet.imagePath);
-                  } else {
-                    image = AssetImage(defaultVetImagePath);
+              child: FutureBuilder(
+                future: bloc.getList(this.stores),
+                builder: (_, futureSnapshot) {
+                  if (futureSnapshot.connectionState == ConnectionState.done) {
+                    return StreamBuilder(
+                      stream: bloc.storeVetListStream,
+                      builder: (_, streamSnapshot) {
+                        if (streamSnapshot.hasData) {
+                          setState(() {
+                            vetList = streamSnapshot.data;
+                          });
+                          return buildStoreVetList(size, nightMode);
+                        }
+                        if (streamSnapshot.hasError) {
+                          return Center(
+                            child: LoadingSpinner(),
+                          );
+                        }
+                        return Center(
+                          child: LoadingSpinner(),
+                        );
+                      }
+                    );
                   }
-                  return Card(
-                    color: nightMode? Colors.black: Colors.white,
-                    shadowColor: nightMode? Colors.white: Colors.black,
-                    child: ListTile(
-                      leading: CircleAvatar(
-                        backgroundImage: image,
-                        backgroundColor: Colors.white,
-                        maxRadius: size.height * 0.03,
-                      ),
-                      onTap: () => Navigator.push(
-                        listContext, 
-                        MaterialPageRoute(
-                          builder: (_) => StoreVetDetail(storeVet)
-                        )
-                      ),
-                      title: Text(
-                        storeVet.name,
-                        style: Theme.of(context).textTheme.headline6.copyWith(
-                          color: nightMode? Colors.white: Colors.black
-                        ),
-                      ),
-                      subtitle: Text(
-                        "Rating: ${storeVet.averageRating}",
-                        style: Theme.of(context).textTheme.bodyText1.copyWith(
-                          color: nightMode? Colors.white: Colors.black
-                        ),
-                      ),
-                    ),
+                  if (futureSnapshot.hasError) {
+                    return Center(
+                      child: Text(futureSnapshot.error)
+                    );
+                  }
+                  return Center(
+                    child: LoadingSpinner(),
                   );
                 },
-              ),
+              )
             )
           ],
         ),
       ),
+    );
+  }
+
+  buildStoreVetList(Size size, bool nightMode) {
+    final defaultVetImagePath = "assets/icons/snakes.png";
+    return ListView.builder(
+      itemCount: vetList.length,
+      itemBuilder: (BuildContext listContext, int index) {
+        StoreVetModel.StoreVet storeVet = vetList[index];
+        AssetImage image;
+
+        if (storeVet.imagePath.isNotEmpty) {
+          image = AssetImage(storeVet.imagePath);
+        } else {
+          image = AssetImage(defaultVetImagePath);
+        }
+        return Card(
+          color: nightMode? Colors.black: Colors.white,
+          shadowColor: nightMode? Colors.white: Colors.black,
+          child: ListTile(
+            leading: CircleAvatar(
+              backgroundImage: image,
+              backgroundColor: Colors.white,
+              maxRadius: size.height * 0.03,
+            ),
+            onTap: () => Navigator.push(
+              listContext, 
+              MaterialPageRoute(
+                builder: (_) => StoreVetDetail(storeVet)
+              )
+            ),
+            title: Text(
+              storeVet.name,
+              style: Theme.of(context).textTheme.headline6.copyWith(
+                color: nightMode? Colors.white: Colors.black
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 
