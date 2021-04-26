@@ -181,7 +181,10 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
                     MaterialPageRoute(
                       builder: (_) => Provider(
                         bloc: UpdateProfilePictureBloc(), 
-                        child: ProfilePictureUploadScreen(userId)
+                        child: ProfilePictureUploadScreen(
+                          userId, directory: 
+                          "user_pictures/store_vet"
+                        )
                       )
                     )
                   );

@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:app/src/screens/user/home.dart';
 import 'package:app/src/widgets/toast_alert.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../utils/notification_dialog.dart';
 import '../../widgets/spinner.dart';
@@ -11,14 +10,17 @@ import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
 import '../../bloc/bloc_provider.dart';
 import '../../bloc/blocs/update_profile_picture_bloc.dart';
-import '../../models/user.dart' as UserModel;
 
 import 'package:flutter/material.dart';
 
 class ProfilePictureUploadScreen extends StatefulWidget {
   final String userId;
+  final String directory;
 
-  ProfilePictureUploadScreen(this.userId);
+  ProfilePictureUploadScreen(
+    this.userId, 
+    {this.directory="user_pictures/pet_owner"}
+  );
 
   @override
   _ProfilePictureUploadScreenState createState() => _ProfilePictureUploadScreenState();
@@ -106,7 +108,10 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             var streamList = snapshot.data;
 
                             try {
-                              await bloc.upload(streamList[0], streamList[1]);
+                              await bloc.upload(
+                                streamList[0], streamList[1],
+                                directory: widget.directory
+                              );
                               Navigator.pop(streamContext);
                             } catch (error) {
                               Navigator.pop(streamContext);
