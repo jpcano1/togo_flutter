@@ -62,7 +62,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
       "lng": userLocation.longitude
     };
 
-    for (Map<String, double> location in this.storeVet.locations) {
+    for (Map location in this.storeVet.locations) {
       var startLat = currentUserCoordinates["lat"];
       var startLong = currentUserCoordinates["lng"];
 
@@ -91,7 +91,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
     controller.setMapStyle(this._mapStyle);
     setState(() {
       int counter = 1;
-      for (Map<String, double> location in this.storeVet.locations) {
+      for (Map location in this.storeVet.locations) {
         markers.add(
           Marker(
             markerId: MarkerId("value-${counter++}"),
@@ -111,11 +111,13 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
     final size = MediaQuery.of(context).size;
     final defaultVetImagePath = "assets/icons/snakes.png";
 
-    AssetImage storeVetImage = AssetImage(
-      this.storeVet.imagePath.isEmpty?
-        defaultVetImagePath:
-        this.storeVet.imagePath
-    );
+    var storeVetImage;
+
+    if (storeVet.imagePath.isNotEmpty) {
+      storeVetImage = NetworkImage(storeVet.imagePath);
+    } else {
+      storeVetImage = AssetImage(defaultVetImagePath);
+    }
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
@@ -189,7 +191,7 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
                                 this.storeVet.officeHours.length, 
                                 (int index) {
                                   String key = this.storeVet.officeHours.keys.elementAt(index);
-                                  List<String> schedules = this.storeVet.officeHours[key];
+                                  List schedules = this.storeVet.officeHours[key];
                                   return Text(
                                     "$key: ${schedules[0]} - ${schedules[1]}",
                                     style: Theme.of(context).textTheme.subtitle1.copyWith(

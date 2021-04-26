@@ -9,28 +9,10 @@ import '../../../models/store_vet.dart' as StoreVetModel;
 import '../../../widgets/app_bar.dart';
 import '../../../utils/night_mode.dart';
 
-class StoreVetListScreen extends StatefulWidget {
-  final bool stores;
-  
+class StoreVetListScreen extends StatelessWidget {
+  final stores;
+
   StoreVetListScreen({this.stores=false});
-
-  @override
-  _StoreVetListScreenState createState() => _StoreVetListScreenState();
-}
-
-class _StoreVetListScreenState extends State<StoreVetListScreen> {
-  bool stores;
-  String _selected = "name";
-  bool _visible = false;
-  List<StoreVetModel.StoreVet> vetList;
-
-  List<String> criteria = ["name", "rating"];
-
-  @override
-  void initState() {
-    super.initState();
-    stores = widget.stores;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,103 +31,54 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
           children: [
             Container(
               width: size.width,
-              margin: EdgeInsets.only(top: 10.0),
-              padding: EdgeInsets.only(left: 10.0),
-              child: Row(
-                children: [
-                  Container(
-                    width: size.width * 0.4,
-                    child: Text(
-                      this.stores? "Stores": "Vets",
-                      style: Theme.of(context).textTheme.headline4.copyWith(
-                        color: nightMode? Colors.white: Colors.black
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    margin: EdgeInsets.only(left: size.width * 0.15),
-                    width: size.width * 0.4,
-                    child: IconButton(
-                      icon: Icon(
-                        Icons.sort,
-                        color: nightMode? Colors.white: Colors.black,
-                      ), 
-                      onPressed: () {
-                        setState(() {
-                          this._visible = !this._visible;
-                        });
-                      }
-                    ),
-                  )
-                ],
-              )
-            ),
-            Visibility(
-              visible: this._visible,
-              child: Container(
-                height: size.height * 0.15,
-                child: ListView(
-                  children: List.generate(
-                    this.criteria.length, 
-                    (index) => ListTile(
-                      title: Text(
-                        this.criteria[index],
-                        style: Theme.of(context).textTheme.subtitle1.copyWith(
-                          color: nightMode? Colors.white: Colors.black
-                        ),
-                      ),
-                      leading: Radio(
-                        activeColor: nightMode? Colors.white: Colors.black,
-                        value: this.criteria[index],
-                        groupValue: this._selected,
-                        onChanged: (String value) {
-                          setState(() {
-                            this._selected = value;
-                          });
-                          this.sortStoreVet(value);
-                        },
-                      ),
-                    )
-                  ),
+              margin: EdgeInsets.only(top: 10.0, bottom: 20.0),
+              padding: EdgeInsets.only(left: size.width * 0.05),
+              child: Text(
+                this.stores? "Stores": "Vets",
+                style: Theme.of(context).textTheme.headline4.copyWith(
+                  color: nightMode? Colors.white: Colors.black
                 ),
-              )
+                textAlign: TextAlign.start,
+              ),
             ),
             Expanded(
-              child: FutureBuilder(
-                future: bloc.getList(this.stores),
-                builder: (_, futureSnapshot) {
-                  if (futureSnapshot.connectionState == ConnectionState.done) {
-                    return StreamBuilder(
-                      stream: bloc.storeVetListStream,
-                      builder: (_, streamSnapshot) {
-                        if (streamSnapshot.hasData) {
-                          setState(() {
-                            vetList = streamSnapshot.data;
-                          });
-                          return buildStoreVetList(size, nightMode);
-                        }
-                        if (streamSnapshot.hasError) {
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.0),
+                child: FutureBuilder(
+                  future: bloc.getList(this.stores),
+                  builder: (_, futureSnapshot) {
+                    if (futureSnapshot.connectionState == ConnectionState.done) {
+                      return StreamBuilder(
+                        stream: bloc.storeVetListStream,
+                        builder: (_, streamSnapshot) {
+                          if (streamSnapshot.hasData) {
+                            return buildStoreVetList(
+                              context,
+                              size, nightMode, 
+                              streamSnapshot.data
+                            );
+                          }
+                          if (streamSnapshot.hasError) {
+                            return Center(
+                              child: LoadingSpinner(),
+                            );
+                          }
                           return Center(
                             child: LoadingSpinner(),
                           );
                         }
-                        return Center(
-                          child: LoadingSpinner(),
-                        );
-                      }
-                    );
-                  }
-                  if (futureSnapshot.hasError) {
+                      );
+                    }
+                    if (futureSnapshot.hasError) {
+                      return Center(
+                        child: Text(futureSnapshot.error)
+                      );
+                    }
                     return Center(
-                      child: Text(futureSnapshot.error)
+                      child: LoadingSpinner(),
                     );
-                  }
-                  return Center(
-                    child: LoadingSpinner(),
-                  );
-                },
+                  },
+                ),
               )
             )
           ],
@@ -154,19 +87,20 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
     );
   }
 
-  buildStoreVetList(Size size, bool nightMode) {
+  buildStoreVetList(BuildContext context, Size size, bool nightMode, List vetList) {
     final defaultVetImagePath = "assets/icons/snakes.png";
     return ListView.builder(
       itemCount: vetList.length,
       itemBuilder: (BuildContext listContext, int index) {
         StoreVetModel.StoreVet storeVet = vetList[index];
-        AssetImage image;
+        var image;
 
         if (storeVet.imagePath.isNotEmpty) {
-          image = AssetImage(storeVet.imagePath);
+          image = NetworkImage(storeVet.imagePath);
         } else {
           image = AssetImage(defaultVetImagePath);
         }
+        
         return Card(
           color: nightMode? Colors.black: Colors.white,
           shadowColor: nightMode? Colors.white: Colors.black,
@@ -188,25 +122,25 @@ class _StoreVetListScreenState extends State<StoreVetListScreen> {
                 color: nightMode? Colors.white: Colors.black
               ),
             ),
+            trailing: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.star,
+                  color: Colors.yellow[800],
+                ),
+                Text(
+                  storeVet.averageRating.toStringAsFixed(1),
+                  style: Theme.of(context).textTheme.bodyText2.copyWith(
+                    color: nightMode? Colors.white: Colors.black
+                  ),
+                )
+              ],
+            ),
           ),
         );
       },
     );
-  }
-
-  void sortStoreVet(String criteria) {
-    if (criteria == "name") {
-      setState(() {
-        this.vetList.sort((a, b) => 
-          b.name.toLowerCase().compareTo(a.name.toLowerCase())
-        );
-      });
-    } else {
-      setState(() {
-        this.vetList.sort((a, b) => 
-          b.averageRating.compareTo(a.averageRating)
-        );
-      });
-    }
   }
 }
