@@ -32,7 +32,7 @@ class RegisterBloc with Validators implements BlocBase {
   Function(String) get changeRegisterName => _nameController.sink.add;
   Function(String) get changeRegisterPhone => _phoneController.sink.add;
 
-  Future<UserModel.User> register(String zone) async {
+  Future<String> register(String zone) async {
     FirebaseAuth.UserCredential credentials;
     UserModel.User currentUser;
     try {
@@ -70,7 +70,7 @@ class RegisterBloc with Validators implements BlocBase {
       print(e.toString());
     }
 
-    return currentUser;
+    return currentUser.id;
   }
 
   @override
