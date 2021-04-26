@@ -97,4 +97,10 @@ class Repository {
     {@required FirebaseAuth.User currentUser}
   ) => 
     _firestoreProvider.listPets(currentUser: currentUser);
+
+  Future<List<Firestore.QueryDocumentSnapshot>> listVets() =>
+    _firestoreProvider.listVets();
+
+  Future<List<Firestore.QueryDocumentSnapshot>> listStores() =>
+    _firestoreProvider.listStores();
 }
