@@ -19,7 +19,8 @@ class UpdateProfilePictureBloc implements BlocBase {
     try {
       photoUrl = await _repository.uploadProfilePicture(
         filename: filename,
-        file: file
+        file: file,
+        directory: "user_pictures/pet_owner"
       );
       await _repository.updateUser(
         uid: _repository.getCurrentUser().uid,

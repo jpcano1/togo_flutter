@@ -1,6 +1,8 @@
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
+import '../widgets/spinner.dart';
 import '../widgets/app_bar.dart';
 import '../widgets/button.dart';
 import '../bloc/bloc_provider.dart';
@@ -87,31 +89,34 @@ class LoginScreen extends StatelessWidget {
                     color: Theme.of(context).colorScheme.primary,
                     text: "Log In",
                     onPressed: snapshot.hasData? () async {
+                      dialog(context, content: LoadingSpinner());
                       try {
                         var blocData = await bloc.login();
-
+                        
+                        Navigator.pop(streamContext);
                         if (!blocData["verified"]) {
-                          Fluttertoast.showToast(
-                            msg: "You are not verified, please go check your email",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            textColor: Colors.white,
-                            backgroundColor: Theme.of(context).colorScheme.primary,
+                          showToast(
+                            "You are not verified, please go check your email", 
+                            context
                           );
                         }
-
-                        var document = blocData["document"];
-
-                        var currentUser = UserModel.User.fromJson(document.data());
 
                         Navigator.pushReplacement(
                           streamContext, 
                           MaterialPageRoute(
-                            builder: (materialPageRouteContext) => HomeScreen(currentUser)
+                            builder: (_) => HomeScreen()
                           )
                         );
                       } catch(error) {
-                        return dialog(streamContext, message: error);
+                        Navigator.pop(streamContext);
+                        Fluttertoast.showToast(
+                          msg: error,
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          textColor: Colors.white,
+                          backgroundColor: Theme.of(context).colorScheme.primary,
+                        );
+                        return;
                       }
                     }: null,
                     minWidth: size.width,

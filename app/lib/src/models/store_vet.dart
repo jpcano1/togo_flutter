@@ -2,39 +2,36 @@ import 'user.dart' as UserModel;
 
 class StoreVet extends UserModel.User {
 
-  Map<String, List<String>> officeHours;
-  String contactPhone;
-  List<Map<String, double>> locations;
-  double averageRating;
+  Map officeHours;
+  String catalog;
+  List locations;
 
   StoreVet(String id, String name, 
            String email, this.officeHours, 
-           this.contactPhone, this.averageRating,
-           this.locations, {String phoneNumber}): 
-    super(id, name, email, phoneNumber: phoneNumber) {
-      this.id = id;
-      this.name = name;
-      this.email = email;
-      this.phoneNumber = phoneNumber;
-    }
+           this.catalog,this.locations,
+           {String phoneNumber}): 
+    super(id, name, email, phoneNumber: phoneNumber);
   
   @override
-  StoreVet.fromJson(Map<String, String> parsedJson): 
-    super.fromJson(parsedJson) {
-      // User Attributes
-      this.name = parsedJson["name"];
-      this.email = parsedJson["email"];
-      this.phoneNumber = parsedJson["phoneNumber"];
-      // Vet Attributes
-    }
+  StoreVet.fromMap(Map<String, dynamic> map): 
+    super.fromMap(map) {
+    // Vet Attributes
+    this.catalog = map["catalog"];
+    this. officeHours = map["officeHours"];
+    this.locations = map["locations"];
+  }
   
   @override
   toMap() {
     return {
       ...super.toMap(),
       "officeHours": this.officeHours,
-      "contactPhone": this.contactPhone,
-      "locations": this.locations
+      "catalog": this.catalog,
+      "locations": this.locations,
     };
+  }
+
+  double get averageRating {
+    return 0;
   }
 }

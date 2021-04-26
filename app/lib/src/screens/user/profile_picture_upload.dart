@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:app/src/screens/user/home.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../utils/notification_dialog.dart';
+import '../../widgets/spinner.dart';
 import '../../widgets/app_bar.dart';
 import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
@@ -11,22 +13,17 @@ import '../../bloc/blocs/update_profile_picture_bloc.dart';
 import '../../models/user.dart' as UserModel;
 
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
-import 'package:cloud_firestore/cloud_firestore.dart' as firestore;
 
 class ProfilePictureUploadScreen extends StatefulWidget {
-  final UserModel.User currentUser;
+  final String userId;
 
-  ProfilePictureUploadScreen(this.currentUser);
+  ProfilePictureUploadScreen(this.userId);
 
   @override
   _ProfilePictureUploadScreenState createState() => _ProfilePictureUploadScreenState();
 }
 
 class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen> {
-  final firebase_storage.FirebaseStorage _storage = firebase_storage.FirebaseStorage.instance;
-  final firestore.CollectionReference users = firestore.FirebaseFirestore.instance.collection("User");
-
   File picture;
   String filename;
   String nextButtonText = "Next";
@@ -34,7 +31,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
 
   @override
   Widget build(BuildContext context) {
-    final UserModel.User currentUser = widget.currentUser;
+    final String userId = widget.userId;
 
     final size = MediaQuery.of(context).size;
     final String imageUrl = "assets/icons/profile.png";
@@ -78,7 +75,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                           .then((File result) {
                             setState(() {
                               this.picture = result;
-                              this.filename = currentUser.id + "." + this.picture.path
+                              this.filename = userId + "." + this.picture.path
                               .split("/").last.split(".").last;
                               bloc.profileImageChange([this.filename, this.picture]);
                               allowed = true;
@@ -110,16 +107,15 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                           color: Theme.of(context).colorScheme.primary,
                           text: nextButtonText,
                           onPressed: allowed? () async {
+                            dialog(context, content: LoadingSpinner());
                             var streamList = snapshot.data;
 
-                            String downloadPath;
-
                             try {
-                              downloadPath = await bloc.upload(streamList[0], streamList[1]);
+                              await bloc.upload(streamList[0], streamList[1]);
+                              Navigator.pop(streamContext);
                             } catch (error) {
-                              print(error);
+                              Navigator.pop(streamContext);
                             }
-
                             Fluttertoast.showToast(
                               msg: "User created successfully!",
                               toastLength: Toast.LENGTH_LONG,
@@ -127,11 +123,10 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                               textColor: Colors.white,
                               backgroundColor: Theme.of(context).colorScheme.primary,
                             );
-                            currentUser.imagePath = downloadPath;
                             Navigator.pushReplacement(
                               context, 
                               MaterialPageRoute(
-                                builder: (_) => HomeScreen(currentUser)
+                                builder: (_) => HomeScreen()
                               )
                             );
                           }: null,

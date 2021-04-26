@@ -49,4 +49,19 @@ class Validators {
       }
     }
   );
+
+  final validateNumberField = StreamTransformer<String, String>.fromHandlers(
+    handleData: (String fieldData, EventSink sink) {
+      var numericField = double.tryParse(fieldData);
+      if (numericField == null) {
+        sink.addError("Invalid field");
+      } else {
+        if (numericField < 0) {
+          sink.addError("Invalid field");
+        } else {
+          sink.add(fieldData);
+        }
+      }
+    }
+  );
 }
