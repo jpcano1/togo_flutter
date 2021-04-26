@@ -5,10 +5,14 @@ import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../models/pet.dart';
-import 'package:flutter/material.dart';
 import '../../models/user.dart' as UserModel;
+import '../../models/store_vet.dart' as StoreVetModel;
+import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -51,11 +55,18 @@ class ProfileScreen extends StatelessWidget {
             child: LoadingSpinner(),
           );
         },
-      )
+      ),
     );
   }
 
-  builBody(BuildContext context, UserModel.User currentUser, ProfileBloc bloc) {
+  builBody(BuildContext context, profileData, ProfileBloc bloc) {
+    var currentUser;
+    if (profileData["petOwner"]) {
+      currentUser = UserModel.User.fromMap(profileData);
+    } else {
+      currentUser = StoreVetModel.StoreVet.fromMap(profileData);
+    }
+
     var userImage;
     final String defaultUserImage = "assets/icons/user.png";
     if (currentUser.imagePath.isEmpty) {
@@ -125,53 +136,16 @@ class ProfileScreen extends StatelessWidget {
             width: size.width,
             padding: EdgeInsets.all(10.0),
             child: Text(
-              "My Pets:",
+              currentUser.petOwner? "My Pets:": "My Locations",
               style: Theme.of(context).textTheme.headline6.copyWith(
                 color: Colors.black
               )
             ),
           ),
-          Expanded(
-            child: Container(
-              width: size.width * 0.8,
-              child: FutureBuilder(
-                future: bloc.listPets(),
-                builder: (futureContext, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return StreamBuilder(
-                      stream: bloc.petListOut,
-                      builder: (BuildContext streamContext, AsyncSnapshot streamSnapshot) {
-                        if (streamSnapshot.hasData) {
-                          print(streamSnapshot.data);
-                          return builPetList(streamContext, streamSnapshot.data);
-                        }
-                        if (streamSnapshot.hasError) {
-                          return Center(
-                            child: Text(streamSnapshot.error),
-                          );
-                        }
-                        return Center(
-                          child: LoadingSpinner()
-                        );
-                      },
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        snapshot.error,
-                        style: TextStyle(color: Colors.black)
-                      ),
-                    );
-                  }
-                  return Center(
-                    child: LoadingSpinner()
-                  );
-                },
-              )
-            )
-          ),
-          Container(
+          currentUser.petOwner? 
+          buildPets(size, bloc): 
+          buildLocation(size, currentUser.locations),
+          currentUser.petOwner? Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50.0),
               color: Theme.of(context).colorScheme.secondaryVariant
@@ -184,7 +158,7 @@ class ProfileScreen extends StatelessWidget {
                 await bloc.listPets();
               },
             ),
-          ),
+          ): Container(),
           Container(
             margin: EdgeInsets.only(top: size.width * 0.055),
             child: TextButton(
@@ -218,6 +192,74 @@ class ProfileScreen extends StatelessWidget {
           )
         ],
       ),
+    );
+  }
+
+  buildLocation(Size size, locations) {
+    Set<Marker> markers = {};
+
+    int counter = 1;
+    for (Map location in locations) {
+      markers.add(
+        Marker(
+          markerId: MarkerId("value-${counter++}"),
+          position: LatLng(location["lat"], location["lng"]),
+        )
+      );
+    }
+    return Expanded(
+      child: GoogleMap(
+        markers: markers,
+        initialCameraPosition: CameraPosition(
+          target: markers.first.position,
+          zoom: 14
+        ),
+        gestureRecognizers: {
+          Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())
+        },
+      ),
+    );
+  }
+
+  buildPets(Size size, ProfileBloc bloc) {
+    return Expanded(
+      child: Container(
+        width: size.width * 0.8,
+        child: FutureBuilder(
+          future: bloc.listPets(),
+          builder: (futureContext, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return StreamBuilder(
+                stream: bloc.petListOut,
+                builder: (BuildContext streamContext, AsyncSnapshot streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return builPetList(streamContext, streamSnapshot.data);
+                  }
+                  if (streamSnapshot.hasError) {
+                    return Center(
+                      child: Text(streamSnapshot.error),
+                    );
+                  }
+                  return Center(
+                    child: LoadingSpinner()
+                  );
+                },
+              );
+            }
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  snapshot.error,
+                  style: TextStyle(color: Colors.black)
+                ),
+              );
+            }
+            return Center(
+              child: LoadingSpinner()
+            );
+          },
+        )
+      )
     );
   }
 

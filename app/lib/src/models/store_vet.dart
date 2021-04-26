@@ -2,9 +2,9 @@ import 'user.dart' as UserModel;
 
 class StoreVet extends UserModel.User {
 
-  Map<String, List<String>> officeHours;
+  Map officeHours;
   String catalog;
-  List<Map<String, double>> locations;
+  List locations;
 
   StoreVet(String id, String name, 
            String email, this.officeHours, 
@@ -16,8 +16,8 @@ class StoreVet extends UserModel.User {
   StoreVet.fromMap(Map<String, dynamic> map): 
     super.fromMap(map) {
     // Vet Attributes
-    this. officeHours = map["officeHours"];
     this.catalog = map["catalog"];
+    this. officeHours = map["officeHours"];
     this.locations = map["locations"];
   }
   
