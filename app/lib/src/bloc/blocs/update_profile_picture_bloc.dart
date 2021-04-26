@@ -28,7 +28,7 @@ class UpdateProfilePictureBloc implements BlocBase {
           "imagePath": photoUrl
         }
       );
-    } on FirebaseStorage.FirebaseException catch(e) {
+    } on FirebaseStorage.FirebaseException catch(_) {
       return Future.error("There was an error uploading the image");
     }
     return photoUrl;

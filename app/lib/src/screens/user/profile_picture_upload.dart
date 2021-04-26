@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app/src/screens/user/home.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../utils/notification_dialog.dart';
@@ -83,13 +84,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             });
                           })
                           .catchError((error) {
-                            Fluttertoast.showToast(
-                              msg: error,
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              textColor: Colors.white,
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                            );
+                            showToast(error, context);
                             setState(() {
                               nextButtonText = "Jump";
                               allowed = true;
@@ -116,13 +111,8 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             } catch (error) {
                               Navigator.pop(streamContext);
                             }
-                            Fluttertoast.showToast(
-                              msg: "User created successfully!",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              textColor: Colors.white,
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                            );
+
+                            showToast("User created successfully!", context);
                             Navigator.pushReplacement(
                               context, 
                               MaterialPageRoute(
