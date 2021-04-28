@@ -19,8 +19,9 @@ class QRScannerBloc extends BlocBase {
       );
       if (result.data() == null) {
         _vetStoreController.sink.addError("Not found!");
+      } else {
+        _vetStoreController.sink.add(StoreVetModel.StoreVet.fromMap(result.data()));
       }
-      _vetStoreController.sink.add(StoreVetModel.StoreVet.fromMap(result.data()));
       return;
     } on FirebaseException catch(e) {
       throw Exception(e.message);

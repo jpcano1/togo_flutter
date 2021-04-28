@@ -122,7 +122,10 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                           }
                           if (streamSnapshot.hasError) {
                             return Center(
-                              child: Text(streamSnapshot.error),
+                              child: Text(
+                                streamSnapshot.error,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
                             );
                           }
                           return Center(
