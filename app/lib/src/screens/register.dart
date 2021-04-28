@@ -1,3 +1,4 @@
+import 'package:app/src/utils/checkConnection.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -153,12 +154,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return AppButton(
                       color: Theme.of(streamContext).colorScheme.primary,
                       text: "Next",
-                      //TODO: Revisar conexión
-                      //TODO: Mostrar alertDialog "No tienes conexión"
                       //TODO: En caso de no tener conexión guardar información
-                      onPressed: snapshot.hasData
-                          ? register(streamContext, bloc, this.zone)
-                          : null,
+                      onPressed: () {
+                        checkConnectivity().then((connected) {
+                          if (connected) {
+                            if (snapshot.hasData) {
+                              register(streamContext, bloc, this.zone);
+                            }
+                          } else {
+                            noConnectionSave(streamContext, bloc);
+                          }
+                        });
+                      },
                       minWidth: size.width,
                     );
                   },
@@ -167,6 +174,50 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  noConnectionSave(BuildContext context, RegisterBloc bloc) {
+    _noConnectionSave() async {
+      dialog(context, content: LoadingSpinner());
+      {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(
+              "No internet connection",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            content: Text(
+              'Keep in mind you don\'t have an internet connection at the moment, do you want to save your credentials to retry later? (your password won\'t be saved) ',
+              style: Theme.of(context).textTheme.headline6.copyWith(
+                    color: Colors.black,
+                  ),
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  bloc.noConnectionSaveCredentials();
+                  Navigator.of(context).pop();
+                },
+                child: Text('Save'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cancel'),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    return _noConnectionSave();
   }
 
   register(BuildContext context, RegisterBloc bloc, String zone) {
