@@ -8,7 +8,6 @@ import '../widgets/button.dart';
 import '../bloc/bloc_provider.dart';
 import '../bloc/blocs/login_bloc.dart';
 import '../utils/notification_dialog.dart';
-import '../models/user.dart' as UserModel;
 import './user/home.dart';
 import '../utils/night_mode.dart';
 

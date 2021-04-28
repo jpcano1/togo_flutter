@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart' as Firestore;
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import '../models/user.dart' as UserModel;
 import '../models/pet.dart' as PetModel;
-import '../models/store_vet.dart' as StoreVetModel;
 
 class FirestoreProvider {
   static final FirestoreProvider firestoreProvider = FirestoreProvider._internal();
