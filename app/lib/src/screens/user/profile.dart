@@ -33,12 +33,15 @@ class ProfileScreen extends StatelessWidget {
       body: FutureBuilder(
         future: bloc.readUser(),
         builder: (BuildContext futureBuilderContext, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
             return StreamBuilder(
               stream: bloc.userOut,
               builder: (streamContext, streamSnaphot) {
                 if (streamSnaphot.hasData) {
-                  return builBody(streamContext, streamSnaphot.data, bloc);
+                  return builBody(
+                    streamContext, streamSnaphot.data, 
+                    bloc, snapshot.data
+                  );
                 }
                 return Center(
                   child: LoadingSpinner(),
@@ -59,7 +62,10 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  builBody(BuildContext context, profileData, ProfileBloc bloc) {
+  builBody(
+    BuildContext context, profileData,
+    ProfileBloc bloc, verified
+  ) {
     var currentUser;
     if (profileData["petOwner"]) {
       currentUser = UserModel.User.fromMap(profileData);
@@ -86,6 +92,30 @@ class ProfileScreen extends StatelessWidget {
             maxRadius: size.width * 0.25,
           ),
           Container(
+            margin: EdgeInsets.only(
+              top: spaceBetween
+            ),
+            child: verified? Icon(
+              Icons.verified
+            ): TextButton(
+              onPressed: () {
+                bloc.sendVerificationEmail()
+                .then((_) {
+                  showToast("Email sent, please check your inbox", context);
+                })
+                .catchError((error) {
+                  showToast(error, context);
+                });
+              }, 
+              child: Text(
+                "Resend verification email",
+                style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: Colors.black
+                ),
+              )
+            )
+          ),
+          Container(
             margin: EdgeInsets.only(top: spaceBetween),
             decoration: BoxDecoration(border: Border.symmetric(
               horizontal: BorderSide(
@@ -109,8 +139,8 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        bottom: spaceBetween, 
                         right: spaceBetween,
+                        bottom: spaceBetween, 
                         left: spaceBetween
                       ),
                       child: Text(
@@ -120,7 +150,7 @@ class ProfileScreen extends StatelessWidget {
                           fontSize: 17
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Expanded(
