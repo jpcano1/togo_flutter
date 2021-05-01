@@ -60,7 +60,7 @@ class StoreVetListScreen extends StatelessWidget {
                           }
                           if (streamSnapshot.hasError) {
                             return Center(
-                              child: LoadingSpinner(),
+                              child: Text(streamSnapshot.error)
                             );
                           }
                           return Center(

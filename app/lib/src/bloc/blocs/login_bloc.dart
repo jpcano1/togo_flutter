@@ -30,7 +30,7 @@ class LoginBloc with Validators implements BlocBase {
         email: this._emailController.value, 
         password: this._passwordController.value
       );
-    } on FirebaseAuth.FirebaseException catch(e) {
+    } on FirebaseAuth.FirebaseException catch(_) {
       return Future.error("Wrong email or password");
     }
     
