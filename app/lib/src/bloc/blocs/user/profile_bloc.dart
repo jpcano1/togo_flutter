@@ -17,12 +17,12 @@ class ProfileBloc implements BlocBase {
   Stream<List<PetModel.Pet>> get petListOut => _petListController.stream;
   Stream get userOut => _userProfileController.stream;
 
-  Future<void> readUser() async {
+  Future<bool> readUser() async {
     try {
-      var uid = _repository.getCurrentUser().uid;
-      var user = await _repository.readUser(uid: uid);
+      var currentUser = _repository.getCurrentUser();
+      var user = await _repository.readUser(uid: currentUser.uid);
       userAdd(user.data());
-      return;
+      return currentUser.emailVerified;
     } on FirebaseException catch(e) {
       return Future.error(e.message);
     }
@@ -38,11 +38,18 @@ class ProfileBloc implements BlocBase {
         petList.add(PetModel.Pet.fromMap(pet.data()));
       }
       petListAdd(petList);
-      return;
     } on FirebaseException catch(e) {
       return Future.error(e.message);
     } catch(e) {
       return Future.error(e.toString());
+    }
+  }
+
+  Future<void> sendVerificationEmail() async {
+    try {
+      await _repository.getCurrentUser().sendEmailVerification();
+    } on FirebaseException catch(_) {
+      return Future.error("There was a mistake, try again later");
     }
   }
 

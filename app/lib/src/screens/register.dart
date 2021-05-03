@@ -3,12 +3,10 @@ import 'package:app/src/screens/services/store_vet/store_vet_creation.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/spinner.dart';
 import '../widgets/button.dart';
-import '../models/user.dart' as UserModel;
 import '../utils/notification_dialog.dart';
 import '../utils/night_mode.dart';
 import '../bloc/bloc_provider.dart';
