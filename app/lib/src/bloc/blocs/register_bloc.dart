@@ -38,7 +38,17 @@ class RegisterBloc with Validators implements BlocBase {
 
   //Initialize credentials from sharedPreferences
   RegisterBloc() {
+    print("Entro al constructor");
     noConnectionLoadCredentials();
+  }
+
+  getName<String>() {
+    var name = _nameController.value;
+    if (name != null) {
+      return _nameController.value;
+    } else {
+      return "";
+    }
   }
 
   //Method to save credentials inside shared preferences when there's no
@@ -69,6 +79,8 @@ class RegisterBloc with Validators implements BlocBase {
     } else {
       await prefs.setString('regPhone', "");
     }
+
+    await prefs.setBool("was_offline", true);
   }
 
   //Method to load credentials from shared preferences when there's connection.
@@ -77,23 +89,26 @@ class RegisterBloc with Validators implements BlocBase {
     String email = prefs.getString('regEmail');
     String name = prefs.getString('regName');
     String phone = prefs.getString('regPhone');
+    bool wasOffline = prefs.getBool('was_offline');
 
-    if (email != null) {
-      changeRegisterEmail(email);
-    } else {
-      changeRegisterEmail("");
-    }
+    if (wasOffline != null && wasOffline == true) {
+      if (email != null) {
+        changeRegisterEmail(email);
+      } else {
+        changeRegisterEmail("");
+      }
 
-    if (name != null) {
-      changeRegisterName(name);
-    } else {
-      changeRegisterName("");
-    }
+      if (name != null) {
+        changeRegisterName(name);
+      } else {
+        changeRegisterName("");
+      }
 
-    if (phone != null) {
-      changeRegisterPhone(phone);
-    } else {
-      changeRegisterPhone("");
+      if (phone != null) {
+        changeRegisterPhone(phone);
+      } else {
+        changeRegisterPhone("");
+      }
     }
   }
 
@@ -131,6 +146,7 @@ class RegisterBloc with Validators implements BlocBase {
     await prefs.setString('regEmail', "");
     await prefs.setString('regName', "");
     await prefs.setString('regPhone', "");
+    await prefs.setBool('was_offline', false);
 
     return currentUser;
   }

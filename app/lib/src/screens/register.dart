@@ -57,7 +57,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: StreamBuilder(
                 stream: bloc.registerName,
                 builder: (streamContext, snapshot) {
-                  return TextField(
+                  // return nameField(bloc, snapshot);
+                  return TextFormField(
+                    initialValue: bloc.getName(),
                     onChanged: bloc.changeRegisterName,
                     cursorColor: nightMode ? Colors.white : Colors.black,
                     style: TextStyle(
@@ -174,6 +176,22 @@ class _RegisterScreenState extends State<RegisterScreen> {
         ),
       ),
     );
+  }
+
+  nameField<Widget>(RegisterBloc bloc, AsyncSnapshot snapshot) {
+    _nameField() async {
+      await checkConnectivity().then((connected) {
+        //   if (connected) {
+        return TextField(
+          onChanged: bloc.changeRegisterName,
+          cursorColor: nightMode ? Colors.white : Colors.black,
+          style: TextStyle(color: nightMode ? Colors.white : Colors.black),
+          decoration:
+              InputDecoration(hintText: "John Doe", errorText: snapshot.error),
+        );
+        // }
+      });
+    }
   }
 
   noConnectionSave(BuildContext context, RegisterBloc bloc) {
