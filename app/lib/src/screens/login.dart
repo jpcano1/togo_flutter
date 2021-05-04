@@ -11,8 +11,23 @@ import '../utils/notification_dialog.dart';
 import '../models/user.dart' as UserModel;
 import './user/home.dart';
 import '../utils/night_mode.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class LoginScreen extends StatelessWidget {
+
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  LoginScreen({this.analytics, this.observer});
+
+  Future <void> _logLogin() async{
+    await analytics.logLogin();
+  }
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "Login");
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,22 +106,24 @@ class LoginScreen extends StatelessWidget {
                     onPressed: snapshot.hasData? () async {
                       dialog(context, content: LoadingSpinner());
                       try {
-                        var blocData = await bloc.login();
-                        
-                        Navigator.pop(streamContext);
-                        if (!blocData["verified"]) {
-                          showToast(
-                            "You are not verified, please go check your email", 
-                            context
-                          );
-                        }
+                            var blocData = await bloc.login();
 
-                        Navigator.pushReplacement(
-                          streamContext, 
-                          MaterialPageRoute(
-                            builder: (_) => HomeScreen()
-                          )
-                        );
+                            Navigator.pop(streamContext);
+                            if (!blocData["verified"]) {
+                              showToast(
+                                "You are not verified, please go check your email",
+                                context
+                              );
+                            }
+
+                            //_logLogin();
+
+                            Navigator.pushReplacement(
+                              streamContext,
+                              MaterialPageRoute(
+                                builder: (_) => HomeScreen()
+                              )
+                            );
                       } catch(error) {
                         Navigator.pop(streamContext);
                         Fluttertoast.showToast(
