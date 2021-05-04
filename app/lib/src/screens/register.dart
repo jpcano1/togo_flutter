@@ -32,7 +32,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final bloc = Provider.of<RegisterBloc>(context);
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -57,9 +56,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: StreamBuilder(
                 stream: bloc.registerName,
                 builder: (streamContext, snapshot) {
+                  //TODO eliminate commented code
                   // return nameField(bloc, snapshot);
                   return TextFormField(
-                    initialValue: bloc.getName(),
+                    // initialValue: bloc.getName(),
+                    controller: bloc.textNameController,
                     onChanged: bloc.changeRegisterName,
                     cursorColor: nightMode ? Colors.white : Colors.black,
                     style: TextStyle(
@@ -76,7 +77,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 child: StreamBuilder(
                   stream: bloc.registerEmail,
                   builder: (streamContext, snapshot) {
-                    return TextField(
+                    return TextFormField(
+                      // initialValue: bloc.getEmail(),
+                      //TODO eliminate commented code
+                      //TODO put texteditingcontroller for email
                       onChanged: bloc.changeRegisterEmail,
                       keyboardType: TextInputType.emailAddress,
                       cursorColor: nightMode ? Colors.white : Colors.black,
@@ -115,7 +119,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: StreamBuilder(
                     stream: bloc.registerPhone,
                     builder: (streamContext, snapshot) {
-                      return TextField(
+                      return TextFormField(
+                        // initialValue: bloc.getPhone(),
+                        //TODO eliminate commented code
+                        //TODO put texteditingcontroller for phone
                         onChanged: bloc.changeRegisterPhone,
                         keyboardType: TextInputType.phone,
                         cursorColor: nightMode ? Colors.white : Colors.black,
@@ -159,8 +166,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       //TODO: En caso de no tener conexión guardar información
                       onPressed: () {
                         checkConnectivity().then((connected) {
+                          print("Está conectado? " + connected.toString());
                           if (connected) {
                             if (snapshot.hasData) {
+                              print("Entró a next");
                               register(streamContext, bloc, this.zone);
                             }
                           } else {
@@ -178,6 +187,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
+  //TODO Eliminate unused method
   nameField<Widget>(RegisterBloc bloc, AsyncSnapshot snapshot) {
     _nameField() async {
       await checkConnectivity().then((connected) {
@@ -194,9 +204,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     }
   }
 
+  //TODO Comment method, delete commented code
   noConnectionSave(BuildContext context, RegisterBloc bloc) {
     _noConnectionSave() async {
-      dialog(context, content: LoadingSpinner());
+      // dialog(context, content: LoadingSpinner());
       {
         showDialog(
           barrierDismissible: false,
@@ -218,6 +229,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
+                  //Possible oportunity to show result after saving
                   bloc.noConnectionSaveCredentials();
                   Navigator.of(context).pop();
                 },
@@ -239,7 +251,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   register(BuildContext context, RegisterBloc bloc, String zone) {
+    print("Entro a register de view");
     _register() async {
+      print("Entró a _register async");
       dialog(context, content: LoadingSpinner());
       UserModel.User blocData;
       try {

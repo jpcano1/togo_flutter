@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +17,11 @@ class RegisterBloc with Validators implements BlocBase {
   final _passwordController = BehaviorSubject<String>();
   final _nameController = BehaviorSubject<String>();
   final _phoneController = BehaviorSubject<String>();
+
+  //TODO Comment controllers
+  var textNameController = TextEditingController();
+  var textEmailController = TextEditingController();
+  var textPhoneController = TextEditingController();
 
   Stream<String> get registerEmail =>
       _emailController.stream.transform<String>(validateEmail);
@@ -37,19 +44,45 @@ class RegisterBloc with Validators implements BlocBase {
   Function(String) get changeRegisterPhone => _phoneController.sink.add;
 
   //Initialize credentials from sharedPreferences
+  //TODO Erase commented code, erase print()
   RegisterBloc() {
-    print("Entro al constructor");
+    print("Entró al contructor");
+    // getName();
     noConnectionLoadCredentials();
-  }
 
-  getName<String>() {
-    var name = _nameController.value;
-    if (name != null) {
-      return _nameController.value;
-    } else {
-      return "";
-    }
+    print("Valor actual textEditingController: " + textNameController.text);
   }
+  //TODO Erase commented code
+  // //Method to get the name saved in the controller
+  // getName() {
+  //   print("Entró a get name método");
+  //   var name = _nameController.value;
+  //   if (name != null) {
+  //     print("Entró a get name no nulo: " + _nameController.value);
+  //     textNameController.text = _nameController.value;
+  //   } else {
+  //     print("Entró a get name null");
+  //     textNameController.text = "";
+  //   }
+  // }
+  //
+  // getEmail<String>() {
+  //   var email = _emailController.value;
+  //   if (email != null) {
+  //     return _emailController.value;
+  //   } else {
+  //     return "";
+  //   }
+  // }
+  //
+  // getPhone<String>() {
+  //   var email = _phoneController.value;
+  //   if (email != null) {
+  //     return _phoneController.value;
+  //   } else {
+  //     return "";
+  //   }
+  // }
 
   //Method to save credentials inside shared preferences when there's no
   //connection.
@@ -85,23 +118,30 @@ class RegisterBloc with Validators implements BlocBase {
 
   //Method to load credentials from shared preferences when there's connection.
   noConnectionLoadCredentials() async {
+    //TODO check singleton get instance for bloc
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    String email = prefs.getString('regEmail');
     String name = prefs.getString('regName');
+    String email = prefs.getString('regEmail');
     String phone = prefs.getString('regPhone');
     bool wasOffline = prefs.getBool('was_offline');
 
+    //TODO Erase  prints after checking functionality
+    print("Estaba sin internet: " + wasOffline.toString());
+    print("Nombre extraido: " + name);
     if (wasOffline != null && wasOffline == true) {
+      print("Está en el caso en que estaba sin internet");
+      if (name != null) {
+        changeRegisterName(name);
+        textNameController.text = name;
+        print("Valor namecontrolller:" + _nameController.value);
+      } else {
+        changeRegisterName("");
+      }
+
       if (email != null) {
         changeRegisterEmail(email);
       } else {
         changeRegisterEmail("");
-      }
-
-      if (name != null) {
-        changeRegisterName(name);
-      } else {
-        changeRegisterName("");
       }
 
       if (phone != null) {
@@ -113,6 +153,7 @@ class RegisterBloc with Validators implements BlocBase {
   }
 
   Future<UserModel.User> register(String zone) async {
+    print("Entró a Register");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     FirebaseAuth.UserCredential credentials;
     UserModel.User currentUser;
@@ -143,10 +184,14 @@ class RegisterBloc with Validators implements BlocBase {
       print(e.toString());
     }
 
+    //TODO comment preferences use
     await prefs.setString('regEmail', "");
     await prefs.setString('regName', "");
     await prefs.setString('regPhone', "");
     await prefs.setBool('was_offline', false);
+
+    //TODO Reset text editing controllers
+    textNameController.text = "";
 
     return currentUser;
   }
