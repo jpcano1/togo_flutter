@@ -27,11 +27,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9994ba65-b209-415b-a421-d9c7f028f80c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/app/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/login.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/register.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/register.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/services.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/app/pubspec.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,6 +55,7 @@
     <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
@@ -109,6 +109,7 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
     <state x="0" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619463469573">

@@ -17,11 +17,12 @@ class ServicesScreen extends StatelessWidget {
   Future <void> _setCurrentScreen() async{
     await analytics.setCurrentScreen(screenName: "Services View");
   }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool nightMode = isNightMode();
-
+    _setCurrentScreen();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(

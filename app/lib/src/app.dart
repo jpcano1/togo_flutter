@@ -64,7 +64,7 @@ class App extends StatelessWidget {
         ),
         "/register": (_) => provider.Provider<RegisterBloc>(
           bloc: RegisterBloc(),
-          child: RegisterScreen(),
+          child: RegisterScreen(analytics: analytics, observer: observer),
         ),
         "/services": (_) => ServicesScreen(analytics: analytics, observer: observer),
         "/services/vets": (_) => StoreVetListScreen(),
