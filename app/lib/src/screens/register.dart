@@ -11,7 +11,6 @@ import '../models/user.dart' as UserModel;
 import '../utils/night_mode.dart';
 import '../utils/notification_dialog.dart';
 import '../widgets/button.dart';
-import '../widgets/spinner.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -32,6 +31,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     final bloc = Provider.of<RegisterBloc>(context);
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -56,12 +56,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: StreamBuilder(
                 stream: bloc.registerName,
                 builder: (streamContext, snapshot) {
-                  //TODO eliminate commented code
-                  // return nameField(bloc, snapshot);
                   return TextFormField(
-                    // initialValue: bloc.getName(),
-                    controller: bloc.textNameController,
                     onChanged: bloc.changeRegisterName,
+                    controller: bloc.textNameController,
                     cursorColor: nightMode ? Colors.white : Colors.black,
                     style: TextStyle(
                         color: nightMode ? Colors.white : Colors.black),
@@ -78,10 +75,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   stream: bloc.registerEmail,
                   builder: (streamContext, snapshot) {
                     return TextFormField(
-                      // initialValue: bloc.getEmail(),
-                      //TODO eliminate commented code
-                      //TODO put texteditingcontroller for email
                       onChanged: bloc.changeRegisterEmail,
+                      controller: bloc.textEmailController,
                       keyboardType: TextInputType.emailAddress,
                       cursorColor: nightMode ? Colors.white : Colors.black,
                       style: TextStyle(
@@ -120,10 +115,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     stream: bloc.registerPhone,
                     builder: (streamContext, snapshot) {
                       return TextFormField(
-                        // initialValue: bloc.getPhone(),
-                        //TODO eliminate commented code
-                        //TODO put texteditingcontroller for phone
                         onChanged: bloc.changeRegisterPhone,
+                        controller: bloc.textPhoneController,
                         keyboardType: TextInputType.phone,
                         cursorColor: nightMode ? Colors.white : Colors.black,
                         style: TextStyle(
@@ -163,20 +156,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return AppButton(
                       color: Theme.of(streamContext).colorScheme.primary,
                       text: "Next",
-                      //TODO: En caso de no tener conexión guardar información
-                      onPressed: () {
-                        checkConnectivity().then((connected) {
-                          print("Está conectado? " + connected.toString());
-                          if (connected) {
-                            if (snapshot.hasData) {
-                              print("Entró a next");
-                              register(streamContext, bloc, this.zone);
-                            }
-                          } else {
-                            noConnectionSave(streamContext, bloc);
-                          }
-                        });
-                      },
+                      onPressed: snapshot.hasData
+                          ? register(streamContext, bloc, this.zone)
+                          : null,
                       minWidth: size.width,
                     );
                   },
@@ -187,28 +169,34 @@ class _RegisterScreenState extends State<RegisterScreen> {
     );
   }
 
-  //TODO Eliminate unused method
-  nameField<Widget>(RegisterBloc bloc, AsyncSnapshot snapshot) {
-    _nameField() async {
-      await checkConnectivity().then((connected) {
-        //   if (connected) {
-        return TextField(
-          onChanged: bloc.changeRegisterName,
-          cursorColor: nightMode ? Colors.white : Colors.black,
-          style: TextStyle(color: nightMode ? Colors.white : Colors.black),
-          decoration:
-              InputDecoration(hintText: "John Doe", errorText: snapshot.error),
-        );
-        // }
-      });
-    }
-  }
+  //Method to register the user, if no connection saves the credentials locally
+  //in sharedPreferences (except for the password)
+  register(BuildContext context, RegisterBloc bloc, String zone) {
+    _register() async {
+      bool hasInternet = await checkConnectivity();
 
-  //TODO Comment method, delete commented code
-  noConnectionSave(BuildContext context, RegisterBloc bloc) {
-    _noConnectionSave() async {
-      // dialog(context, content: LoadingSpinner());
-      {
+      if (hasInternet) {
+        UserModel.User blocData;
+        try {
+          blocData = await bloc.register(zone);
+        } catch (e) {
+          return dialog(context, message: e);
+        }
+
+        Fluttertoast.showToast(
+          msg: "Verify your email inbox",
+          gravity: ToastGravity.BOTTOM,
+          textColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+        );
+
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (_) => Provider(
+                    bloc: UpdateProfilePictureBloc(),
+                    child: ProfilePictureUploadScreen(blocData))));
+      } else {
         showDialog(
           barrierDismissible: false,
           context: context,
@@ -245,44 +233,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         );
       }
-    }
-
-    return _noConnectionSave();
-  }
-
-  register(BuildContext context, RegisterBloc bloc, String zone) {
-    print("Entro a register de view");
-    _register() async {
-      print("Entró a _register async");
-      dialog(context, content: LoadingSpinner());
-      UserModel.User blocData;
-      try {
-        blocData = await bloc.register(zone);
-      } catch (e) {
-        Navigator.pop(context);
-        Fluttertoast.showToast(
-          msg: e,
-          gravity: ToastGravity.BOTTOM,
-          textColor: Colors.white,
-          backgroundColor: Theme.of(context).colorScheme.primary,
-        );
-        return;
-      }
-
-      Navigator.pop(context);
-      Fluttertoast.showToast(
-        msg: "Verify your email inbox",
-        gravity: ToastGravity.BOTTOM,
-        textColor: Colors.white,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-      );
-
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (_) => Provider(
-                  bloc: UpdateProfilePictureBloc(),
-                  child: ProfilePictureUploadScreen(blocData))));
     }
 
     return _register;

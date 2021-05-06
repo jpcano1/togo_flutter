@@ -18,7 +18,9 @@ class RegisterBloc with Validators implements BlocBase {
   final _nameController = BehaviorSubject<String>();
   final _phoneController = BehaviorSubject<String>();
 
-  //TODO Comment controllers
+  //Text controllers that update the fields used for registering in the
+  //scenario in which connectivity is lost and the user saves locally those
+  //credentials for the next time it has connection.
   var textNameController = TextEditingController();
   var textEmailController = TextEditingController();
   var textPhoneController = TextEditingController();
@@ -44,45 +46,9 @@ class RegisterBloc with Validators implements BlocBase {
   Function(String) get changeRegisterPhone => _phoneController.sink.add;
 
   //Initialize credentials from sharedPreferences
-  //TODO Erase commented code, erase print()
   RegisterBloc() {
-    print("Entró al contructor");
-    // getName();
     noConnectionLoadCredentials();
-
-    print("Valor actual textEditingController: " + textNameController.text);
   }
-  //TODO Erase commented code
-  // //Method to get the name saved in the controller
-  // getName() {
-  //   print("Entró a get name método");
-  //   var name = _nameController.value;
-  //   if (name != null) {
-  //     print("Entró a get name no nulo: " + _nameController.value);
-  //     textNameController.text = _nameController.value;
-  //   } else {
-  //     print("Entró a get name null");
-  //     textNameController.text = "";
-  //   }
-  // }
-  //
-  // getEmail<String>() {
-  //   var email = _emailController.value;
-  //   if (email != null) {
-  //     return _emailController.value;
-  //   } else {
-  //     return "";
-  //   }
-  // }
-  //
-  // getPhone<String>() {
-  //   var email = _phoneController.value;
-  //   if (email != null) {
-  //     return _phoneController.value;
-  //   } else {
-  //     return "";
-  //   }
-  // }
 
   //Method to save credentials inside shared preferences when there's no
   //connection.
@@ -90,13 +56,6 @@ class RegisterBloc with Validators implements BlocBase {
   noConnectionSaveCredentials() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    //If the email is not empty save the email in shared preferences
-    //else save empty string.
-    if (_emailController.value != null) {
-      await prefs.setString('regEmail', _emailController.value);
-    } else {
-      await prefs.setString('regEmail', "");
-    }
     //If the name is not empty save the name in shared preferences
     //else save empty string.
     if (_nameController.value != null) {
@@ -105,9 +64,17 @@ class RegisterBloc with Validators implements BlocBase {
       await prefs.setString('regName', "");
     }
 
+    //If the email is not empty save the email in shared preferences
+    //else save empty string.
+    if (_emailController.value != null) {
+      await prefs.setString('regEmail', _emailController.value);
+    } else {
+      await prefs.setString('regEmail', "");
+    }
+
     //If the phone number is not empty save the phone number in shared preferences
     //else save empty string.
-    if (_nameController.value != null) {
+    if (_phoneController.value != null) {
       await prefs.setString('regPhone', _phoneController.value);
     } else {
       await prefs.setString('regPhone', "");
@@ -125,27 +92,24 @@ class RegisterBloc with Validators implements BlocBase {
     String phone = prefs.getString('regPhone');
     bool wasOffline = prefs.getBool('was_offline');
 
-    //TODO Erase  prints after checking functionality
-    print("Estaba sin internet: " + wasOffline.toString());
-    print("Nombre extraido: " + name);
     if (wasOffline != null && wasOffline == true) {
-      print("Está en el caso en que estaba sin internet");
       if (name != null) {
         changeRegisterName(name);
         textNameController.text = name;
-        print("Valor namecontrolller:" + _nameController.value);
       } else {
         changeRegisterName("");
       }
 
       if (email != null) {
         changeRegisterEmail(email);
+        textEmailController.text = email;
       } else {
         changeRegisterEmail("");
       }
 
       if (phone != null) {
         changeRegisterPhone(phone);
+        textPhoneController.text = phone;
       } else {
         changeRegisterPhone("");
       }
@@ -153,7 +117,6 @@ class RegisterBloc with Validators implements BlocBase {
   }
 
   Future<UserModel.User> register(String zone) async {
-    print("Entró a Register");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     FirebaseAuth.UserCredential credentials;
     UserModel.User currentUser;
@@ -184,14 +147,16 @@ class RegisterBloc with Validators implements BlocBase {
       print(e.toString());
     }
 
-    //TODO comment preferences use
+    //Email, name, and phone are erased from local storage after registering
+    //succesfully.
     await prefs.setString('regEmail', "");
     await prefs.setString('regName', "");
     await prefs.setString('regPhone', "");
     await prefs.setBool('was_offline', false);
 
-    //TODO Reset text editing controllers
     textNameController.text = "";
+    textEmailController.text = "";
+    textPhoneController.text = "";
 
     return currentUser;
   }
