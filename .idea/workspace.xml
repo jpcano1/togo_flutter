@@ -28,16 +28,13 @@
   <component name="ChangeListManager">
     <list default="true" id="9994ba65-b209-415b-a421-d9c7f028f80c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/register.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/register.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/services.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[4200d032cc584425]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
@@ -128,22 +125,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="100" y="100" width="1166" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1619464384935" />
-    <state width="1323" height="175" key="GridCell.Tab.0.bottom" timestamp="1620143347166">
+    <state width="1323" height="175" key="GridCell.Tab.0.bottom" timestamp="1620186182239">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="175" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620143347166" />
-    <state width="1323" height="175" key="GridCell.Tab.0.center" timestamp="1620143347166">
+    <state width="1323" height="175" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620186182239" />
+    <state width="1323" height="175" key="GridCell.Tab.0.center" timestamp="1620186182239">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="175" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620143347166" />
-    <state width="1323" height="175" key="GridCell.Tab.0.left" timestamp="1620143347165">
+    <state width="1323" height="175" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620186182239" />
+    <state width="1323" height="175" key="GridCell.Tab.0.left" timestamp="1620186182239">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="175" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620143347165" />
-    <state width="1323" height="175" key="GridCell.Tab.0.right" timestamp="1620143347166">
+    <state width="1323" height="175" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620186182239" />
+    <state width="1323" height="175" key="GridCell.Tab.0.right" timestamp="1620186182239">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="175" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620143347166" />
+    <state width="1323" height="175" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620186182239" />
     <state x="184" y="9" key="SettingsEditor" timestamp="1619469385951">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
