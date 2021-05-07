@@ -5,13 +5,24 @@ import 'package:app/src/screens/services/store_vet/store_vet_list.dart';
 import '../../widgets/button.dart';
 import 'package:flutter/material.dart';
 import '../../utils/night_mode.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 class ServicesScreen extends StatelessWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  ServicesScreen({this.analytics, this.observer});
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "Services View");
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     bool nightMode = isNightMode();
-
+    _setCurrentScreen();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(

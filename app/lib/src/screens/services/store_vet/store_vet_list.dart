@@ -1,6 +1,8 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/store_vet_list_bloc.dart';
 import 'package:app/src/widgets/spinner.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/rendering.dart';
 
 import 'store_vet_detail.dart';
@@ -11,15 +13,25 @@ import '../../../utils/night_mode.dart';
 
 class StoreVetListScreen extends StatelessWidget {
   final stores;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
-  StoreVetListScreen({this.stores=false});
+  StoreVetListScreen({this.stores=false, this.analytics, this.observer});
+
+  Future <void> _setCurrentScreenStores() async{
+    await analytics.setCurrentScreen(screenName: "Stores List View");
+  }
+
+  Future <void> _setCurrentScreenVets() async{
+    await analytics.setCurrentScreen(screenName: "Vets List View");
+  }
 
   @override
   Widget build(BuildContext context) {
     bool nightMode = isNightMode();
     final size = MediaQuery.of(context).size;
     final bloc = Provider.of<StoreVetListBloc>(context);
-
+    this.stores? _setCurrentScreenStores():_setCurrentScreenVets();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: appBar(
