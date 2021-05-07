@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+
+import '../utils/checkConnection.dart';
 import '../widgets/button.dart';
 
 class WelcomeScreen extends StatelessWidget {
@@ -13,16 +15,12 @@ class WelcomeScreen extends StatelessWidget {
           Padding(
             padding: EdgeInsets.all(30.0),
           ),
-          Text(
-            "Togo", 
-            style: Theme.of(context).textTheme.headline4.copyWith(
-              color: Colors.black,
-              fontWeight: FontWeight.bold
-            )
-          ),
-          Padding(
-            padding: EdgeInsets.all(30.0)
-          ),
+          Text("Togo",
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4
+                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold)),
+          Padding(padding: EdgeInsets.all(30.0)),
           Image.asset(
             "assets/icons/app-icon.png",
             width: size.width,
@@ -34,8 +32,8 @@ class WelcomeScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppButton(
-                    color: Theme.of(context).colorScheme.primary, 
-                    text: "Login", 
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Login",
                     onPressed: () => Navigator.pushNamed(context, "/login"),
                     minWidth: size.width * 0.45,
                   ),
@@ -43,9 +41,55 @@ class WelcomeScreen extends StatelessWidget {
                     padding: EdgeInsets.only(left: 10.0),
                   ),
                   AppButton(
-                    color: Theme.of(context).colorScheme.secondary, 
-                    text:"Register", 
-                    onPressed: () => Navigator.pushNamed(context, "/register"),
+                    color: Theme.of(context).colorScheme.secondary,
+                    text: "Register",
+                    onPressed: () {
+                      checkConnectivity().then((connected) {
+                        if (!connected) {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                "No internet connection",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              content: Text(
+                                'Keep in mind you don\'t have an internet connection at the moment, you may proceed but credentials will be saved locally.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(
+                                      color: Colors.black,
+                                    ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.pushNamed(context, "/register");
+                                  },
+                                  child: Text('Continue'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            ),
+                          );
+                        } else {
+                          Navigator.pushNamed(context, "/register");
+                        }
+                      });
+                    },
                     minWidth: MediaQuery.of(context).size.width * 0.45,
                   )
                 ],

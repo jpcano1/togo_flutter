@@ -47,8 +47,10 @@ dependencies:
   country_code_picker: ^2.0.1
   image_picker: ^0.7.4
   permission_handler: ^6.1.1
-
+  connectivity: ^3.0.3
   qr_code_scanner: ^0.4.0
+  shared_preferences: ^2.0.5
+  provider: ^5.0.0
 
   vector_math: ^2.1.0
 
