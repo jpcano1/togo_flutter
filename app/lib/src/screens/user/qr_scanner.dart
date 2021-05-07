@@ -6,6 +6,8 @@ import 'package:app/src/bloc/blocs/qr_scanner/qr_scanner_bloc.dart';
 import 'package:app/src/screens/services/store_vet/store_vet_detail.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -16,6 +18,10 @@ import '../../models/store_vet.dart' as VetModel;
 
 class QRScannerScreen extends StatefulWidget {
 
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  QRScannerScreen({this.analytics, this.observer});
 
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
@@ -28,8 +34,13 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   String message = "";
   QRViewController controller;
 
+  Future <void> _setCurrentScreen() async{
+    await widget.analytics.setCurrentScreen(screenName: "QR Scanner");
+  }
+
   initState() {
     super.initState();
+    _setCurrentScreen();
   }
 
   @override

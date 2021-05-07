@@ -65,14 +65,14 @@ class App extends StatelessWidget {
         ),
         "/services": (_) => ServicesScreen(analytics: analytics, observer: observer),
         "/services/vets": (_) => StoreVetListScreen(analytics: analytics, observer: observer),
-        "/services/vets/create": (_) => StoreVetCreationScreen(),
+        "/services/vets/create": (_) => StoreVetCreationScreen(analytics: analytics, observer: observer,),
         "/qr_scanner": (_) => provider.Provider(
           bloc: QRScannerBloc(), 
-          child: QRScannerScreen()
+          child: QRScannerScreen(analytics: analytics, observer: observer,)
         ),
         "/pet/register": (_) => provider.Provider<CreatePetBloc>(
           bloc: CreatePetBloc(),
-          child: PetRegisterScreen(),
+          child: PetRegisterScreen(analytics: analytics, observer: observer,),
         ),
       },
     );

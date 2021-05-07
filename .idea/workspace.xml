@@ -26,51 +26,36 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9994ba65-b209-415b-a421-d9c7f028f80c" name="Default Changelist" comment="">
+    <list default="true" id="354029cb-b8f0-4e22-9236-1b875d7623ab" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_32_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_32_PM__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_43_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_43_PM__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/app.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/login.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/login.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/register.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/register.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_list.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/pet/pet_register.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/pet/pet_register.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_creation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_creation.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/qr_scanner.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/qr_scanner.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/welcome.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/welcome.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[4200d032cc584425]" />
   <component name="Git.Settings">
-    <option name="RECENT_BRANCH_BY_REPOSITORY">
-      <map>
-        <entry key="$PROJECT_DIR$" value="analytics_implementation" />
-      </map>
-    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectId" id="1riTSBY8L8eP0zyp7YSclGBmTXw" />
+  <component name="ProjectId" id="1sBrdSG4b25h9V77zFoXqKwdvgP" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
-    <property name="Git.Branch.Popup.ShowAllRemotes" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="TERMINAL_CUSTOM_COMMANDS_GOT_IT" value="true" />
-    <property name="android.sdk.path" value="$USER_HOME$/AppData/Local/Android/Sdk" />
     <property name="dart.analysis.tool.window.visible" value="false" />
     <property name="io.flutter.reload.alreadyRun" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/app/android/app" />
-    <property name="settings.editor.selected.configurable" value="ics" />
     <property name="show.migrate.to.gradle.popup" value="false" />
-  </component>
-  <component name="RecentsManager">
-    <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\lhprieto\Documents\Semestre 2021-10\Moviles\Togo\flutter\app\android\app" />
-    </key>
   </component>
   <component name="RunManager">
     <configuration name="main.dart" type="FlutterRunConfigurationType" factoryName="Flutter">
@@ -83,11 +68,11 @@
   </component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="9994ba65-b209-415b-a421-d9c7f028f80c" name="Default Changelist" comment="" />
-      <created>1619457907915</created>
+      <changelist id="354029cb-b8f0-4e22-9236-1b875d7623ab" name="Default Changelist" comment="" />
+      <created>1620356911292</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1619457907915</updated>
+      <updated>1620356911292</updated>
     </task>
     <servers />
   </component>
@@ -116,45 +101,29 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="0" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1619463469573">
+    <state x="137" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1620357694697">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="0" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1619463469573" />
-    <state x="275" y="154" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1619463464413">
+    <state x="137" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1620357694697" />
+    <state x="412" y="154" key="#com.intellij.ide.util.TreeFileChooserDialog" timestamp="1620357684923">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="275" y="154" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1619463464413" />
-    <state x="413" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1620047330099">
+    <state x="412" y="154" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1620357684923" />
+    <state width="1323" height="178" key="GridCell.Tab.0.bottom" timestamp="1620403006881">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="413" y="111" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1366.728@0.0.1366.728" timestamp="1620047330099" />
-    <state x="100" y="100" width="1166" height="528" key="AVDManager" timestamp="1619464384935">
+    <state width="1323" height="178" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620403006881" />
+    <state width="1323" height="178" key="GridCell.Tab.0.center" timestamp="1620403006880">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="100" y="100" width="1166" height="528" key="AVDManager/0.0.1366.728@0.0.1366.728" timestamp="1619464384935" />
-    <state width="1323" height="178" key="GridCell.Tab.0.bottom" timestamp="1620332867607">
+    <state width="1323" height="178" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620403006880" />
+    <state width="1323" height="178" key="GridCell.Tab.0.left" timestamp="1620403006880">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620332867607" />
-    <state width="1323" height="178" key="GridCell.Tab.0.center" timestamp="1620332867607">
+    <state width="1323" height="178" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620403006880" />
+    <state width="1323" height="178" key="GridCell.Tab.0.right" timestamp="1620403006880">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620332867607" />
-    <state width="1323" height="178" key="GridCell.Tab.0.left" timestamp="1620332867607">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620332867607" />
-    <state width="1323" height="178" key="GridCell.Tab.0.right" timestamp="1620332867607">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620332867607" />
-    <state x="184" y="9" key="SettingsEditor" timestamp="1619469385951">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="184" y="9" key="SettingsEditor/0.0.1366.728@0.0.1366.728" timestamp="1619469385951" />
-    <state x="390" y="0" width="585" height="728" key="find.popup" timestamp="1619475513780">
-      <screen x="0" y="0" width="1366" height="728" />
-    </state>
-    <state x="390" y="0" width="585" height="728" key="find.popup/0.0.1366.728@0.0.1366.728" timestamp="1619475513780" />
+    <state width="1323" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620403006880" />
   </component>
 </project>

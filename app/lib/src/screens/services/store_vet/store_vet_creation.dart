@@ -9,12 +9,17 @@ import 'package:app/src/widgets/app_bar.dart';
 import 'package:app/src/widgets/button.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 
 class StoreVetCreationScreen extends StatefulWidget {
   final String vetId;
 
-  StoreVetCreationScreen({this.vetId});
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  StoreVetCreationScreen({this.vetId, this.analytics, this.observer});
   @override
   _StoreVetCreationScreenState createState() => _StoreVetCreationScreenState();
 }
@@ -22,10 +27,17 @@ class StoreVetCreationScreen extends StatefulWidget {
 class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
   List<Map<String, double>> locations = [];
   Map<String, List<String>> officeHours = {};
+
   bool storeRole = false;
+
+  Future <void> _setCurrentScreen() async{
+    await widget.analytics.setCurrentScreen(screenName: "Service Creation");
+  }
+
 
   @override
   Widget build(BuildContext context) {
+    _setCurrentScreen();
     final size = MediaQuery.of(context).size;
     final bloc = Provider.of<StoreVetCreationBloc>(context);
     return Scaffold(

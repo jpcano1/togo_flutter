@@ -5,6 +5,8 @@ import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
 import 'package:app/src/utils/permissions.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 
 import '../../widgets/app_bar.dart';
 import '../../utils/night_mode.dart';
@@ -13,6 +15,11 @@ import '../../utils/notification_dialog.dart';
 import 'package:flutter/material.dart';
 
 class PetRegisterScreen extends StatefulWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  PetRegisterScreen({this.analytics, this.observer});
+
   @override
   _PetRegisterScreenState createState() => _PetRegisterScreenState();
 }
@@ -21,6 +28,10 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
   String date;
   File picture;
 
+  Future <void> _setCurrentScreen() async{
+    await widget.analytics.setCurrentScreen(screenName: "Pet Register");
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<CreatePetBloc>(context);
@@ -28,6 +39,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
     final size = MediaQuery.of(context).size;
     String imageUrl = "assets/icons/image.png";
 
+    _setCurrentScreen();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.secondary,
       appBar: appBar(
