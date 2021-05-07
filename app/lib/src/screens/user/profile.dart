@@ -1,14 +1,18 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
+import 'package:app/src/screens/pet/pet_detail.dart';
 import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../models/pet.dart';
-import 'package:flutter/material.dart';
 import '../../models/user.dart' as UserModel;
+import '../../models/store_vet.dart' as StoreVetModel;
+import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -29,12 +33,15 @@ class ProfileScreen extends StatelessWidget {
       body: FutureBuilder(
         future: bloc.readUser(),
         builder: (BuildContext futureBuilderContext, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
             return StreamBuilder(
               stream: bloc.userOut,
               builder: (streamContext, streamSnaphot) {
                 if (streamSnaphot.hasData) {
-                  return builBody(streamContext, streamSnaphot.data, bloc);
+                  return builBody(
+                    streamContext, streamSnaphot.data, 
+                    bloc, snapshot.data
+                  );
                 }
                 return Center(
                   child: LoadingSpinner(),
@@ -51,11 +58,21 @@ class ProfileScreen extends StatelessWidget {
             child: LoadingSpinner(),
           );
         },
-      )
+      ),
     );
   }
 
-  builBody(BuildContext context, UserModel.User currentUser, ProfileBloc bloc) {
+  builBody(
+    BuildContext context, profileData,
+    ProfileBloc bloc, verified
+  ) {
+    var currentUser;
+    if (profileData["petOwner"]) {
+      currentUser = UserModel.User.fromMap(profileData);
+    } else {
+      currentUser = StoreVetModel.StoreVet.fromMap(profileData);
+    }
+
     var userImage;
     final String defaultUserImage = "assets/icons/user.png";
     if (currentUser.imagePath.isEmpty) {
@@ -73,6 +90,30 @@ class ProfileScreen extends StatelessWidget {
           CircleAvatar(
             backgroundImage: userImage,
             maxRadius: size.width * 0.25,
+          ),
+          Container(
+            margin: EdgeInsets.only(
+              top: spaceBetween
+            ),
+            child: verified? Icon(
+              Icons.verified
+            ): TextButton(
+              onPressed: () {
+                bloc.sendVerificationEmail()
+                .then((_) {
+                  showToast("Email sent, please check your inbox", context);
+                })
+                .catchError((error) {
+                  showToast(error, context);
+                });
+              }, 
+              child: Text(
+                "Resend verification email",
+                style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  color: Colors.black
+                ),
+              )
+            )
           ),
           Container(
             margin: EdgeInsets.only(top: spaceBetween),
@@ -98,8 +139,8 @@ class ProfileScreen extends StatelessWidget {
                     ),
                     Padding(
                       padding: EdgeInsets.only(
-                        bottom: spaceBetween, 
                         right: spaceBetween,
+                        bottom: spaceBetween, 
                         left: spaceBetween
                       ),
                       child: Text(
@@ -109,7 +150,7 @@ class ProfileScreen extends StatelessWidget {
                           fontSize: 17
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
                 Expanded(
@@ -125,52 +166,16 @@ class ProfileScreen extends StatelessWidget {
             width: size.width,
             padding: EdgeInsets.all(10.0),
             child: Text(
-              "My Pets:",
+              currentUser.petOwner? "My Pets:": "My Locations",
               style: Theme.of(context).textTheme.headline6.copyWith(
                 color: Colors.black
               )
             ),
           ),
-          Expanded(
-            child: Container(
-              width: size.width * 0.8,
-              child: FutureBuilder(
-                future: bloc.listPets(),
-                builder: (futureContext, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    return StreamBuilder(
-                      stream: bloc.petListOut,
-                      builder: (BuildContext streamContext, AsyncSnapshot streamSnapshot) {
-                        if (streamSnapshot.hasData) {
-                          return builPetList(streamContext, streamSnapshot.data);
-                        }
-                        if (streamSnapshot.hasError) {
-                          return Center(
-                            child: Text(streamSnapshot.error),
-                          );
-                        }
-                        return Center(
-                          child: LoadingSpinner()
-                        );
-                      },
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return Center(
-                      child: Text(
-                        snapshot.error,
-                        style: TextStyle(color: Colors.black)
-                      ),
-                    );
-                  }
-                  return Center(
-                    child: LoadingSpinner()
-                  );
-                },
-              )
-            )
-          ),
-          Container(
+          currentUser.petOwner? 
+          buildPets(size, bloc): 
+          buildLocation(size, currentUser.locations),
+          currentUser.petOwner? Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50.0),
               color: Theme.of(context).colorScheme.secondaryVariant
@@ -183,7 +188,7 @@ class ProfileScreen extends StatelessWidget {
                 await bloc.listPets();
               },
             ),
-          ),
+          ): Container(),
           Container(
             margin: EdgeInsets.only(top: size.width * 0.055),
             child: TextButton(
@@ -220,9 +225,77 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
+  buildLocation(Size size, locations) {
+    Set<Marker> markers = {};
+
+    int counter = 1;
+    for (Map location in locations) {
+      markers.add(
+        Marker(
+          markerId: MarkerId("value-${counter++}"),
+          position: LatLng(location["lat"], location["lng"]),
+        )
+      );
+    }
+    return Expanded(
+      child: GoogleMap(
+        markers: markers,
+        initialCameraPosition: CameraPosition(
+          target: markers.first.position,
+          zoom: 14
+        ),
+        gestureRecognizers: {
+          Factory<OneSequenceGestureRecognizer>(() => EagerGestureRecognizer())
+        },
+      ),
+    );
+  }
+
+  buildPets(Size size, ProfileBloc bloc) {
+    return Expanded(
+      child: Container(
+        width: size.width * 0.8,
+        child: FutureBuilder(
+          future: bloc.listPets(),
+          builder: (futureContext, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return StreamBuilder(
+                stream: bloc.petListOut,
+                builder: (BuildContext streamContext, AsyncSnapshot streamSnapshot) {
+                  if (streamSnapshot.hasData) {
+                    return builPetList(streamContext, streamSnapshot.data);
+                  }
+                  if (streamSnapshot.hasError) {
+                    return Center(
+                      child: Text(streamSnapshot.error),
+                    );
+                  }
+                  return Center(
+                    child: LoadingSpinner()
+                  );
+                },
+              );
+            }
+            if (snapshot.hasError) {
+              return Center(
+                child: Text(
+                  snapshot.error,
+                  style: TextStyle(color: Colors.black)
+                ),
+              );
+            }
+            return Center(
+              child: LoadingSpinner()
+            );
+          },
+        )
+      )
+    );
+  }
+
   builPetList(BuildContext context, List pets) {
     final String defaultPetImage = "assets/icons/scottish-fold-cat.png";
-    return pets.length > 0? ListView.builder(
+    return ListView.builder(
       itemCount: pets.length,
       itemBuilder: (BuildContext listContext, int index) {
         Pet pet = pets[index];
@@ -252,10 +325,15 @@ class ProfileScreen extends StatelessWidget {
             leading: CircleAvatar(
               backgroundImage: image,
             ),
-            onTap: () => true,
+            onTap: () => Navigator.push(
+              context, 
+              MaterialPageRoute(
+                builder: (_) => PetDetailScreen(pet)
+              )
+            ),
           ),
         );
       },
-    ): null;
+    );
   }
 }

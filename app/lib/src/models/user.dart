@@ -17,6 +17,10 @@ class User {
     this.email = map["email"];
     this.phoneNumber = map["phoneNumber"];
     this.imagePath = map["imagePath"];
+    this.petOwner = map["petOwner"];
+    this.vet = map["vet"];
+    this.walker = map["walker"];
+    this.store = map["store"];
   }
 
   toMap() {

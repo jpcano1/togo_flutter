@@ -1,8 +1,11 @@
 import 'dart:async';
 
+import 'validators.dart';
+import 'bloc_base.dart';
+import '../../resources/repository.dart';
+import '../../models/user.dart' as UserModel;
+
 import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -34,11 +37,12 @@ class RegisterBloc with Validators implements BlocBase {
   Stream<String> get registerPhone =>
       _phoneController.stream.transform(validateEmptyField);
   Stream<bool> get registerSubmit => Rx.combineLatest4(
-      registerEmail,
-      registerPassword,
-      registerName,
-      registerPhone,
-      (email, password, name, phone) => true);
+    registerEmail,
+    registerPassword,
+    registerName,
+    registerPhone,
+    (email, password, name, phone) => true
+  );
 
   Function(String) get changeRegisterEmail => _emailController.sink.add;
   Function(String) get changeRegisterPassword => _passwordController.sink.add;
@@ -116,24 +120,32 @@ class RegisterBloc with Validators implements BlocBase {
     }
   }
 
-  Future<UserModel.User> register(String zone) async {
+  Future<String> register(String zone) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     FirebaseAuth.UserCredential credentials;
     UserModel.User currentUser;
     try {
       credentials = await _repository.register(
-          email: _emailController.value, password: _passwordController.value);
+        email: _emailController.value,
+        password: _passwordController.value
+      );
 
-      await _repository
-          .updateUserData(data: {"displayName": _nameController.value});
+      await _repository.updateUserData(
+        data: {
+          "displayName": _nameController.value
+        }
+      );
 
       currentUser = UserModel.User(
-          credentials.user.uid, _nameController.value, _emailController.value,
-          phoneNumber: zone + _phoneController.value);
+        credentials.user.uid,
+        _nameController.value, _emailController.value,
+        phoneNumber: zone + _phoneController.value
+      );
 
       await _repository.createUser(currentUser: currentUser);
       await credentials.user.sendEmailVerification();
-    } on FirebaseAuth.FirebaseException catch (e) {
+
+    } on FirebaseAuth.FirebaseException catch(e) {
       var message = "";
       if (e.code == "weak-password") {
         message = "The password provided is too weak.";
@@ -143,7 +155,7 @@ class RegisterBloc with Validators implements BlocBase {
         message = "You do not have permission to perform this.";
       }
       return Future.error(message);
-    } catch (e) {
+    } catch(e) {
       print(e.toString());
     }
 
@@ -158,7 +170,7 @@ class RegisterBloc with Validators implements BlocBase {
     textEmailController.text = "";
     textPhoneController.text = "";
 
-    return currentUser;
+    return currentUser.id;
   }
 
   @override

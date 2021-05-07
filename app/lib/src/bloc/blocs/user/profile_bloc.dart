@@ -1,30 +1,28 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart' as FirebaseAuth;
 import 'package:firebase_core/firebase_core.dart';
 
 import '../../../models/pet.dart' as PetModel;
-import '../../../models/user.dart' as UserModel;
 import '../../../resources/repository.dart';
 import '../bloc_base.dart';
 
 class ProfileBloc implements BlocBase {
 
   Repository _repository = Repository();
-  StreamController<UserModel.User> _userProfileController = StreamController<UserModel.User>();
+  StreamController<Map<String, dynamic>> _userProfileController = StreamController<Map<String, dynamic>>();
   StreamController<List<PetModel.Pet>> _petListController = StreamController<List<PetModel.Pet>>();
 
   Function(List<PetModel.Pet>) get petListAdd => _petListController.sink.add;
-  Function(UserModel.User) get userAdd => _userProfileController.sink.add;
+  Function(Map<String, dynamic>) get userAdd => _userProfileController.sink.add;
 
   Stream<List<PetModel.Pet>> get petListOut => _petListController.stream;
-  Stream<UserModel.User> get userOut => _userProfileController.stream;
+  Stream get userOut => _userProfileController.stream;
 
-  Future<void> readUser() async {
+  Future<bool> readUser() async {
     try {
-      var uid = _repository.getCurrentUser().uid;
-      var user = await _repository.readUser(uid: uid);
-      userAdd(UserModel.User.fromMap(user.data()));
-      return;
+      var currentUser = _repository.getCurrentUser();
+      var user = await _repository.readUser(uid: currentUser.uid);
+      userAdd(user.data());
+      return currentUser.emailVerified;
     } on FirebaseException catch(e) {
       return Future.error(e.message);
     }
@@ -40,11 +38,18 @@ class ProfileBloc implements BlocBase {
         petList.add(PetModel.Pet.fromMap(pet.data()));
       }
       petListAdd(petList);
-      return;
     } on FirebaseException catch(e) {
       return Future.error(e.message);
     } catch(e) {
       return Future.error(e.toString());
+    }
+  }
+
+  Future<void> sendVerificationEmail() async {
+    try {
+      await _repository.getCurrentUser().sendEmailVerification();
+    } on FirebaseException catch(_) {
+      return Future.error("There was a mistake, try again later");
     }
   }
 

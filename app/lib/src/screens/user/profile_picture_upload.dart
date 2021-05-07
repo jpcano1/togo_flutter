@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:app/src/screens/user/home.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 
 import '../../utils/notification_dialog.dart';
 import '../../widgets/spinner.dart';
@@ -10,14 +10,17 @@ import '../../utils/permissions.dart';
 import '../../widgets/button.dart';
 import '../../bloc/bloc_provider.dart';
 import '../../bloc/blocs/update_profile_picture_bloc.dart';
-import '../../models/user.dart' as UserModel;
 
 import 'package:flutter/material.dart';
 
 class ProfilePictureUploadScreen extends StatefulWidget {
-  final UserModel.User currentUser;
+  final String userId;
+  final String directory;
 
-  ProfilePictureUploadScreen(this.currentUser);
+  ProfilePictureUploadScreen(
+    this.userId, 
+    {this.directory="user_pictures/pet_owner"}
+  );
 
   @override
   _ProfilePictureUploadScreenState createState() => _ProfilePictureUploadScreenState();
@@ -31,7 +34,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
 
   @override
   Widget build(BuildContext context) {
-    final UserModel.User currentUser = widget.currentUser;
+    final String userId = widget.userId;
 
     final size = MediaQuery.of(context).size;
     final String imageUrl = "assets/icons/profile.png";
@@ -75,7 +78,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                           .then((File result) {
                             setState(() {
                               this.picture = result;
-                              this.filename = currentUser.id + "." + this.picture.path
+                              this.filename = userId + "." + this.picture.path
                               .split("/").last.split(".").last;
                               bloc.profileImageChange([this.filename, this.picture]);
                               allowed = true;
@@ -83,13 +86,7 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             });
                           })
                           .catchError((error) {
-                            Fluttertoast.showToast(
-                              msg: error,
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              textColor: Colors.white,
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                            );
+                            showToast(error, context);
                             setState(() {
                               nextButtonText = "Jump";
                               allowed = true;
@@ -110,22 +107,17 @@ class _ProfilePictureUploadScreenState extends State<ProfilePictureUploadScreen>
                             dialog(context, content: LoadingSpinner());
                             var streamList = snapshot.data;
 
-                            String downloadPath;
-
                             try {
-                              downloadPath = await bloc.upload(streamList[0], streamList[1]);
+                              await bloc.upload(
+                                streamList[0], streamList[1],
+                                directory: widget.directory
+                              );
                               Navigator.pop(streamContext);
                             } catch (error) {
                               Navigator.pop(streamContext);
                             }
-                            Fluttertoast.showToast(
-                              msg: "User created successfully!",
-                              toastLength: Toast.LENGTH_LONG,
-                              gravity: ToastGravity.BOTTOM,
-                              textColor: Colors.white,
-                              backgroundColor: Theme.of(context).colorScheme.primary,
-                            );
-                            currentUser.imagePath = downloadPath;
+
+                            showToast("User created successfully!", context);
                             Navigator.pushReplacement(
                               context, 
                               MaterialPageRoute(

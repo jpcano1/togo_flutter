@@ -3,12 +3,9 @@ import 'dart:io';
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
 import 'package:app/src/utils/permissions.dart';
-import 'package:app/src/widgets/button.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
-import '../../models/pet.dart' as PetModel;
 import '../../widgets/app_bar.dart';
 import '../../utils/night_mode.dart';
 import '../../utils/notification_dialog.dart';
@@ -55,7 +52,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
               ),
               Container(
                 margin: EdgeInsets.only(top: size.height * 0.03),
-                width: size.width * 0.5,
+                width: size.width * 0.3,
                 alignment: Alignment.center,
                 child: this.picture == null? Image.asset(
                   imageUrl
@@ -78,6 +75,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                 ),
               ),
               Container(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
                 alignment: Alignment.centerLeft,
                 margin: EdgeInsets.only(
                   top: size.height * 0.03,
@@ -95,7 +93,6 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                   children: [
                     Container(
                       margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: StreamBuilder(
                         stream: bloc.nameOut,
                         builder: (_, snapshot) {
@@ -116,7 +113,6 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: StreamBuilder(
                         stream: bloc.breedOut,
                         builder: (_, snapshot) {
@@ -136,8 +132,8 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(vertical: size.height * 0.015),
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Flexible(
                             child: StreamBuilder(
@@ -202,7 +198,6 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                       ),
                     ),
                     Container(
-                      padding: EdgeInsets.symmetric(horizontal: 20.0),
                       child: OutlinedButton(
                         child: Row(
                           children: [
@@ -226,7 +221,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                             lastDate: DateTime.now()
                           ).then((DateTime date) {
                             if (date != null) {
-                                setState(() {
+                              setState(() {
                                 this.date = "${date.day}/${date.month}/${date.year}";
                               });
                               bloc.birthdayChange("${date.day}/${date.month}/${date.year}");

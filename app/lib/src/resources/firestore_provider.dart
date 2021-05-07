@@ -8,6 +8,7 @@ class FirestoreProvider {
 
   final String userCollection = "User";
   final String petCollection = "Pet";
+  final String storeVetCollection = "StoreVet";
 
   FirestoreProvider._internal();
 
@@ -76,5 +77,20 @@ class FirestoreProvider {
 
   Future<void> deletePet({String petId}) async {
     return await database.collection(petCollection).doc(petId).delete();
+  }
+
+  // Vet Store Functions
+  Future<List<Firestore.QueryDocumentSnapshot>> listVets() async {
+    Firestore.QuerySnapshot vetListDocument = await database.collection(userCollection)
+    .where("vet", isEqualTo: true)
+    .get();
+    return vetListDocument.docs;
+  }
+
+  Future<List<Firestore.QueryDocumentSnapshot>> listStores() async {
+    Firestore.QuerySnapshot storeListDocument = await database.collection(userCollection)
+    .where("store", isEqualTo: true)
+    .get();
+    return storeListDocument.docs;
   }
 }
