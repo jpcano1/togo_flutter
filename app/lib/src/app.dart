@@ -3,6 +3,8 @@ import 'package:app/src/bloc/blocs/qr_scanner/qr_scanner_bloc.dart';
 import 'package:app/src/screens/pet/pet_register.dart';
 import 'package:app/src/screens/services/store_vet/store_vet_creation.dart';
 import 'package:app/src/screens/user/home.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // Screens
@@ -29,8 +31,12 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
+    final FirebaseAnalytics analytics = FirebaseAnalytics();
+    final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
     return MaterialApp(
       theme: basicTheme(),
+      navigatorObservers:  <NavigatorObserver>[observer],
       routes: {
         "/": (_) => FutureBuilder(
           future: _initialization,
@@ -41,24 +47,24 @@ class App extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
               if (firebaseAuth.currentUser != null) {
-                return HomeScreen();
+                return HomeScreen(analytics: analytics,observer: observer,);
               }
-              return WelcomeScreen();
+              return WelcomeScreen(analytics: analytics, observer: observer,);
             }
             return Text("Loading");
           },
         ),
-        "/home": (_) => HomeScreen(),
+        "/home": (_) => HomeScreen(analytics: analytics,observer: observer,),
         "/login": (_) => provider.Provider<LoginBloc>(
           bloc: LoginBloc(),
-          child: LoginScreen()
+          child: LoginScreen(analytics: analytics, observer: observer)
         ),
         "/register": (_) => provider.Provider<RegisterBloc>(
           bloc: RegisterBloc(),
-          child: RegisterScreen(),
+          child: RegisterScreen(analytics: analytics, observer: observer),
         ),
-        "/services": (_) => ServicesScreen(),
-        "/services/vets": (_) => StoreVetListScreen(),
+        "/services": (_) => ServicesScreen(analytics: analytics, observer: observer),
+        "/services/vets": (_) => StoreVetListScreen(analytics: analytics, observer: observer),
         "/services/vets/create": (_) => StoreVetCreationScreen(),
         "/qr_scanner": (_) => provider.Provider(
           bloc: QRScannerBloc(), 
