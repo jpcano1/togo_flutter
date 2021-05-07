@@ -1,14 +1,11 @@
 import 'package:app/src/bloc/blocs/pet/create_pet_bloc.dart';
+import 'package:app/src/bloc/blocs/qr_scanner/qr_scanner_bloc.dart';
 import 'package:app/src/screens/pet/pet_register.dart';
-import 'package:app/src/screens/services/store_vet/add_marker.dart';
 import 'package:app/src/screens/services/store_vet/store_vet_creation.dart';
 import 'package:app/src/screens/user/home.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-
-import './models/user.dart' as UserModel;
-import './models/pet.dart' as PetModel;
 
 // Screens
 import './screens/services/services.dart';
@@ -69,7 +66,10 @@ class App extends StatelessWidget {
         "/services": (_) => ServicesScreen(analytics: analytics, observer: observer),
         "/services/vets": (_) => StoreVetListScreen(analytics: analytics, observer: observer),
         "/services/vets/create": (_) => StoreVetCreationScreen(),
-        "/qr_scanner": (_) => QRScannerScreen(),
+        "/qr_scanner": (_) => provider.Provider(
+          bloc: QRScannerBloc(), 
+          child: QRScannerScreen()
+        ),
         "/pet/register": (_) => provider.Provider<CreatePetBloc>(
           bloc: CreatePetBloc(),
           child: PetRegisterScreen(),

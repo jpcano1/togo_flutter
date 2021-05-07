@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:app/src/bloc/bloc_provider.dart';
+import 'package:app/src/bloc/blocs/qr_scanner/qr_scanner_bloc.dart';
 import 'package:app/src/screens/services/store_vet/store_vet_detail.dart';
+import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -21,79 +24,12 @@ class QRScannerScreen extends StatefulWidget {
 class _QRScannerScreenState extends State<QRScannerScreen> {
   final GlobalKey qrKey = GlobalKey(debugLabel: "QR");
   String qrMessage;
-  bool foundStoreVet = false;
-  VetModel.StoreVet storeVet;
+  bool messageRead = false;
+  String message = "";
   QRViewController controller;
-  List vetList;
 
   initState() {
     super.initState();
-    vetList = [
-      VetModel.StoreVet(
-        "1",
-        "Exotic Pet",
-        "Email@vet.com",
-        {
-          "Monday": ["1:00", "2:00"],
-          "Tuesday": ["1:00", "2:00"],
-          "Wednesday": ["1:00", "2:00"],
-          "Thursday": ["1:00", "2:00"],
-          "Friday": ["1:00", "2:00"],
-          "Weekend": ["1:00", "2:00"],
-        },
-        "123123123", 
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-      VetModel.StoreVet(
-        "2",
-        "New Med Vet",
-        "Email@vet.com",
-        {
-          "Lunes": ["1:00", "2:00"],
-          "Martes": ["1:00", "2:00"],
-        },
-        "123123123", 
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-      VetModel.StoreVet(
-        "3",
-        "The Golden Century",
-        "Email@vet.com",
-        {
-          "Lunes": ["1:00", "2:00"],
-          "Martes": ["1:00", "2:00"],
-        },
-        "123123123",
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-      VetModel.StoreVet(
-        "4",
-        "Country Vet",
-        "Email@vet.com",
-        {
-          "Lunes": ["1:00", "2:00"],
-          "Martes": ["1:00", "2:00"],
-        },
-        "123123123",
-        [
-          {"lat": 4.6365921453154995, "lng": -74.09680067805952},
-          {"lat": 4.634153971749186, "lng": -74.09474074161847},
-          {"lat": 4.65310306395165, "lng": -74.11152064054464}
-        ]
-      ),
-    ];
   }
 
   @override
@@ -106,7 +42,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final image = AssetImage("assets/icons/snakes.png");
+    final bloc = Provider.of<QRScannerBloc>(context);
     bool nightMode = isNightMode();
     Size size = MediaQuery.of(context).size;
 
@@ -145,29 +81,71 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
             Container(
               margin: EdgeInsets.only(top: size.height * 0.05),
               child: Visibility(
-                visible: this.foundStoreVet,
-                child: this.storeVet != null? Card(
-                  color: nightMode? Colors.white60: Colors.black38,
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: image,
-                      backgroundColor: Colors.white,
-                      maxRadius: size.height * 0.03,
-                    ),
-                    title: Text(
-                      this.storeVet.name,
-                      style: Theme.of(context).textTheme.headline6.copyWith(
-                        color: nightMode? Colors.white: Colors.black
-                      ),
-                    ),
-                    onTap: () => Navigator.push(
-                      context, 
-                      MaterialPageRoute(
-                        builder: (_) => StoreVetDetail(this.storeVet)
-                      )
-                    ),
-                  ),
-                ): Text("Nada"),
+                visible: this.messageRead,
+                child: FutureBuilder(
+                  future: bloc.readStoreVet(this.message),
+                  builder: (futureContext, futureSnapshot) {
+                    if (futureSnapshot.connectionState == ConnectionState.done) {
+                      return StreamBuilder(
+                        stream: bloc.vetStoreOut,
+                        builder: (streamContext, streamSnapshot) {
+                          if (streamSnapshot.hasData) {
+                            var image;
+                            VetModel.StoreVet storeVet = streamSnapshot.data;
+
+                            if (storeVet.imagePath.isNotEmpty) {
+                              image = NetworkImage(storeVet.imagePath);
+                            } else {
+                              image = AssetImage("assets/icons/snakes.png");
+                            }
+
+                            return Card(
+                              elevation: 3.0,
+                              color: Theme.of(context).colorScheme.primaryVariant,
+                              child: ListTile(
+                                leading: CircleAvatar(
+                                  backgroundColor: Theme.of(context).colorScheme.primaryVariant,
+                                  backgroundImage: image,
+                                ),
+                                title: Text(
+                                  storeVet.name,
+                                  style: Theme.of(context).textTheme.headline6.copyWith(
+                                    color: Colors.white
+                                  ),
+                                ),
+                                onTap: () => Navigator.pushReplacement(
+                                  context, 
+                                  MaterialPageRoute(
+                                    builder: (_) => StoreVetDetail(storeVet)
+                                  )
+                                ),
+                              ),
+                            );
+                          }
+                          if (streamSnapshot.hasError) {
+                            return Center(
+                              child: Text(
+                                streamSnapshot.error,
+                                style: Theme.of(context).textTheme.headline6,
+                              ),
+                            );
+                          }
+                          return Center(
+                            child: LoadingSpinner(),
+                          );
+                        },
+                      );
+                    }
+                    if (futureSnapshot.hasError) {
+                      return Center(
+                        child: Text(futureSnapshot.error),
+                      );
+                    }
+                    return Center(
+                      child: LoadingSpinner(),
+                    );
+                  },
+                )
               ),
             )
           ],
@@ -186,9 +164,11 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
       StreamSubscription<Barcode> scanner;
       scanner = controller.scannedDataStream.listen((scanData) {
         setState(() {
-          this.storeVet = findStoreVet(scanData.code);
-          this.foundStoreVet = this.storeVet != null;
-          this.qrMessage = this.foundStoreVet? "Found!": "No Results :(";
+          this.messageRead = true;
+          this.message = scanData.code;
+          // this.storeVet = findStoreVet(scanData.code);
+          // this.foundStoreVet = this.storeVet != null;
+          // this.qrMessage = this.foundStoreVet? "Found!": "No Results :(";
         });
         scanner.cancel();
       });
@@ -197,18 +177,23 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     }
   }
 
-  VetModel.StoreVet findStoreVet(String id) {
-    for (VetModel.StoreVet storeVet in this.vetList) {
-      if (id == storeVet.id) {
-        return storeVet;
-      }
-    }
-    return null;
-  }
-
   @override
   void dispose() {
     super.dispose();
     controller?.dispose();
   }
 }
+
+// this.storeVet != null? Card(
+//                   color: nightMode? Colors.white60: Colors.black38,
+//                   child: ListTile(
+//                     leading: CircleAvatar(
+//                       backgroundImage: image,
+//                       backgroundColor: Colors.white,
+//                       maxRadius: size.height * 0.03,
+//                     ),
+//                     title: Text(
+//                       this.storeVet.name,
+//                     ),
+//                   ),
+//                 ): Text("Nothing"),

@@ -14,13 +14,16 @@ class UpdateProfilePictureBloc implements BlocBase {
 
   Stream<List<dynamic>> get profileImageOut => this._profileImageStream.stream;
 
-  Future<String> upload(String filename, File file) async {
+  Future<String> upload(
+    String filename, File file, 
+    {directory="user_pictures/pet_owner"}
+  ) async {
     String photoUrl;
     try {
       photoUrl = await _repository.uploadProfilePicture(
         filename: filename,
         file: file,
-        directory: "user_pictures/pet_owner"
+        directory: directory
       );
       await _repository.updateUser(
         uid: _repository.getCurrentUser().uid,
@@ -28,7 +31,7 @@ class UpdateProfilePictureBloc implements BlocBase {
           "imagePath": photoUrl
         }
       );
-    } on FirebaseStorage.FirebaseException catch(e) {
+    } on FirebaseStorage.FirebaseException catch(_) {
       return Future.error("There was an error uploading the image");
     }
     return photoUrl;
