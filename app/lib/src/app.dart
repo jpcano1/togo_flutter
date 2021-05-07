@@ -50,14 +50,14 @@ class App extends StatelessWidget {
             if (snapshot.connectionState == ConnectionState.done) {
               final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
               if (firebaseAuth.currentUser != null) {
-                return HomeScreen();
+                return HomeScreen(analytics: analytics,observer: observer,);
               }
-              return WelcomeScreen();
+              return WelcomeScreen(analytics: analytics, observer: observer,);
             }
             return Text("Loading");
           },
         ),
-        "/home": (_) => HomeScreen(),
+        "/home": (_) => HomeScreen(analytics: analytics,observer: observer,),
         "/login": (_) => provider.Provider<LoginBloc>(
           bloc: LoginBloc(),
           child: LoginScreen(analytics: analytics, observer: observer)
@@ -67,7 +67,7 @@ class App extends StatelessWidget {
           child: RegisterScreen(analytics: analytics, observer: observer),
         ),
         "/services": (_) => ServicesScreen(analytics: analytics, observer: observer),
-        "/services/vets": (_) => StoreVetListScreen(),
+        "/services/vets": (_) => StoreVetListScreen(analytics: analytics, observer: observer),
         "/services/vets/create": (_) => StoreVetCreationScreen(),
         "/qr_scanner": (_) => QRScannerScreen(),
         "/pet/register": (_) => provider.Provider<CreatePetBloc>(

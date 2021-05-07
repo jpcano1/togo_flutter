@@ -39,6 +39,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future <void> _setCurrentScreen() async{
     await widget.analytics.setCurrentScreen(screenName: "Register");
   }
+  
+  Future<void> _logRegister() async{
+    await widget.analytics.logEvent(name: "Register");
+  }
 
   @override
   void initState() {

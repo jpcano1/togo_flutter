@@ -35,6 +35,8 @@ class LoginScreen extends StatelessWidget {
     final bloc = Provider.of<LoginBloc>(context);
     final size = MediaQuery.of(context).size;
 
+    _setCurrentScreen();
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: appBar(

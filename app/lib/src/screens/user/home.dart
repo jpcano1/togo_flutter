@@ -1,5 +1,7 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../widgets/button.dart';
@@ -8,10 +10,20 @@ import 'profile.dart';
 
 class HomeScreen extends StatelessWidget {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  HomeScreen({this.analytics, this.observer});
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "Home");
+  }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
+    _setCurrentScreen();
 
     return WillPopScope(
       child: Scaffold(

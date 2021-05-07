@@ -12,6 +12,8 @@ import '../../utils/night_mode.dart';
 import '../../models/store_vet.dart' as VetModel;
 
 class QRScannerScreen extends StatefulWidget {
+
+
   @override
   _QRScannerScreenState createState() => _QRScannerScreenState();
 }

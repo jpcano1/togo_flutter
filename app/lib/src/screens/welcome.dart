@@ -1,11 +1,23 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import '../widgets/button.dart';
 
 class WelcomeScreen extends StatelessWidget {
+
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
+
+  WelcomeScreen({this.analytics, this.observer});
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "Welcome");
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
+    _setCurrentScreen();
     return Container(
       color: Theme.of(context).colorScheme.primaryVariant,
       child: Column(
