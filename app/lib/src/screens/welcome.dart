@@ -6,13 +6,12 @@ import '../utils/checkConnection.dart';
 import '../widgets/button.dart';
 
 class WelcomeScreen extends StatelessWidget {
-
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
 
   WelcomeScreen({this.analytics, this.observer});
 
-  Future <void> _setCurrentScreen() async{
+  Future<void> _setCurrentScreen() async {
     await analytics.setCurrentScreen(screenName: "Welcome");
   }
 
@@ -46,7 +45,53 @@ class WelcomeScreen extends StatelessWidget {
                   AppButton(
                     color: Theme.of(context).colorScheme.primary,
                     text: "Login",
-                    onPressed: () => Navigator.pushNamed(context, "/login"),
+                    onPressed: () {
+                      checkConnectivity().then((connected) {
+                        if (connected) {
+                          Navigator.pushNamed(context, "/login");
+                        } else {
+                          showDialog(
+                            barrierDismissible: false,
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: Text(
+                                "No internet connection",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline4
+                                    .copyWith(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold),
+                              ),
+                              content: Text(
+                                'You don\'t have an internet connection, login will only be made if it matches the credentials from the last online session made.',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(
+                                      color: Colors.black,
+                                    ),
+                              ),
+                              actions: <Widget>[
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                    Navigator.pushNamed(context, "/login");
+                                  },
+                                  child: Text('Continue'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text('Cancel'),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+                      });
+                    },
                     minWidth: size.width * 0.45,
                   ),
                   Padding(

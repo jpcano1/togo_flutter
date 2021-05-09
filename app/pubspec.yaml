@@ -51,7 +51,7 @@ dependencies:
   qr_code_scanner: ^0.4.0
   shared_preferences: ^2.0.5
   provider: ^5.0.0
-
+  bloc_provider: ^0.8.0
   vector_math: ^2.1.0
 
 dev_dependencies:
