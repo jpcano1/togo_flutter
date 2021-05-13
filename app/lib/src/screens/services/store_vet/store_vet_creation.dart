@@ -35,7 +35,7 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
   }
 
   Future<void> _logService() async{
-    await widget.analytics.logEvent(name: "pet_owner_register", parameters: {'Store': this.storeRole});
+    await widget.analytics.logEvent(name: "service_register", parameters: {'Store': this.storeRole});
   }
 
 

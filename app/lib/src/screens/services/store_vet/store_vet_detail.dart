@@ -48,6 +48,15 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
     await widget.analytics.setCurrentScreen(screenName: "StoreDetailView");
   }
 
+  Future <void> _sendStore() async{
+    await widget.analytics.logEvent(name: "stores_visited", parameters: {'Name': storeVet.name});
+  }
+
+  Future <void> _sendVet() async{
+    await widget.analytics.logEvent(name: "vets_visited", parameters: {'Name': storeVet.name});
+  }
+
+
   @override
   initState() {
     super.initState();
@@ -127,8 +136,10 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
 
     if (storeVet.store){
       _setCurrentScreenStore();
+      _sendStore();
     }else{
       _setCurrentScreenVet();
+      _sendVet();
     }
 
     if (storeVet.imagePath.isNotEmpty) {
