@@ -27,6 +27,10 @@ class ProfileScreen extends StatelessWidget {
     await analytics.setCurrentScreen(screenName: "ProfileView");
   }
 
+  Future <void> _setEvent() async{
+    await analytics.logEvent(name: "resend_email_verification");
+  }
+
   @override
   Widget build(BuildContext context) {
     _setCurrentScreen();
@@ -110,6 +114,7 @@ class ProfileScreen extends StatelessWidget {
               Icons.verified
             ): TextButton(
               onPressed: () {
+                _setEvent();
                 bloc.sendVerificationEmail()
                 .then((_) {
                   showToast("Email sent, please check your inbox", context);
