@@ -38,9 +38,14 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
     await widget.analytics.setCurrentScreen(screenName: "QRScanner");
   }
 
+  Future <void> _sendEvent() async{
+    await widget.analytics.logEvent(name: "qr_scanner");
+  }
+
   initState() {
     super.initState();
     _setCurrentScreen();
+    _sendEvent();
   }
 
   @override
