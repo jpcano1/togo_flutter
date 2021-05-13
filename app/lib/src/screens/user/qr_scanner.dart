@@ -35,7 +35,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   QRViewController controller;
 
   Future <void> _setCurrentScreen() async{
-    await widget.analytics.setCurrentScreen(screenName: "QR Scanner");
+    await widget.analytics.setCurrentScreen(screenName: "QRScanner");
   }
 
   initState() {
@@ -127,7 +127,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
                                 onTap: () => Navigator.pushReplacement(
                                   context, 
                                   MaterialPageRoute(
-                                    builder: (_) => StoreVetDetail(storeVet)
+                                    builder: (_) => StoreVetDetail(storeVet, widget.analytics, widget.observer)
                                   )
                                 ),
                               ),

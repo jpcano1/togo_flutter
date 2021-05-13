@@ -19,11 +19,19 @@ class StoreVetListScreen extends StatelessWidget {
   StoreVetListScreen({this.stores=false, this.analytics, this.observer});
 
   Future <void> _setCurrentScreenStores() async{
-    await analytics.setCurrentScreen(screenName: "Stores List View");
+    await analytics.setCurrentScreen(screenName: "StoreListView");
   }
 
   Future <void> _setCurrentScreenVets() async{
-    await analytics.setCurrentScreen(screenName: "Vets List View");
+    await analytics.setCurrentScreen(screenName: "VetListView");
+  }
+
+  Future <void> _sendEventVets() async{
+    await analytics.logEvent(name: "vet_list_screen", parameters: null);
+  }
+
+  Future <void> _sendEventStores() async{
+    await analytics.logEvent(name: "store_list_screen", parameters: null);
   }
 
   @override
@@ -32,6 +40,7 @@ class StoreVetListScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final bloc = Provider.of<StoreVetListBloc>(context);
     this.stores? _setCurrentScreenStores():_setCurrentScreenVets();
+    this.stores? _sendEventStores():_sendEventVets();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: appBar(
@@ -125,7 +134,7 @@ class StoreVetListScreen extends StatelessWidget {
             onTap: () => Navigator.push(
               listContext, 
               MaterialPageRoute(
-                builder: (_) => StoreVetDetail(storeVet)
+                builder: (_) => StoreVetDetail(storeVet, analytics, observer)
               )
             ),
             title: Text(

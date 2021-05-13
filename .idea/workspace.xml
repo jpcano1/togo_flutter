@@ -27,13 +27,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="354029cb-b8f0-4e22-9236-1b875d7623ab" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_32_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_32_PM__Default_Changelist_.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_43_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_43_PM__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_32_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_32_PM__Default_Changelist_.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_43_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_4_05_2021_3_43_PM__Default_Changelist_.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/app.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/screens/pet/pet_register.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/pet/pet_register.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/services.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/services.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_creation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_creation.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_detail.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_detail.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_list.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_list.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/home.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/home.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/qr_scanner.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/qr_scanner.dart" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,7 +46,7 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[4200d032cc584425]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
@@ -109,21 +114,21 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="412" y="154" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1620357684923" />
-    <state width="1323" height="178" key="GridCell.Tab.0.bottom" timestamp="1620403006881">
+    <state width="1323" height="341" key="GridCell.Tab.0.bottom" timestamp="1620788131792">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620403006881" />
-    <state width="1323" height="178" key="GridCell.Tab.0.center" timestamp="1620403006880">
+    <state width="1323" height="341" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620788131792" />
+    <state width="1323" height="341" key="GridCell.Tab.0.center" timestamp="1620788131792">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620403006880" />
-    <state width="1323" height="178" key="GridCell.Tab.0.left" timestamp="1620403006880">
+    <state width="1323" height="341" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620788131792" />
+    <state width="1323" height="341" key="GridCell.Tab.0.left" timestamp="1620788131791">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620403006880" />
-    <state width="1323" height="178" key="GridCell.Tab.0.right" timestamp="1620403006880">
+    <state width="1323" height="341" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620788131791" />
+    <state width="1323" height="341" key="GridCell.Tab.0.right" timestamp="1620788131792">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620403006880" />
+    <state width="1323" height="341" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620788131792" />
   </component>
 </project>

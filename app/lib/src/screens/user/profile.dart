@@ -4,6 +4,8 @@ import 'package:app/src/screens/pet/pet_detail.dart';
 import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -15,10 +17,19 @@ import '../../models/store_vet.dart' as StoreVetModel;
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  ProfileScreen({this.analytics, this.observer});
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "ProfileView");
+  }
 
   @override
   Widget build(BuildContext context) {
+    _setCurrentScreen();
     final bloc = Provider.of<ProfileBloc>(context);
 
     return Scaffold(

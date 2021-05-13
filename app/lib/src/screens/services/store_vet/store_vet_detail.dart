@@ -1,5 +1,7 @@
 import 'dart:typed_data';
 
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,8 +18,10 @@ import '../../../utils/night_mode.dart';
 
 class StoreVetDetail extends StatefulWidget {
   final StoreVet storeVet;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
-  StoreVetDetail(this.storeVet, {Key key}): super(key: key);
+  StoreVetDetail(this.storeVet, this.analytics, this.observer, {Key key}): super(key: key);
 
   @override
   _StoreVetDetailState createState() => _StoreVetDetailState(this.storeVet);
@@ -35,6 +39,14 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
   String _mapStyle;
 
   _StoreVetDetailState(this.storeVet);
+
+  Future <void> _setCurrentScreenVet() async{
+    await widget.analytics.setCurrentScreen(screenName: "VetDetailView");
+  }
+
+  Future <void> _setCurrentScreenStore() async{
+    await widget.analytics.setCurrentScreen(screenName: "StoreDetailView");
+  }
 
   @override
   initState() {
@@ -112,6 +124,12 @@ class _StoreVetDetailState extends State<StoreVetDetail> {
     final defaultVetImagePath = "assets/icons/snakes.png";
 
     var storeVetImage;
+
+    if (storeVet.store){
+      _setCurrentScreenStore();
+    }else{
+      _setCurrentScreenVet();
+    }
 
     if (storeVet.imagePath.isNotEmpty) {
       storeVetImage = NetworkImage(storeVet.imagePath);

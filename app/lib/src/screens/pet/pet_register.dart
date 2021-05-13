@@ -29,7 +29,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
   File picture;
 
   Future <void> _setCurrentScreen() async{
-    await widget.analytics.setCurrentScreen(screenName: "Pet Register");
+    await widget.analytics.setCurrentScreen(screenName: "PetRegister");
   }
 
   @override

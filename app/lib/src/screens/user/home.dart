@@ -130,7 +130,7 @@ class HomeScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (materialPageRouteContext) => Provider(
                               bloc: ProfileBloc(), 
-                              child: ProfileScreen()
+                              child: ProfileScreen(analytics: analytics, observer: observer,)
                             )
                           )
                         ),
