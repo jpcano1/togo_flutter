@@ -34,6 +34,10 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
     await widget.analytics.setCurrentScreen(screenName: "ServiceCreation");
   }
 
+  Future<void> _logService() async{
+    await widget.analytics.logEvent(name: "pet_owner_register", parameters: {'Store': this.storeRole});
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -175,6 +179,7 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
               child: AppButton(
                 color: Theme.of(context).colorScheme.primary, 
                 onPressed: () async {
+                  _logService();
                   bloc.roleChange(storeRole);
                   bloc.locationsChange(locations);
                   bloc.officeHoursChange(officeHours);

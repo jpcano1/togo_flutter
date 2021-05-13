@@ -32,6 +32,10 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
     await widget.analytics.setCurrentScreen(screenName: "PetRegister");
   }
 
+  Future <void> _sendEvent() async{
+    await widget.analytics.logEvent(name: "pet_registration");
+  }
+
   @override
   Widget build(BuildContext context) {
     final bloc = Provider.of<CreatePetBloc>(context);
@@ -274,7 +278,7 @@ class _PetRegisterScreenState extends State<PetRegisterScreen> {
                           try {
                             dialog(context, content: LoadingSpinner());
                             String petId = await bloc.createPet();
-
+                            _sendEvent();
                             if (this.picture != null) {
                               await bloc.pictureChange([this.picture, petId]);
                             }

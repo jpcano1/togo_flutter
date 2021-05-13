@@ -39,8 +39,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     await widget.analytics.setCurrentScreen(screenName: "Register");
   }
   
-  Future<void> _logRegister() async{
-    await widget.analytics.logEvent(name: "Register");
+  Future<void> _logRegisterNormalUser() async{
+    await widget.analytics.logEvent(name: "pet_owner_register");
   }
 
   @override
@@ -244,6 +244,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     : Provider(
                         bloc: UpdateProfilePictureBloc(),
                         child: ProfilePictureUploadScreen(blocData))));
+        if (this.serviceProvider==false){
+          _logRegisterNormalUser();
+        }
       } else {
         showDialog(
           barrierDismissible: false,
