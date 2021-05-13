@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
   }
 
   Future <void> _setEvent() async{
-    await analytics.logEvent(name: "resend_email_verification");
+    await analytics.logEvent(name: "resend_email_verification", parameters: null);
   }
 
   @override

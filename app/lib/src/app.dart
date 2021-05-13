@@ -6,6 +6,7 @@ import 'package:app/src/screens/user/home.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 // Screens
 import './screens/services/services.dart';
@@ -24,15 +25,18 @@ import './bloc/blocs/login_bloc.dart';
 import './bloc/blocs/register_bloc.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
     final FirebaseAnalytics analytics = FirebaseAnalytics();
     final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
 
     return MaterialApp(
       theme: basicTheme(),
@@ -45,6 +49,8 @@ class App extends StatelessWidget {
               return Text(snapshot.error);
             } 
             if (snapshot.connectionState == ConnectionState.done) {
+              FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+              FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
               final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
               if (firebaseAuth.currentUser != null) {
                 return HomeScreen(analytics: analytics,observer: observer,);
@@ -76,5 +82,7 @@ class App extends StatelessWidget {
         ),
       },
     );
+
+
   }
 }

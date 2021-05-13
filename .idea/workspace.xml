@@ -27,8 +27,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="354029cb-b8f0-4e22-9236-1b875d7623ab" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/libraries/Dart_Packages.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/android/app/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/app/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/android/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/app/android/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/app.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/app.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/profile.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/profile.dart" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/lib/src/screens/user/qr_scanner.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/user/qr_scanner.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/app/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/app/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,21 +110,21 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="412" y="154" key="#com.intellij.ide.util.TreeFileChooserDialog/0.0.1366.728@0.0.1366.728" timestamp="1620357684923" />
-    <state width="1323" height="178" key="GridCell.Tab.0.bottom" timestamp="1620882813393">
+    <state width="1323" height="178" key="GridCell.Tab.0.bottom" timestamp="1620944794514">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620882813393" />
-    <state width="1323" height="178" key="GridCell.Tab.0.center" timestamp="1620882813392">
+    <state width="1323" height="178" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1620944794514" />
+    <state width="1323" height="178" key="GridCell.Tab.0.center" timestamp="1620944794514">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620882813392" />
-    <state width="1323" height="178" key="GridCell.Tab.0.left" timestamp="1620882813392">
+    <state width="1323" height="178" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1620944794514" />
+    <state width="1323" height="178" key="GridCell.Tab.0.left" timestamp="1620944794513">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620882813392" />
-    <state width="1323" height="178" key="GridCell.Tab.0.right" timestamp="1620882813392">
+    <state width="1323" height="178" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1620944794513" />
+    <state width="1323" height="178" key="GridCell.Tab.0.right" timestamp="1620944794514">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1323" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620882813392" />
+    <state width="1323" height="178" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1620944794514" />
   </component>
 </project>

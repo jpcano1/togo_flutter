@@ -39,7 +39,7 @@ class _QRScannerScreenState extends State<QRScannerScreen> {
   }
 
   Future <void> _sendEvent() async{
-    await widget.analytics.logEvent(name: "qr_scanner");
+    await widget.analytics.logEvent(name: "qr_scanner", parameters: null);
   }
 
   initState() {
