@@ -34,7 +34,7 @@ class _StoreVetCreationScreenState extends State<StoreVetCreationScreen> {
     await widget.analytics.setCurrentScreen(screenName: "ServiceCreation");
   }
 
-  Future<void> _logService() async{
+  Future <void> _logService() async{
     await widget.analytics.logEvent(name: "service_register", parameters: {'Store': this.storeRole});
   }
 

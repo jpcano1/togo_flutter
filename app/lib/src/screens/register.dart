@@ -240,7 +240,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 builder: (_) => this.serviceProvider
                     ? Provider(
                         bloc: StoreVetCreationBloc(),
-                        child: StoreVetCreationScreen(vetId: blocData))
+                        child: StoreVetCreationScreen(vetId: blocData, analytics: widget.analytics, observer: widget.observer,))
                     : Provider(
                         bloc: UpdateProfilePictureBloc(),
                         child: ProfilePictureUploadScreen(blocData))));
