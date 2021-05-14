@@ -169,7 +169,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           MaterialPageRoute(
                             builder: (materialPageRouteContext) => Provider(
                               bloc: ProfileBloc(), 
-                              child: ProfileScreen(analytics: analytics, observer: observer,)
+                              child: ProfileScreen(analytics: widget.analytics, observer: widget.observer,)
                             )
                           )
                         ),
