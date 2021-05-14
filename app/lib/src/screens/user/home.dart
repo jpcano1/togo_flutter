@@ -121,8 +121,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       AppButton(
                         color: Theme.of(context).colorScheme.secondary,
                         text: "Services",
-                        onPressed: () =>
-                            Navigator.pushNamed(context, "/services"),
+                        onPressed: () {
+                          checkConnectivity().then((connected) {
+                            if (connected) {
+                              Navigator.pushNamed(context, "/services");
+                            } else {
+                              _noConnectionDialog(context);
+                            }
+                          });
+                        },
                         minWidth: 150,
                       )
                     ],
@@ -189,6 +196,37 @@ class _HomeScreenState extends State<HomeScreen> {
           )),
         ),
         onWillPop: () => Future.value(false));
+  }
+
+  //TODO check reused code
+  _noConnectionDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "No internet connection",
+          style: Theme.of(context)
+              .textTheme
+              .headline4
+              .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'You don\'t have an internet connection, try again later.',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.black,
+              ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Ok'),
+          ),
+        ],
+      ),
+    );
   }
 
   Future<String> loadUsername() async {

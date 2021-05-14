@@ -161,6 +161,7 @@ class ServicesScreen extends StatelessWidget {
     );
   }
 
+  //TODO check reused code
   _noConnectionDialog(BuildContext context) {
     showDialog(
       barrierDismissible: false,
