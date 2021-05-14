@@ -6,8 +6,6 @@ import 'package:app/src/widgets/toast_alert.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
 
 import '../bloc/bloc_provider.dart';
@@ -19,7 +17,6 @@ import '../widgets/button.dart';
 import '../widgets/spinner.dart';
 
 class RegisterScreen extends StatefulWidget {
-
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
 
@@ -34,12 +31,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
   bool nightMode = isNightMode();
   bool serviceProvider = false;
 
-
-  Future <void> _setCurrentScreen() async{
+  Future<void> _setCurrentScreen() async {
     await widget.analytics.setCurrentScreen(screenName: "Register");
   }
-  
-  Future<void> _logRegister() async{
+
+  Future<void> _logRegister() async {
     await widget.analytics.logEvent(name: "Register");
   }
 

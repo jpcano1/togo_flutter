@@ -48,15 +48,12 @@ class LoginBloc with Validators implements BlocBase {
     String name = this._repository.getCurrentUser().displayName;
 
     await prefs.setString("logName", name);
-    //TODO delete prints
-    print('Resultado de nombre usuario actual: ' + name);
     return {
       "verified": credential.user.emailVerified,
       "document": await _repository.readUser(uid: credential.user.uid)
     };
   }
 
-  //TODO Add offline credential check logic
   //Method to check locally saved credentials to log in without connection.
   Future<String> offlineLogin() async {
     //TODO adjust sharedPreferences to singleton

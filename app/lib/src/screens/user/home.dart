@@ -1,33 +1,70 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
+import 'package:app/src/utils/checkConnection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/button.dart';
 import 'profile.dart';
 
-class HomeScreen extends StatelessWidget {
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+/// Wrapper for stateful functionality to provide onInit calls in stateles widget
+class StatefulWrapper extends StatefulWidget {
+  final Function onInit;
+  final Widget child;
+  const StatefulWrapper({@required this.onInit, @required this.child});
+  @override
+  _StatefulWrapperState createState() => _StatefulWrapperState();
+}
+
+class _StatefulWrapperState extends State<StatefulWrapper> {
+  @override
+  void initState() {
+    if (widget.onInit != null) {
+      widget.onInit();
+    }
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.child;
+  }
+}
+
+class HomeScreen extends StatefulWidget {
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
   HomeScreen({this.analytics, this.observer});
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  //TODO uncomment code if necessary
+  // final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  String username;
   Future<void> _setCurrentScreen() async {
-    await analytics.setCurrentScreen(screenName: "Home");
+    bool connected = await checkConnectivity();
+    if (connected) {
+      await widget.analytics.setCurrentScreen(screenName: "Home");
+    }
   }
 
-  Future<SharedPreferences> _getSharedPreferences() async {
-    return await SharedPreferences.getInstance();
+  @override
+  void initState() {
+    super.initState();
+    loadUsername().then((value) {
+      username = value;
+      setState(() {});
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    // final bloc = Provider.of<HomeBloc>(context);
-
     _setCurrentScreen();
 
     return WillPopScope(
@@ -42,8 +79,8 @@ class HomeScreen extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.only(top: size.height * 0.08),
                   child: Text(
-                    "Welcome, ${this._firebaseAuth.currentUser.displayName}",
-                    // "Welcome, ${bloc.getUserName()}",
+                    // "Welcome, ${this._firebaseAuth.currentUser.displayName}",
+                    "Welcome, " + username,
                     style: Theme.of(context).textTheme.headline5.copyWith(
                         color: Colors.black, fontWeight: FontWeight.bold),
                   ),
@@ -152,5 +189,15 @@ class HomeScreen extends StatelessWidget {
           )),
         ),
         onWillPop: () => Future.value(false));
+  }
+
+  Future<String> loadUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String name = prefs.getString('logName');
+    if (name != null && name.isNotEmpty) {
+      return name;
+    } else {
+      return "";
+    }
   }
 }
