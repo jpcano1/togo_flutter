@@ -6,6 +6,7 @@ import 'package:app/src/screens/user/home.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 // Screens
 import './screens/services/services.dart';
@@ -24,15 +25,18 @@ import './bloc/blocs/login_bloc.dart';
 import './bloc/blocs/register_bloc.dart';
 
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
     final FirebaseAnalytics analytics = FirebaseAnalytics();
     final FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
 
     return MaterialApp(
       theme: basicTheme(),
@@ -45,6 +49,8 @@ class App extends StatelessWidget {
               return Text(snapshot.error);
             } 
             if (snapshot.connectionState == ConnectionState.done) {
+              FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
+              FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
               final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
               if (firebaseAuth.currentUser != null) {
                 return HomeScreen(analytics: analytics,observer: observer,);
@@ -65,16 +71,18 @@ class App extends StatelessWidget {
         ),
         "/services": (_) => ServicesScreen(analytics: analytics, observer: observer),
         "/services/vets": (_) => StoreVetListScreen(analytics: analytics, observer: observer),
-        "/services/vets/create": (_) => StoreVetCreationScreen(),
+        "/services/vets/create": (_) => StoreVetCreationScreen(analytics: analytics, observer: observer,),
         "/qr_scanner": (_) => provider.Provider(
           bloc: QRScannerBloc(), 
-          child: QRScannerScreen()
+          child: QRScannerScreen(analytics: analytics, observer: observer,)
         ),
         "/pet/register": (_) => provider.Provider<CreatePetBloc>(
           bloc: CreatePetBloc(),
-          child: PetRegisterScreen(),
+          child: PetRegisterScreen(analytics: analytics, observer: observer,),
         ),
       },
     );
+
+
   }
 }

@@ -165,11 +165,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: Theme.of(context).colorScheme.secondary,
                         text: "Profile",
                         onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (materialPageRouteContext) => Provider(
-                                    bloc: ProfileBloc(),
-                                    child: ProfileScreen()))),
+                          context, 
+                          MaterialPageRoute(
+                            builder: (materialPageRouteContext) => Provider(
+                              bloc: ProfileBloc(), 
+                              child: ProfileScreen(analytics: analytics, observer: observer,)
+                            )
+                          )
+                        ),
                         minWidth: 150,
                       )
                     ],

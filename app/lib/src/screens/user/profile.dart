@@ -4,6 +4,8 @@ import 'package:app/src/screens/pet/pet_detail.dart';
 import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -15,10 +17,23 @@ import '../../models/store_vet.dart' as StoreVetModel;
 import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  ProfileScreen({this.analytics, this.observer});
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "ProfileView");
+  }
+
+  Future <void> _setEvent() async{
+    await analytics.logEvent(name: "resend_email_verification", parameters: null);
+  }
 
   @override
   Widget build(BuildContext context) {
+    _setCurrentScreen();
     final bloc = Provider.of<ProfileBloc>(context);
 
     return Scaffold(
@@ -99,6 +114,7 @@ class ProfileScreen extends StatelessWidget {
               Icons.verified
             ): TextButton(
               onPressed: () {
+                _setEvent();
                 bloc.sendVerificationEmail()
                 .then((_) {
                   showToast("Email sent, please check your inbox", context);

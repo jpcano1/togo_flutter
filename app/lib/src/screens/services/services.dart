@@ -15,7 +15,11 @@ class ServicesScreen extends StatelessWidget {
   ServicesScreen({this.analytics, this.observer});
 
   Future <void> _setCurrentScreen() async{
-    await analytics.setCurrentScreen(screenName: "Services View");
+    await analytics.setCurrentScreen(screenName: "ServicesView");
+  }
+
+  Future <void> _sendEvent() async{
+    await analytics.logEvent(name: "services_screen", parameters: null);
   }
 
   @override
@@ -23,6 +27,7 @@ class ServicesScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     bool nightMode = isNightMode();
     _setCurrentScreen();
+    _sendEvent();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -77,7 +82,7 @@ class ServicesScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => Provider(
                           bloc: StoreVetListBloc(),
-                          child: StoreVetListScreen(stores: false),
+                          child: StoreVetListScreen(stores: false, analytics: analytics, observer: observer,),
                         )
                       )
                     ),
@@ -92,7 +97,7 @@ class ServicesScreen extends StatelessWidget {
                       MaterialPageRoute(
                         builder: (_) => Provider(
                           bloc: StoreVetListBloc(),
-                          child: StoreVetListScreen(stores: true),
+                          child: StoreVetListScreen(stores: true, analytics: analytics, observer: observer,),
                         )
                       )
                     ),
