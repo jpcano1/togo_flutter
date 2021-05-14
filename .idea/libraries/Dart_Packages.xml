@@ -219,6 +219,13 @@
             </list>
           </value>
         </entry>
+        <entry key="firebase_performance">
+          <value>
+            <list>
+              <option value="$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_performance-0.7.0+2/lib" />
+            </list>
+          </value>
+        </entry>
         <entry key="firebase_storage">
           <value>
             <list>
@@ -673,6 +680,7 @@
       <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_core_web-1.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_crashlytics-2.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_crashlytics_platform_interface-3.0.3/lib" />
+      <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_performance-0.7.0+2/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage-8.0.5/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_platform_interface-2.0.3/lib" />
       <root url="file://$PROJECT_DIR$/../../../../../../../flutter/.pub-cache/hosted/pub.dartlang.org/firebase_storage_web-1.0.5/lib" />
