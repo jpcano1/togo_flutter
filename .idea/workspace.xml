@@ -26,19 +26,13 @@
     </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="354029cb-b8f0-4e22-9236-1b875d7623ab" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_05_2021_8_33_PM_[Default_Changelist]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_6_05_2021_8_33_PM__Default_Changelist_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/register.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/register.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_creation.dart" beforeDir="false" afterPath="$PROJECT_DIR$/app/lib/src/screens/services/store_vet/store_vet_creation.dart" afterDir="false" />
-    </list>
+    <list default="true" id="354029cb-b8f0-4e22-9236-1b875d7623ab" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[4200d032cc584425]" />
+  <component name="ExecutionTargetManager" SELECTED_TARGET="device_and_snapshot_combo_box_target[]" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
