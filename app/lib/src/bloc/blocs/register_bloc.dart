@@ -84,7 +84,7 @@ class RegisterBloc with Validators implements BlocBase {
 
   //Method to load credentials from shared preferences when there's connection.
   noConnectionLoadCredentials() async {
-    //TODO check singleton get instance for bloc
+    //TODO Change to singleton
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String name = prefs.getString('regName');
     String email = prefs.getString('regEmail');
