@@ -1,12 +1,14 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/profile_bloc.dart';
 import 'package:app/src/utils/checkConnection.dart';
+import 'package:app/src/widgets/toast_alert.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../widgets/button.dart';
+import '../welcome.dart';
 import 'profile.dart';
 
 /// Wrapper for stateful functionality to provide onInit calls in stateles widget
@@ -171,12 +173,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       AppButton(
                         color: Theme.of(context).colorScheme.secondary,
                         text: "Profile",
-                        onPressed: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (materialPageRouteContext) => Provider(
-                                    bloc: ProfileBloc(),
-                                    child: ProfileScreen()))),
+                        onPressed: () async {
+                          bool onlineLog = await onlineLogin();
+                          bool connected = await checkConnectivity();
+                          if (onlineLog) {
+                            if (connected) {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (materialPageRouteContext) =>
+                                          Provider(
+                                              bloc: ProfileBloc(),
+                                              child: ProfileScreen())));
+                            } else {
+                              _noConnectionDialog(context);
+                            }
+                          } else {
+                            _offlineLoginDialog(context);
+                          }
+                        },
                         minWidth: 150,
                       )
                     ],
@@ -185,8 +200,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Container(
                   margin: EdgeInsets.only(top: size.width * 0.055),
                   child: ElevatedButton.icon(
-                    onPressed: () =>
-                        Navigator.pushNamed(context, "/qr_scanner"),
+                    onPressed: () {
+                      checkConnectivity().then((connected) {
+                        if (connected) {
+                          Navigator.pushNamed(context, "/qr_scanner");
+                        } else {
+                          _noConnectionDialog(context);
+                        }
+                      });
+                    },
                     icon: Icon(Icons.qr_code),
                     label: Text("QR Scan"),
                   ),
@@ -227,6 +249,51 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
+  //TODO merge both dialogs into one method
+  _offlineLoginDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "No internet connection",
+          style: Theme.of(context)
+              .textTheme
+              .headline4
+              .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'You logged in without internet connection and cannot access your profile, would you like to go back to the welcome screen?',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.black,
+              ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              showToast("Redirected to welcome screen", context);
+              Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(builder: (context) => WelcomeScreen()),
+                  ModalRoute.withName("/"));
+            },
+            child: Text('Yes'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<bool> onlineLogin() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("online_log");
   }
 
   Future<String> loadUsername() async {
