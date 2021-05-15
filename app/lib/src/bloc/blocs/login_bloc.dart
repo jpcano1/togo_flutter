@@ -45,6 +45,8 @@ class LoginBloc with Validators implements BlocBase {
     //action
     await prefs.setBool("was_offline", false);
 
+    //Indicates locally if the user logged with internet.
+    await prefs.setBool("online_log", true);
     String name = this._repository.getCurrentUser().displayName;
 
     await prefs.setString("logName", name);
@@ -73,7 +75,9 @@ class LoginBloc with Validators implements BlocBase {
         result = "valid";
       }
     }
-    await prefs.setBool("was_offline", false);
+
+    //Indicates locally if the user logged without internet.
+    await prefs.setBool("online_log", false);
     return result;
   }
 
