@@ -14,9 +14,8 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../models/pet.dart';
-import '../../models/user.dart' as UserModel;
 import '../../models/store_vet.dart' as StoreVetModel;
-import 'package:flutter/material.dart';
+import '../../models/user.dart' as UserModel;
 
 class ProfileScreen extends StatelessWidget {
   final FirebaseAnalytics analytics;
@@ -25,12 +24,13 @@ class ProfileScreen extends StatelessWidget {
 
   ProfileScreen({this.analytics, this.observer});
 
-  Future <void> _setCurrentScreen() async{
+  Future<void> _setCurrentScreen() async {
     await analytics.setCurrentScreen(screenName: "ProfileView");
   }
 
-  Future <void> _setEvent() async{
-    await analytics.logEvent(name: "resend_email_verification", parameters: null);
+  Future<void> _setEvent() async {
+    await analytics.logEvent(
+        name: "resend_email_verification", parameters: null);
   }
 
   @override
@@ -102,8 +102,7 @@ class ProfileScreen extends StatelessWidget {
             maxRadius: size.width * 0.25,
           ),
           Container(
-              margin: EdgeInsets.only(
-                  top: spaceBetween),
+              margin: EdgeInsets.only(top: spaceBetween),
               child: verified
                   ? Icon(Icons.verified)
                   : TextButton(
