@@ -5,6 +5,8 @@ import 'package:app/src/screens/welcome.dart';
 import 'package:app/src/utils/checkConnection.dart';
 import 'package:app/src/widgets/spinner.dart';
 import 'package:app/src/widgets/toast_alert.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -12,14 +14,28 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../models/pet.dart';
-import '../../models/store_vet.dart' as StoreVetModel;
 import '../../models/user.dart' as UserModel;
+import '../../models/store_vet.dart' as StoreVetModel;
+import 'package:flutter/material.dart';
 
 class ProfileScreen extends StatelessWidget {
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+
+  ProfileScreen({this.analytics, this.observer});
+
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "ProfileView");
+  }
+
+  Future <void> _setEvent() async{
+    await analytics.logEvent(name: "resend_email_verification", parameters: null);
+  }
 
   @override
   Widget build(BuildContext context) {
+    _setCurrentScreen();
     final bloc = Provider.of<ProfileBloc>(context);
 
     return Scaffold(
@@ -86,11 +102,13 @@ class ProfileScreen extends StatelessWidget {
             maxRadius: size.width * 0.25,
           ),
           Container(
-              margin: EdgeInsets.only(top: spaceBetween),
+              margin: EdgeInsets.only(
+                  top: spaceBetween),
               child: verified
                   ? Icon(Icons.verified)
                   : TextButton(
                       onPressed: () async {
+                        _setEvent();
                         bool connected = await checkConnectivity();
                         if (connected) {
                           bloc.sendVerificationEmail().then((_) {

@@ -2,6 +2,7 @@ import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/store_vet_list_bloc.dart';
 import 'package:app/src/screens/services/store_vet/store_vet_list.dart';
 import 'package:app/src/utils/checkConnection.dart';
+import 'package:app/src/utils/checkConnection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +16,12 @@ class ServicesScreen extends StatelessWidget {
 
   ServicesScreen({this.analytics, this.observer});
 
-  Future<void> _setCurrentScreen() async {
-    await analytics.setCurrentScreen(screenName: "Services View");
+  Future <void> _setCurrentScreen() async{
+    await analytics.setCurrentScreen(screenName: "ServicesView");
+  }
+
+  Future <void> _sendEvent() async{
+    await analytics.logEvent(name: "services_screen", parameters: null);
   }
 
   @override
@@ -24,6 +29,7 @@ class ServicesScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     bool nightMode = isNightMode();
     _setCurrentScreen();
+    _sendEvent();
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
@@ -80,7 +86,7 @@ class ServicesScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (_) => Provider(
                                 bloc: StoreVetListBloc(),
-                                child: StoreVetListScreen(stores: false),
+                                child: StoreVetListScreen(stores: false, analytics: analytics, observer: observer,),
                               ),
                             ),
                           );
@@ -103,7 +109,7 @@ class ServicesScreen extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (_) => Provider(
                                 bloc: StoreVetListBloc(),
-                                child: StoreVetListScreen(stores: true),
+                                child: StoreVetListScreen(stores: true, analytics: analytics, observer: observer,),
                               ),
                             ),
                           );

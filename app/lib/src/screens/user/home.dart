@@ -184,7 +184,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       builder: (materialPageRouteContext) =>
                                           Provider(
                                               bloc: ProfileBloc(),
-                                              child: ProfileScreen())));
+                                              child: ProfileScreen(analytics: widget.analytics, observer: widget.observer,))));
                             } else {
                               _noConnectionDialog(context);
                             }
