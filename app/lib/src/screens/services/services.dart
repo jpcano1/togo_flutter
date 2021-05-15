@@ -1,12 +1,13 @@
 import 'package:app/src/bloc/bloc_provider.dart';
 import 'package:app/src/bloc/blocs/user/store_vet_list_bloc.dart';
 import 'package:app/src/screens/services/store_vet/store_vet_list.dart';
-
-import '../../widgets/button.dart';
-import 'package:flutter/material.dart';
-import '../../utils/night_mode.dart';
+import 'package:app/src/utils/checkConnection.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
+import 'package:flutter/material.dart';
+
+import '../../utils/night_mode.dart';
+import '../../widgets/button.dart';
 
 class ServicesScreen extends StatelessWidget {
   final FirebaseAnalytics analytics;
@@ -14,11 +15,11 @@ class ServicesScreen extends StatelessWidget {
 
   ServicesScreen({this.analytics, this.observer});
 
-  Future <void> _setCurrentScreen() async{
+  Future<void> _setCurrentScreen() async {
     await analytics.setCurrentScreen(screenName: "ServicesView");
   }
 
-  Future <void> _sendEvent() async{
+  Future<void> _sendEvent() async {
     await analytics.logEvent(name: "services_screen", parameters: null);
   }
 
@@ -33,9 +34,8 @@ class ServicesScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.background,
         elevation: 0.0,
-        iconTheme: IconThemeData(
-          color: nightMode? Colors.white: Colors.black
-        ),
+        iconTheme:
+            IconThemeData(color: nightMode ? Colors.white : Colors.black),
       ),
       body: Container(
         child: Column(
@@ -47,8 +47,8 @@ class ServicesScreen extends StatelessWidget {
               child: Text(
                 "Services",
                 style: Theme.of(context).textTheme.headline4.copyWith(
-                  color: nightMode? Colors.white: Colors.black,
-                ),
+                      color: nightMode ? Colors.white : Colors.black,
+                    ),
                 textAlign: TextAlign.start,
               ),
             ),
@@ -75,32 +75,56 @@ class ServicesScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppButton(
-                    color: Theme.of(context).colorScheme.primary, 
-                    text: "Vets", 
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => Provider(
-                          bloc: StoreVetListBloc(),
-                          child: StoreVetListScreen(stores: false, analytics: analytics, observer: observer,),
-                        )
-                      )
-                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Vets",
+                    onPressed: () {
+                      checkConnectivity().then((connected) {
+                        if (connected) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Provider(
+                                bloc: StoreVetListBloc(),
+                                child: StoreVetListScreen(
+                                  stores: false,
+                                  analytics: analytics,
+                                  observer: observer,
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          _noConnectionDialog(context);
+                        }
+                      });
+                    },
                     minWidth: size.width * 0.35,
                   ),
                   Padding(padding: EdgeInsets.all(size.width * 0.08)),
                   AppButton(
-                    color: Theme.of(context).colorScheme.primary, 
-                    text: "Stores", 
-                    onPressed: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => Provider(
-                          bloc: StoreVetListBloc(),
-                          child: StoreVetListScreen(stores: true, analytics: analytics, observer: observer,),
-                        )
-                      )
-                    ),
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Stores",
+                    onPressed: () {
+                      checkConnectivity().then((connected) {
+                        if (connected) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => Provider(
+                                bloc: StoreVetListBloc(),
+                                child: StoreVetListScreen(
+                                  stores: true,
+                                  analytics: analytics,
+                                  observer: observer,
+                                ),
+                              ),
+                            ),
+                          );
+                        } else {
+                          _noConnectionDialog(context);
+                        }
+                      });
+                    },
                     minWidth: size.width * 0.35,
                   )
                 ],
@@ -129,15 +153,15 @@ class ServicesScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppButton(
-                    color: Theme.of(context).colorScheme.primary, 
-                    text: "Walkers", 
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Walkers",
                     onPressed: () => true,
                     minWidth: size.width * 0.35,
                   ),
                   Padding(padding: EdgeInsets.all(size.width * 0.08)),
                   AppButton(
-                    color: Theme.of(context).colorScheme.primary, 
-                    text: "Daycare", 
+                    color: Theme.of(context).colorScheme.primary,
+                    text: "Daycare",
                     onPressed: () => true,
                     minWidth: size.width * 0.35,
                   )
@@ -146,6 +170,37 @@ class ServicesScreen extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+
+  //TODO check reused code
+  _noConnectionDialog(BuildContext context) {
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(
+          "No internet connection",
+          style: Theme.of(context)
+              .textTheme
+              .headline4
+              .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
+        content: Text(
+          'You don\'t have an internet connection, try again later.',
+          style: Theme.of(context).textTheme.headline6.copyWith(
+                color: Colors.black,
+              ),
+        ),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Ok'),
+          ),
+        ],
       ),
     );
   }
