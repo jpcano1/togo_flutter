@@ -153,6 +153,17 @@ class RegisterBloc with Validators implements BlocBase {
     await prefs.setString('regPhone', "");
     await prefs.setBool('was_offline', false);
 
+    //Indicates locally the user logged with internet.
+    await prefs.setBool("online_log", true);
+
+    //Sets the home page's name
+    String name = _nameController.value;
+    await prefs.setString("logName", name);
+
+    //Save locally the last successful online session credentials
+    await prefs.setString("logEmail", this._emailController.value);
+    await prefs.setString("logPassword", this._passwordController.value);
+
     textNameController.text = "";
     textEmailController.text = "";
     textPhoneController.text = "";
