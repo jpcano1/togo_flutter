@@ -101,7 +101,8 @@ class StoreVetListScreen extends StatelessWidget {
   }
 
   buildStoreVetList(
-      BuildContext context, Size size, bool nightMode, List vetList) {
+      BuildContext context, Size size, bool nightMode, List vetList
+    ) {
     final defaultVetImagePath = "assets/icons/snakes.png";
     return ListView.builder(
       itemCount: vetList.length,
@@ -128,10 +129,11 @@ class StoreVetListScreen extends StatelessWidget {
               checkConnectivity().then((connected) {
                 if (connected) {
                   Navigator.push(
-                      listContext,
-                      MaterialPageRoute(
-                          builder: (_) =>
-                              StoreVetDetail(storeVet, analytics, observer)));
+                    listContext,
+                    MaterialPageRoute(
+                      builder: (_) => StoreVetDetail(storeVet, analytics, observer)
+                    )
+                  );
                 } else {
                   _noConnectionDialog(context);
                 }
@@ -144,7 +146,14 @@ class StoreVetListScreen extends StatelessWidget {
                   .headline6
                   .copyWith(color: nightMode ? Colors.white : Colors.black),
             ),
-            trailing: Column(
+            trailing: this.stores? Text(
+              "${storeVet.locations.length} locations",
+              style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: nightMode ? Colors.white : Colors.black),
+            ) 
+            : Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
