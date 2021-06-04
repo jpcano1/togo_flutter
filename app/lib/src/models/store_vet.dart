@@ -5,10 +5,11 @@ class StoreVet extends UserModel.User {
   Map officeHours;
   String catalog;
   List locations;
+  double averageRating;
 
   StoreVet(String id, String name, 
            String email, this.officeHours, 
-           this.catalog,this.locations,
+           this.catalog,this.locations, this.averageRating,
            {String phoneNumber}): 
     super(id, name, email, phoneNumber: phoneNumber);
   
@@ -19,6 +20,7 @@ class StoreVet extends UserModel.User {
     this.catalog = map["catalog"];
     this. officeHours = map["officeHours"];
     this.locations = map["locations"];
+    this.averageRating = map["averageRating"]?? 0;
   }
   
   @override
@@ -28,10 +30,7 @@ class StoreVet extends UserModel.User {
       "officeHours": this.officeHours,
       "catalog": this.catalog,
       "locations": this.locations,
+      "averageRating": this.averageRating
     };
-  }
-
-  double get averageRating {
-    return 0;
   }
 }

@@ -2,6 +2,7 @@ import 'package:app/src/bloc/blocs/bloc_base.dart';
 import 'package:app/src/resources/repository.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:rxdart/rxdart.dart';
+import 'dart:math' as Math;
 
 class StoreVetCreationBloc extends BlocBase {
   final Repository _repository = Repository();
@@ -28,7 +29,8 @@ class StoreVetCreationBloc extends BlocBase {
       "petOwner": false,
       "store": _roleController.value?? false,
       "vet": !_roleController.value?? true,
-      "catalog": ""
+      "averageRating": Math.Random().nextDouble() * 5,
+      "catalog": "",
     };
 
     try {
