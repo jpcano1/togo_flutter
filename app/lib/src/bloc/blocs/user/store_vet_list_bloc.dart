@@ -27,6 +27,12 @@ class StoreVetListBloc extends BlocBase {
         vetStores.add(StoreVetModel.StoreVet.fromMap(element.data()));
       }
 
+      if (store) {
+        vetStores.sort((a, b) => b.locations.length.compareTo(a.locations.length));
+      } else {
+        vetStores.sort((a, b) => b.averageRating.compareTo(a.averageRating));
+      }
+
       _storeVetListController.sink.add(vetStores);
     } on FirebaseException catch(e) {
       return Future.error(e.message);
